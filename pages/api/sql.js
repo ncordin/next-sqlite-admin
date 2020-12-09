@@ -2,7 +2,13 @@ import sqlite from "better-sqlite3";
 const database = sqlite("myBase.db");
 
 const executeSql = (sql) => {
-  return database.prepare(sql).all();
+  const lowerSql = sql.trim().toLowerCase();
+
+  if (lowerSql.startsWith("select ")) {
+    return database.prepare(sql).all();
+  } else {
+    return [database.prepare(sql).run()];
+  }
 };
 
 export default (request, response) => {
