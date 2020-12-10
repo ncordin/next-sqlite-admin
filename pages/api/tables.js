@@ -1,15 +1,6 @@
 import sqlite from "better-sqlite3";
 const database = sqlite("myBase.db");
 
-// const create = database
-//   .prepare("CREATE TABLE players (id INT, name TEXT, gold INT)")
-//   .run();
-
-// const insert = database.prepare("INSERT INTO players VALUES (?, ?, ?)");
-// for (var i = 0; i < 10; i++) {
-//   insert.run(i, `Name ${i}`, 100);
-// }
-
 const countLines = (tableName) => {
   const result = database.prepare(`SELECT COUNT(*) FROM ${tableName}`).get();
 

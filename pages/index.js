@@ -1,12 +1,12 @@
 import React from "react";
 import dynamic from "next/dynamic";
 
-import { IndexPage } from "../src/pages/IndexPage";
+import { MainScreen } from "../src/screens/MainScreen";
 
 export default function Page() {
   const Component = dynamic(
     () => {
-      return Promise.resolve(IndexPage);
+      return Promise.resolve(MainScreen);
     },
     { ssr: false }
   );

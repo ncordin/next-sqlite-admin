@@ -1,9 +1,11 @@
 import Head from "next/head";
 import React from "react";
 import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
-import { styleReset } from "react95";
-
+import { styleReset, Window, WindowHeader } from "react95";
 import original from "react95/dist/themes/original";
+
+import { useErrorModal } from "../contexts/ErrorModal";
+import { ErrorModal } from "./ErrorModal";
 
 const GlobalStyles = createGlobalStyle`
   @font-face {
@@ -21,20 +23,25 @@ const GlobalStyles = createGlobalStyle`
   body {
     font-family: 'ms_sans_serif';
     background-color: teal;
+    height: 100vh;
   }
   html {
     font-size: 14px !important;
   }
   ${styleReset}
+  * {
+    box-sizing: border-box;
+  }
 `;
 
 const StyledLayout = styled.div`
   font-family: "ms_sans_serif";
-  padding: 8px;
-  padding-top: 50px;
+  padding: 16px;
 `;
 
-export function Layout({ children }) {
+export function Layout({ title, children }) {
+  const { isOpen, title: titleModal, message, close } = useErrorModal();
+
   return (
     <>
       <GlobalStyles />
@@ -43,7 +50,17 @@ export function Layout({ children }) {
           <title>Node SQLite Admin</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <StyledLayout>{children}</StyledLayout>
+        <StyledLayout>
+          <Window style={{ minWidth: "100%" }}>
+            <WindowHeader>{title}</WindowHeader>
+            {children}
+          </Window>
+        </StyledLayout>
+        {isOpen && (
+          <ErrorModal title={titleModal} onClose={close}>
+            {message}
+          </ErrorModal>
+        )}
       </ThemeProvider>
     </>
   );
