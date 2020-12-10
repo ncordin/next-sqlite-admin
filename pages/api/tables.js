@@ -18,7 +18,9 @@ const countLines = (tableName) => {
 
 const getTables = () => {
   const tables = database
-    .prepare("SELECT * FROM sqlite_master WHERE type='table';")
+    .prepare(
+      "SELECT * FROM sqlite_master WHERE `type`='table' ORDER BY `name` ASC;"
+    )
     .all();
 
   const data = tables.map((table) => ({

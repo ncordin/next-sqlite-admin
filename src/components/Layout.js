@@ -22,12 +22,16 @@ const GlobalStyles = createGlobalStyle`
     font-family: 'ms_sans_serif';
     background-color: teal;
   }
+  html {
+    font-size: 14px !important;
+  }
   ${styleReset}
 `;
 
 const StyledLayout = styled.div`
   font-family: "ms_sans_serif";
-  padding: 16px;
+  padding: 8px;
+  padding-top: 50px;
 `;
 
 export function Layout({ children }) {

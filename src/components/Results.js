@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Window,
   WindowHeader,
@@ -9,9 +9,7 @@ import {
   TableHeadCell,
   TableBody,
   TableDataCell,
-  TextField,
-  Button,
-  List,
+  Checkbox,
 } from "react95";
 export function Results({ data }) {
   const headers = Array.isArray(data) ? Object.keys(data[0]) : [];
@@ -19,11 +17,12 @@ export function Results({ data }) {
 
   return (
     <Window style={{ width: "100%" }}>
-      <WindowHeader>{data.length} résultats</WindowHeader>
+      <WindowHeader>{data.length} results</WindowHeader>
       <WindowContent>
         <Table>
           <TableHead>
             <TableRow head>
+              <TableHeadCell>.</TableHeadCell>
               {headers.map((header) => (
                 <TableHeadCell key={header}>{header}</TableHeadCell>
               ))}
@@ -35,6 +34,10 @@ export function Results({ data }) {
 
               return (
                 <TableRow key={index}>
+                  <TableDataCell style={{ width: 28 }}>
+                    <Checkbox />
+                  </TableDataCell>
+
                   {values.map((value, valuesIndex) => (
                     <TableDataCell key={`${index}-${valuesIndex}`}>
                       {value}
