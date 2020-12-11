@@ -6,12 +6,11 @@ import {
   TableHeadCell,
   TableBody,
   TableDataCell,
-  Checkbox,
   Panel,
 } from "react95";
 
-export function Results({ data }) {
-  const headers = Array.isArray(data) ? Object.keys(data[0]) : [];
+export function SqlResults({ data }) {
+  const headers = data[0] ? Object.keys(data[0]) : [];
   const rows = Array.isArray(data) ? data : [];
 
   return (
@@ -30,9 +29,10 @@ export function Results({ data }) {
       <Table>
         <TableHead>
           <TableRow head>
-            <TableHeadCell></TableHeadCell>
             {headers.map((header) => (
-              <TableHeadCell key={header}>{header}</TableHeadCell>
+              <TableHeadCell key={header} disabled>
+                {header}
+              </TableHeadCell>
             ))}
           </TableRow>
         </TableHead>
@@ -42,10 +42,6 @@ export function Results({ data }) {
 
             return (
               <TableRow key={index}>
-                <TableDataCell style={{ width: 28 }}>
-                  <Checkbox />
-                </TableDataCell>
-
                 {values.map((value, valuesIndex) => (
                   <TableDataCell
                     key={`${index}-${valuesIndex}`}

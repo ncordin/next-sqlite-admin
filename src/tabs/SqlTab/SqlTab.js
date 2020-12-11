@@ -1,14 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TextField, Button } from "react95";
 
-import { Results } from "../components/Results";
-import { coolFetch } from "../utils/coolFetch";
-import { useErrorModal } from "../contexts/ErrorModal";
+import { SqlResults } from "./SqlResults";
+import { coolFetch } from "../../utils/coolFetch";
+import { useErrorModal } from "../../contexts/ErrorModal";
+import { useTables } from "../../contexts/Tables";
 
 export function SqlTab() {
-  const [value, setValue] = useState("SELECT * FROM `players`;");
+  const { currentTable } = useTables();
+  const [value, setValue] = useState(`SELECT * FROM \`${currentTable.name}\`;`);
   const [response, setResponse] = useState(null);
   const { open } = useErrorModal();
+
+  useEffect(() => {
+    setValue(`SELECT * FROM \`${currentTable.name}\`;`);
+  }, [currentTable.name]);
 
   const onChange = (event) => {
     setValue(event.target.value);
@@ -36,7 +42,7 @@ export function SqlTab() {
 
       <Button onClick={() => execute(value)}>Execute</Button>
 
-      {response && !response.error && <Results data={response} />}
+      {response && !response.error && <SqlResults data={response} />}
     </>
   );
 }

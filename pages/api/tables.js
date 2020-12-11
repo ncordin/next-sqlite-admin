@@ -7,6 +7,16 @@ const countLines = (tableName) => {
   return result["COUNT(*)"];
 };
 
+const getStructure = (tableName) => {
+  return database.pragma(`table_info('${tableName}')`).map((tableInfo) => ({
+    name: tableInfo.name,
+    type: tableInfo.type,
+    canBeNUll: !tableInfo.notnull,
+    defaultValue: tableInfo.dftl_value,
+    isPrimaryKey: tableInfo.pk,
+  }));
+};
+
 const getTables = () => {
   const tables = database
     .prepare(
@@ -17,6 +27,7 @@ const getTables = () => {
   const data = tables.map((table) => ({
     name: table.name,
     lines: countLines(table.name),
+    structure: getStructure(table.name),
   }));
 
   return data;

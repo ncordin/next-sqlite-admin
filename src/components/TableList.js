@@ -1,20 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Button, ListItem, Fieldset } from "react95";
-
-import { coolFetch } from "../utils/coolFetch";
+import { useTables } from "../contexts/Tables";
+import { BoldIf } from "./BoldIf";
 
 export function TableList() {
-  const [tables, setTables] = useState([]);
-  const [currentTable, setCurrentTable] = useState("players");
-
-  useEffect(() => {
-    coolFetch("api/tables").then(setTables);
-  }, []);
+  const { currentTable, setCurrentTable, tables, refresh } = useTables();
 
   return (
     <>
-      <Button fullWidth style={{ marginBottom: 16 }}>
+      <Button fullWidth style={{ marginBottom: 8 }}>
         New table
+      </Button>
+      <Button fullWidth style={{ marginBottom: 16 }} onClick={refresh}>
+        Refresh tables
       </Button>
       <Fieldset label={`Tables (${tables.length})`} style={{ width: 200 }}>
         {tables.map((table) => {
@@ -23,12 +21,13 @@ export function TableList() {
               key={table.name}
               size="sm"
               style={{ cursor: "pointer" }}
-              disabled={table.name === currentTable}
               onClick={() => {
-                setCurrentTable(table.name);
+                setCurrentTable(table);
               }}
             >
-              {table.name} ({table.lines})
+              <BoldIf condition={table.name === currentTable.name}>
+                {table.name} ({table.lines})
+              </BoldIf>
             </ListItem>
           );
         })}
