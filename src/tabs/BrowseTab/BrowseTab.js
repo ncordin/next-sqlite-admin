@@ -1,25 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { Button } from "react95";
+import styled from "styled-components";
 
 import { InnerPanel } from "../../components/InnerPanel";
 import { BrowseResults } from "./BrowseResults";
 import { coolFetch } from "../../utils/coolFetch";
 import { useErrorModal } from "../../contexts/ErrorModal";
 import { useTables } from "../../contexts/Tables";
-import { EditRow } from "./EditRow";
-import { Button } from "react95";
-import styled from "styled-components";
-
-const makeSet = (row) => {
-  return Object.keys(row)
-    .map((key) => `\`${key}\` = '${row[key]}'`)
-    .join(", ");
-};
-
-const makeWhere = (row) => {
-  return Object.keys(row)
-    .map((key) => `\`${key}\` = '${row[key]}'`)
-    .join(" AND ");
-};
+import { Edit } from "./Edit";
 
 const FlexRow = styled.div`
   display: flex;
@@ -74,11 +62,7 @@ export function BrowseTab() {
     setOrderBy(field);
   };
 
-  const saveRow = async (row) => {
-    const set = makeSet(row);
-    const where = makeWhere(editingRow);
-    const query = `UPDATE \`${currentTable.name}\` SET ${set} WHERE ${where}`;
-
+  const saveRow = async (query) => {
     const data = await coolFetch("api/sql", { sql: query });
     data.error && open("SQL error!", data.error);
 
@@ -88,10 +72,10 @@ export function BrowseTab() {
 
   if (editingRow) {
     return (
-      <EditRow
+      <Edit
         row={editingRow}
         cancel={() => setEditingRow(null)}
-        submit={saveRow}
+        execute={saveRow}
       />
     );
   }

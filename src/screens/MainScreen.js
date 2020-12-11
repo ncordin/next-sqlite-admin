@@ -7,6 +7,7 @@ import { TableList } from "../components/TableList";
 import { ErrorModalProvider } from "../contexts/ErrorModal";
 import { TablesProvider } from "../contexts/Tables";
 import { BrowseTab } from "../tabs/BrowseTab";
+import { InsertTab } from "../tabs/InsertTab/InsertTab";
 import { SqlTab } from "../tabs/SqlTab";
 
 const FlexRow = styled.div`
@@ -31,7 +32,7 @@ export function MainScreen() {
         return <BrowseTab />;
 
       case "insert":
-        return "INSERT";
+        return <InsertTab />;
 
       case "sql":
         return <SqlTab />;
@@ -47,8 +48,10 @@ export function MainScreen() {
   return (
     <ErrorModalProvider>
       <TablesProvider>
-        <Layout title="Ma base de donnée">
-          <Toolbar style={{ marginBottom: 8 }}>
+        <Layout title="SQLite 95 - myDatabase.db">
+          <Toolbar
+            style={{ marginBottom: 8, position: "relative", top: -4, left: -4 }}
+          >
             <Button variant="menu" size="sm">
               Database
             </Button>

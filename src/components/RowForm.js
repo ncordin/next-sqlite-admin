@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Checkbox, TextField } from "react95";
 import styled from "styled-components";
 
-import { useTables } from "../../contexts/Tables";
+import { useTables } from "../contexts/Tables";
 
 const StyledTable = styled.table`
   margin: 1rem 0;
@@ -13,7 +13,7 @@ const StyledTable = styled.table`
   }
 `;
 
-export function EditRow({ row: initialRow, cancel, submit }) {
+export function RowForm({ row: initialRow, cancel, submit }) {
   const { currentTable } = useTables();
   const [row, setRow] = useState(initialRow);
 
@@ -28,8 +28,6 @@ export function EditRow({ row: initialRow, cancel, submit }) {
 
   return (
     <div>
-      <p style={{ fontWeight: "bold" }}>Edit row</p>
-
       <form onSubmit={onSubmit}>
         <StyledTable style={{ width: "100%" }}>
           <tbody>
@@ -55,7 +53,7 @@ export function EditRow({ row: initialRow, cancel, submit }) {
 
         <p>
           <Button type="submit">Submit</Button>{" "}
-          <Button onClick={cancel}>Cancel</Button>
+          {cancel && <Button onClick={cancel}>Cancel</Button>}
         </p>
       </form>
     </div>

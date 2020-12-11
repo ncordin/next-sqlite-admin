@@ -47,7 +47,7 @@ export function Layout({ title, children }) {
       <GlobalStyles />
       <ThemeProvider theme={original}>
         <Head>
-          <title>Node SQLite Admin</title>
+          <title>SQLite 95</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <StyledLayout>
