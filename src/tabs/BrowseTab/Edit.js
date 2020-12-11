@@ -2,18 +2,7 @@ import React from "react";
 
 import { useTables } from "../../contexts/Tables";
 import { RowForm } from "../../components/RowForm";
-
-const makeSet = (row) => {
-  return Object.keys(row)
-    .map((key) => `\`${key}\` = '${row[key]}'`)
-    .join(", ");
-};
-
-const makeWhere = (row) => {
-  return Object.keys(row)
-    .map((key) => `\`${key}\` = '${row[key]}'`)
-    .join(" AND ");
-};
+import { makeSet, makeWhere } from "../../utils/query";
 
 export function Edit({ row, execute, cancel }) {
   const { currentTable } = useTables();

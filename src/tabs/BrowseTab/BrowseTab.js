@@ -8,6 +8,7 @@ import { coolFetch } from "../../utils/coolFetch";
 import { useErrorModal } from "../../contexts/ErrorModal";
 import { useTables } from "../../contexts/Tables";
 import { Edit } from "./Edit";
+import { makeDelete } from "../../utils/query";
 
 const FlexRow = styled.div`
   display: flex;
@@ -18,6 +19,7 @@ const FlexRow = styled.div`
 
 const FlexColumn = styled.div`
   margin-right: 1rem;
+  display: flex;
 `;
 
 export function BrowseTab() {
@@ -29,6 +31,7 @@ export function BrowseTab() {
   const [orderBy, setOrderBy] = useState(null);
   const [orderByDirection, setOrderByDirection] = useState(true);
   const [editingRow, setEditingRow] = useState(null);
+  const [selected, setSelected] = useState([]);
 
   useEffect(() => {
     currentTable && execute(`SELECT * FROM \`${currentTable.name}\`;`);
@@ -70,6 +73,20 @@ export function BrowseTab() {
     execute(value);
   };
 
+  const deleteSelected = async () => {
+    setSelected([]);
+    const rows = selected.map((index) => response[index]);
+
+    for (const row of rows) {
+      const sql = makeDelete(currentTable.name, row);
+      const data = await coolFetch("api/sql", { sql });
+
+      data.error && open("SQL error!", data.error);
+    }
+
+    execute(value);
+  };
+
   if (editingRow) {
     return (
       <Edit
@@ -87,6 +104,13 @@ export function BrowseTab() {
       <FlexRow>
         <FlexColumn>
           <Button onClick={() => execute(value)}>Refresh</Button>
+          <Button
+            onClick={deleteSelected}
+            disabled={!selected.length}
+            style={{ width: 150, marginLeft: 8 }}
+          >
+            Delete selected ({selected.length})
+          </Button>
         </FlexColumn>
 
         <InnerPanel>
@@ -99,6 +123,8 @@ export function BrowseTab() {
           orderBy={orderBy}
           changeOrderBy={changeOrderBy}
           selectEditingRow={setEditingRow}
+          selected={selected}
+          setSelected={setSelected}
         />
       )}
     </>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Table,
   TableHead,
@@ -17,9 +17,19 @@ export function BrowseResults({
   orderBy,
   changeOrderBy,
   selectEditingRow,
+  selected,
+  setSelected,
 }) {
   const headers = data[0] ? Object.keys(data[0]) : [];
   const rows = Array.isArray(data) ? data : [];
+
+  const changeSelection = (isSelected, index) => {
+    if (isSelected) {
+      setSelected([...selected, index]);
+    } else {
+      setSelected(selected.filter((value) => value !== index));
+    }
+  };
 
   if (data.length === 0) {
     return null;
@@ -49,7 +59,12 @@ export function BrowseResults({
           return (
             <TableRow key={index}>
               <TableDataCell style={{ width: 40 }}>
-                <Checkbox />
+                <Checkbox
+                  checked={selected.includes(index)}
+                  onChange={(event) =>
+                    changeSelection(event.target.checked, index)
+                  }
+                />
               </TableDataCell>
               <TableDataCell style={{ width: 40 }}>
                 <Anchor
