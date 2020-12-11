@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Checkbox, TextField } from "react95";
 import styled from "styled-components";
 
@@ -13,34 +13,51 @@ const StyledTable = styled.table`
   }
 `;
 
-export function EditRow({ row, cancel }) {
+export function EditRow({ row: initialRow, cancel, submit }) {
   const { currentTable } = useTables();
+  const [row, setRow] = useState(initialRow);
+
+  const updateField = (field) => (event) => {
+    setRow({ ...row, [field]: event.target.value });
+  };
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    submit(row);
+  };
 
   return (
     <div>
       <p style={{ fontWeight: "bold" }}>Edit row</p>
-      <StyledTable style={{ width: "100%" }}>
-        <tbody>
-          {currentTable.structure.map((field) => {
-            return (
-              <tr key={field.name}>
-                <td style={{ fontWeight: "bold" }}>{field.name}</td>
-                <td>{field.type}</td>
-                <td>
-                  <TextField value={row[field.name]} />
-                </td>
-                <td>
-                  <Checkbox label="NULL" disabled />
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </StyledTable>
-      <p>
-        <Button onClick={cancel}>Submit</Button>{" "}
-        <Button onClick={cancel}>Cancel</Button>
-      </p>
+
+      <form onSubmit={onSubmit}>
+        <StyledTable style={{ width: "100%" }}>
+          <tbody>
+            {currentTable.structure.map((field) => {
+              return (
+                <tr key={field.name}>
+                  <td style={{ fontWeight: "bold" }}>{field.name}</td>
+                  <td>{field.type}</td>
+                  <td>
+                    <TextField
+                      value={row && row[field.name]}
+                      onChange={updateField(field.name)}
+                    />
+                  </td>
+                  <td>
+                    <Checkbox label="NULL" disabled />
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </StyledTable>
+
+        <p>
+          <Button type="submit">Submit</Button>{" "}
+          <Button onClick={cancel}>Cancel</Button>
+        </p>
+      </form>
     </div>
   );
 }

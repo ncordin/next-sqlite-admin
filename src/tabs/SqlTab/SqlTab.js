@@ -1,10 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { TextField, Button } from "react95";
+import { TextField, Button, Panel } from "react95";
+import styled from "styled-components";
 
 import { SqlResults } from "./SqlResults";
 import { coolFetch } from "../../utils/coolFetch";
 import { useErrorModal } from "../../contexts/ErrorModal";
 import { useTables } from "../../contexts/Tables";
+
+const FlexRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 1.5rem;
+`;
+
+const FlexColumn = styled.div`
+  margin-right: 1rem;
+`;
 
 export function SqlTab() {
   const { currentTable } = useTables();
@@ -33,16 +45,32 @@ export function SqlTab() {
     <>
       <TextField
         multiline
-        rows={5}
+        rows={10}
         value={value}
         fullWidth
         onChange={onChange}
         style={{ marginBottom: 8 }}
       />
 
-      <Button onClick={() => execute(value)}>Execute</Button>
+      <FlexRow>
+        <FlexColumn>
+          <Button onClick={() => execute(value)}>Execute</Button>
+        </FlexColumn>
 
-      {response && !response.error && <SqlResults data={response} />}
+        <Panel
+          variant="well"
+          style={{
+            padding: "0.1rem 0.25rem",
+            width: "100%",
+          }}
+        >
+          {`${response ? response.length : 0} results`}
+        </Panel>
+      </FlexRow>
+
+      {response && response.length && !response.error ? (
+        <SqlResults data={response} />
+      ) : null}
     </>
   );
 }
