@@ -38,6 +38,7 @@ export function BrowseTab() {
     setEditingRow(null);
     setOrderBy(null);
     setOrderByDirection(null);
+    setSelected([]);
   }, [currentTable]);
 
   useEffect(() => {

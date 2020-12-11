@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Checkbox, TextField } from "react95";
+import { Button, Checkbox, NumberField, TextField } from "react95";
 import styled from "styled-components";
 
 import { useTables } from "../contexts/Tables";
@@ -8,17 +8,48 @@ const StyledTable = styled.table`
   margin: 1rem 0;
 
   td {
-    padding: 0 0.5rem;
+    padding: 0.5rem 0.5rem;
     vertical-align: middle;
   }
 `;
+
+function renderInput({ field, value, setValue }) {
+  const [type] = field.type.toLowerCase().split("(");
+
+  switch (type) {
+    case "text":
+    case "date":
+    case "datetime":
+      return (
+        <TextField
+          value={value}
+          onChange={(event) => setValue(event.target.value)}
+          style={{ width: 300 }}
+        />
+      );
+
+    case "int":
+    case "bigint":
+    case "integer":
+      return (
+        <NumberField
+          defaultValue={value}
+          onChange={(value) => setValue(value)}
+          width={300}
+        />
+      );
+
+    default:
+      <span>{value}</span>;
+  }
+}
 
 export function RowForm({ row: initialRow, cancel, submit }) {
   const { currentTable } = useTables();
   const [row, setRow] = useState(initialRow);
 
-  const updateField = (field) => (event) => {
-    setRow({ ...row, [field]: event.target.value });
+  const updateField = (field) => (value) => {
+    setRow({ ...row, [field]: value });
   };
 
   const onSubmit = (event) => {
@@ -37,10 +68,11 @@ export function RowForm({ row: initialRow, cancel, submit }) {
                   <td style={{ fontWeight: "bold" }}>{field.name}</td>
                   <td>{field.type}</td>
                   <td>
-                    <TextField
-                      value={row && row[field.name]}
-                      onChange={updateField(field.name)}
-                    />
+                    {renderInput({
+                      field,
+                      value: row[field.name],
+                      setValue: updateField(field.name),
+                    })}
                   </td>
                   <td>
                     <Checkbox label="NULL" disabled />
@@ -52,7 +84,9 @@ export function RowForm({ row: initialRow, cancel, submit }) {
         </StyledTable>
 
         <p>
-          <Button type="submit">Submit</Button>{" "}
+          <Button type="submit" style={{ marginRight: "0.5rem" }}>
+            Submit
+          </Button>
           {cancel && <Button onClick={cancel}>Cancel</Button>}
         </p>
       </form>
