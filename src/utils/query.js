@@ -10,6 +10,26 @@ export function makeWhere(row) {
     .join(" AND ");
 }
 
+export function makeFields(fields) {
+  console.log(fields);
+  return fields
+    .map((field) => {
+      console.log(field);
+      const notNull = field.canBeNull ? "" : "NOT NULL";
+      const primary = field.primaryKey ? "PRIMARY KEY" : "";
+      const increment = field.autoIncrement ? "AUTOINCREMENT" : "";
+      const defaultValue =
+        field.defaultValue !== null ? `DEFAULT "${field.defaultValue}"` : "";
+
+      return `\`${field.name}\` ${field.type} ${primary} ${increment} ${notNull} ${defaultValue}`;
+    })
+    .join(",  ");
+}
+
 export function makeDelete(table, row) {
   return `DELETE FROM \`${table}\` WHERE ${makeWhere(row)};`;
+}
+
+export function makeCreateTable(table, fields) {
+  return `CREATE TABLE \`${table}\` (${makeFields(fields)});`;
 }

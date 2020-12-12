@@ -9,6 +9,7 @@ import { TablesProvider } from "../contexts/Tables";
 import { BrowseTab } from "../tabs/BrowseTab";
 import { InsertTab } from "../tabs/InsertTab/InsertTab";
 import { SqlTab } from "../tabs/SqlTab";
+import { CreateTableTab } from "../tabs/CreateTableTab";
 
 const FlexRow = styled.div`
   display: flex;
@@ -37,11 +38,14 @@ export function MainScreen() {
       case "sql":
         return <SqlTab />;
 
-      case "structure":
-        return "STRUCTURE";
-
       case "alter":
         return "ALTER";
+
+      case "management":
+        return "Drop / Vacuum / Primary key ? / Index ? / Dump / Describe1";
+
+      case "create-table":
+        return <CreateTableTab onCreated={() => setCurrentTab("browse")} />;
     }
   };
 
@@ -63,7 +67,7 @@ export function MainScreen() {
 
           <FlexRow>
             <Column>
-              <TableList />
+              <TableList createTable={() => setCurrentTab("create-table")} />
             </Column>
             <Column style={{ flex: 1, paddingLeft: 8, paddingBottom: 50 }}>
               <Tabs
@@ -73,8 +77,8 @@ export function MainScreen() {
                 <StyledTab value="browse">Browse</StyledTab>
                 <StyledTab value="insert">Insert</StyledTab>
                 <StyledTab value="sql">SQL</StyledTab>
-                <StyledTab value="structure">Structure</StyledTab>
-                <StyledTab value="alter">Alter table</StyledTab>
+                <StyledTab value="alter">Structure</StyledTab>
+                <StyledTab value="management">Management</StyledTab>
               </Tabs>
               <TabBody>{getTabBody(currentTab)}</TabBody>
             </Column>

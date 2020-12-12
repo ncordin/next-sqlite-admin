@@ -4,11 +4,10 @@ import styled from "styled-components";
 
 import { InnerPanel } from "../../components/InnerPanel";
 import { BrowseResults } from "./BrowseResults";
-import { coolFetch } from "../../utils/coolFetch";
-import { useErrorModal } from "../../contexts/ErrorModal";
 import { useTables } from "../../contexts/Tables";
 import { Edit } from "./Edit";
 import { makeDelete } from "../../utils/query";
+import { useApi } from "../../utils/useApi";
 
 const FlexRow = styled.div`
   display: flex;
@@ -24,7 +23,7 @@ const FlexColumn = styled.div`
 
 export function BrowseTab() {
   const { currentTable } = useTables();
-  const { open } = useErrorModal();
+  const { executeQuery } = useApi();
 
   const [value, setValue] = useState("");
   const [response, setResponse] = useState(null);
@@ -55,10 +54,8 @@ export function BrowseTab() {
   const execute = async (value) => {
     setValue(value);
 
-    const data = await coolFetch("api/sql", { sql: value });
+    const data = await executeQuery(value);
     setResponse(data);
-
-    data.error && open("SQL error!", data.error);
   };
 
   const changeOrderBy = (field) => {
@@ -67,8 +64,7 @@ export function BrowseTab() {
   };
 
   const saveRow = async (query) => {
-    const data = await coolFetch("api/sql", { sql: query });
-    data.error && open("SQL error!", data.error);
+    await executeQuery(query);
 
     setEditingRow(null);
     execute(value);
@@ -80,9 +76,7 @@ export function BrowseTab() {
 
     for (const row of rows) {
       const sql = makeDelete(currentTable.name, row);
-      const data = await coolFetch("api/sql", { sql });
-
-      data.error && open("SQL error!", data.error);
+      executeQuery(sql);
     }
 
     execute(value);

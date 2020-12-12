@@ -3,12 +3,12 @@ import { Button, ListItem, Fieldset } from "react95";
 import { useTables } from "../contexts/Tables";
 import { BoldIf } from "./BoldIf";
 
-export function TableList() {
+export function TableList({ createTable }) {
   const { currentTable, setCurrentTable, tables, refresh } = useTables();
 
   return (
     <>
-      <Button fullWidth style={{ marginBottom: 8 }}>
+      <Button fullWidth style={{ marginBottom: 8 }} onClick={createTable}>
         New table
       </Button>
       <Button fullWidth style={{ marginBottom: 16 }} onClick={refresh}>

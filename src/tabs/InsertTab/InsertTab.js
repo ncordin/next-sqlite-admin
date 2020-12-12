@@ -1,13 +1,12 @@
 import React from "react";
 
-import { coolFetch } from "../../utils/coolFetch";
-import { useErrorModal } from "../../contexts/ErrorModal";
 import { useTables } from "../../contexts/Tables";
 import { RowForm } from "../../components/RowForm";
+import { useApi } from "../../utils/useApi";
 
 export function InsertTab() {
   const { currentTable } = useTables();
-  const { open } = useErrorModal();
+  const { executeQuery } = useApi();
 
   const insertRow = async (row) => {
     const fields = currentTable.structure
@@ -20,8 +19,7 @@ export function InsertTab() {
 
     const query = `INSERT INTO \`${currentTable.name}\` (${fields}) VALUES (${values});`;
 
-    const data = await coolFetch("api/sql", { sql: query });
-    data.error && open("SQL error!", data.error);
+    executeQuery(query);
   };
 
   return (

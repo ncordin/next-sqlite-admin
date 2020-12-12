@@ -3,9 +3,8 @@ import { TextField, Button, Panel } from "react95";
 import styled from "styled-components";
 
 import { SqlResults } from "./SqlResults";
-import { coolFetch } from "../../utils/coolFetch";
-import { useErrorModal } from "../../contexts/ErrorModal";
 import { useTables } from "../../contexts/Tables";
+import { useApi } from "../../utils/useApi";
 
 const FlexRow = styled.div`
   display: flex;
@@ -22,7 +21,7 @@ export function SqlTab() {
   const { currentTable } = useTables();
   const [value, setValue] = useState(`SELECT * FROM \`${currentTable.name}\`;`);
   const [response, setResponse] = useState(null);
-  const { open } = useErrorModal();
+  const { executeQuery } = useApi();
 
   useEffect(() => {
     setValue(`SELECT * FROM \`${currentTable.name}\`;`);
@@ -34,11 +33,9 @@ export function SqlTab() {
 
   const execute = async (value) => {
     setValue(value);
+    const response = await executeQuery(value);
 
-    const data = await coolFetch("api/sql", { sql: value });
-    setResponse(data);
-
-    data.error && open("SQL error!", data.error);
+    setResponse(response);
   };
 
   return (

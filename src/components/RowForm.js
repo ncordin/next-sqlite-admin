@@ -4,6 +4,9 @@ import styled from "styled-components";
 
 import { useTables } from "../contexts/Tables";
 
+// (bigint can be handle as numeric)
+const NUMERICS = ["int", "integer", "tinyint", "smallint", "mediumint"];
+
 const StyledTable = styled.table`
   margin: 1rem 0;
 
@@ -16,32 +19,23 @@ const StyledTable = styled.table`
 function renderInput({ field, value, setValue }) {
   const [type] = field.type.toLowerCase().split("(");
 
-  switch (type) {
-    case "text":
-    case "date":
-    case "datetime":
-      return (
-        <TextField
-          value={value}
-          onChange={(event) => setValue(event.target.value)}
-          style={{ width: 300 }}
-        />
-      );
-
-    case "int":
-    case "bigint":
-    case "integer":
-      return (
-        <NumberField
-          defaultValue={value}
-          onChange={(value) => setValue(value)}
-          width={300}
-        />
-      );
-
-    default:
-      <span>{value}</span>;
+  if (NUMERICS.includes(type)) {
+    return (
+      <NumberField
+        defaultValue={value}
+        onChange={(value) => setValue(value)}
+        width={300}
+      />
+    );
   }
+
+  return (
+    <TextField
+      value={value}
+      onChange={(event) => setValue(event.target.value)}
+      style={{ width: 300 }}
+    />
+  );
 }
 
 export function RowForm({ row: initialRow, cancel, submit }) {
@@ -58,38 +52,36 @@ export function RowForm({ row: initialRow, cancel, submit }) {
   };
 
   return (
-    <div>
-      <form onSubmit={onSubmit}>
-        <StyledTable style={{ width: "100%" }}>
-          <tbody>
-            {currentTable.structure.map((field) => {
-              return (
-                <tr key={field.name}>
-                  <td style={{ fontWeight: "bold" }}>{field.name}</td>
-                  <td>{field.type}</td>
-                  <td>
-                    {renderInput({
-                      field,
-                      value: row[field.name],
-                      setValue: updateField(field.name),
-                    })}
-                  </td>
-                  <td>
-                    <Checkbox label="NULL" disabled />
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </StyledTable>
+    <form onSubmit={onSubmit}>
+      <StyledTable style={{ width: "100%" }}>
+        <tbody>
+          {currentTable.structure.map((field) => {
+            return (
+              <tr key={field.name}>
+                <td style={{ fontWeight: "bold" }}>{field.name}</td>
+                <td>{field.type}</td>
+                <td>
+                  {renderInput({
+                    field,
+                    value: row[field.name],
+                    setValue: updateField(field.name),
+                  })}
+                </td>
+                <td>
+                  <Checkbox label="NULL" disabled={!field.canBeNull} />
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </StyledTable>
 
-        <p>
-          <Button type="submit" style={{ marginRight: "0.5rem" }}>
-            Submit
-          </Button>
-          {cancel && <Button onClick={cancel}>Cancel</Button>}
-        </p>
-      </form>
-    </div>
+      <p>
+        <Button type="submit" style={{ marginRight: "0.5rem" }}>
+          Submit
+        </Button>
+        {cancel && <Button onClick={cancel}>Cancel</Button>}
+      </p>
+    </form>
   );
 }

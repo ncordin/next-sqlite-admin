@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { coolFetch } from "../utils/coolFetch";
+import { useApi } from "../utils/useApi";
 
 const initialState = {
   tables: [],
@@ -11,16 +11,17 @@ const ReactContext = React.createContext(initialState);
 function TablesProvider({ children }) {
   const [tables, setTables] = useState([]);
   const [currentTable, setCurrentTable] = useState(null);
+  const { fetch } = useApi();
 
   useEffect(() => {
-    coolFetch("api/tables").then((tables) => {
+    fetch("api/tables").then((tables) => {
       setCurrentTable(tables[0] || null);
       setTables(tables);
     });
   }, []);
 
   const refresh = () => {
-    coolFetch("api/tables").then(setTables);
+    return fetch("api/tables").then(setTables);
   };
 
   return (

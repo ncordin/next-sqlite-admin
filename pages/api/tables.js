@@ -13,7 +13,7 @@ const getStructure = (tableName) => {
     type: tableInfo.type,
     canBeNUll: !tableInfo.notnull,
     defaultValue: tableInfo.dftl_value,
-    isPrimaryKey: tableInfo.pk,
+    isPrimaryKey: !!tableInfo.pk,
   }));
 };
 
