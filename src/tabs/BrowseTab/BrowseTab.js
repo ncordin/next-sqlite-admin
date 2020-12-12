@@ -22,7 +22,7 @@ const FlexColumn = styled.div`
 `;
 
 export function BrowseTab() {
-  const { currentTable } = useTables();
+  const { currentTable, refresh } = useTables();
   const { executeQuery } = useApi();
 
   const [value, setValue] = useState("");
@@ -80,6 +80,7 @@ export function BrowseTab() {
     }
 
     execute(value);
+    refresh();
   };
 
   if (editingRow) {

@@ -11,10 +11,8 @@ export function makeWhere(row) {
 }
 
 export function makeFields(fields) {
-  console.log(fields);
   return fields
     .map((field) => {
-      console.log(field);
       const notNull = field.canBeNull ? "" : "NOT NULL";
       const primary = field.primaryKey ? "PRIMARY KEY" : "";
       const increment = field.autoIncrement ? "AUTOINCREMENT" : "";

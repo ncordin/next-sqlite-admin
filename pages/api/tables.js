@@ -11,7 +11,7 @@ const getStructure = (tableName) => {
   return database.pragma(`table_info('${tableName}')`).map((tableInfo) => ({
     name: tableInfo.name,
     type: tableInfo.type,
-    canBeNUll: !tableInfo.notnull,
+    canBeNull: !tableInfo.notnull,
     defaultValue: tableInfo.dftl_value,
     isPrimaryKey: !!tableInfo.pk,
   }));

@@ -21,7 +21,13 @@ function TablesProvider({ children }) {
   }, []);
 
   const refresh = () => {
-    return fetch("api/tables").then(setTables);
+    return fetch("api/tables").then((tables) => {
+      const newCurrentTable =
+        tables.find((table) => table.name === currentTable?.name) || null;
+
+      setTables(tables);
+      setCurrentTable(newCurrentTable);
+    });
   };
 
   return (

@@ -25,7 +25,7 @@ export function TableList({ createTable }) {
                 setCurrentTable(table);
               }}
             >
-              <BoldIf condition={table.name === currentTable.name}>
+              <BoldIf condition={table.name === currentTable?.name}>
                 {table.name} ({table.lines})
               </BoldIf>
             </ListItem>

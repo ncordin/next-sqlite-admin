@@ -22,7 +22,7 @@ function renderInput({ field, value, setValue }) {
   if (NUMERICS.includes(type)) {
     return (
       <NumberField
-        defaultValue={value}
+        defaultValue={value || ""}
         onChange={(value) => setValue(value)}
         width={300}
       />
@@ -31,7 +31,7 @@ function renderInput({ field, value, setValue }) {
 
   return (
     <TextField
-      value={value}
+      value={value || ""}
       onChange={(event) => setValue(event.target.value)}
       style={{ width: 300 }}
     />

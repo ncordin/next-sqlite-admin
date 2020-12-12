@@ -4,8 +4,8 @@ import { useTables } from "../../contexts/Tables";
 import { RowForm } from "../../components/RowForm";
 import { useApi } from "../../utils/useApi";
 
-export function InsertTab() {
-  const { currentTable } = useTables();
+export function InsertTab({ onCreated }) {
+  const { currentTable, refresh } = useTables();
   const { executeQuery } = useApi();
 
   const insertRow = async (row) => {
@@ -19,7 +19,10 @@ export function InsertTab() {
 
     const query = `INSERT INTO \`${currentTable.name}\` (${fields}) VALUES (${values});`;
 
-    executeQuery(query);
+    executeQuery(query).then(() => {
+      onCreated();
+      refresh();
+    });
   };
 
   return (
