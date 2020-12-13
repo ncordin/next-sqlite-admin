@@ -38,6 +38,7 @@ const getTables = () => {
     name: table.name,
     lines: countLines(table.name),
     structure: getStructure(table.name),
+    describe: table.sql,
   }));
 
   return data;

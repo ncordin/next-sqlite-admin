@@ -1,12 +1,18 @@
-import React from "react";
-import { Button, Fieldset } from "react95";
+import React, { useEffect, useState } from "react";
+import { Button, Fieldset, TextField } from "react95";
 
 import { useTables } from "../../contexts/Tables";
+import { InnerPanel } from "../../components/InnerPanel";
 import { useApi } from "../../utils/useApi";
 
 export function ManagementTab() {
   const { currentTable, refresh } = useTables();
   const { executeQuery } = useApi();
+  const [newTableName, setNewTableName] = useState(currentTable.name);
+
+  useEffect(() => {
+    setNewTableName(currentTable.name);
+  }, [currentTable?.name]);
 
   const flushTable = async () => {
     await executeQuery(`DELETE FROM "${currentTable.name}";`);
@@ -18,9 +24,30 @@ export function ManagementTab() {
     await refresh();
   };
 
+  const renameTable = async (event) => {
+    event.preventDefault();
+
+    await executeQuery(
+      `ALTER TABLE "${currentTable.name}" RENAME TO "${newTableName}";`
+    );
+    await refresh();
+  };
+
   return (
     <>
-      <Fieldset label="Danger zone">
+      <form onSubmit={renameTable}>
+        <Fieldset label="Rename table" style={{ marginBottom: 32 }}>
+          <TextField
+            value={newTableName}
+            onChange={(event) => setNewTableName(event.target.value)}
+          />
+          <Button type="submit" style={{ marginTop: "0.5rem" }}>
+            Rename
+          </Button>
+        </Fieldset>
+      </form>
+
+      <Fieldset label="Danger zone" style={{ marginBottom: "2rem" }}>
         <Button style={{ marginRight: 16 }} onClick={flushTable}>
           EMPTY TABLE `{currentTable.name}`
         </Button>
@@ -28,9 +55,10 @@ export function ManagementTab() {
           DELETE TABLE `{currentTable.name}`
         </Button>
       </Fieldset>
-      <p style={{ padding: 16 }}>
-        Vacuum / Primary key ? / Index ? / Dump / Describe1
-      </p>
+      <Fieldset label="SQL Describe" style={{ marginBottom: "2rem" }}>
+        <InnerPanel>{currentTable.describe}</InnerPanel>
+      </Fieldset>
+      <p>Vacuum / Dump / Primary key ? / Index ?</p>
     </>
   );
 }

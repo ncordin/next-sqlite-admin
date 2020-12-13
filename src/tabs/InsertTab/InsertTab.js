@@ -39,7 +39,7 @@ export function InsertTab({ onCreated }) {
 
       <div style={{ margin: "1rem 0" }}>
         <Button type="submit" style={{ marginRight: "0.5rem" }}>
-          Update
+          Insert
         </Button>
 
         <Button onClick={() => setShowQuery(!showQuery)}>Show query</Button>
