@@ -95,7 +95,7 @@ export function BrowseTab() {
 
   return (
     <>
-      <InnerPanel> {value}</InnerPanel>
+      <InnerPanel>{value}</InnerPanel>
 
       <FlexRow>
         <FlexColumn>

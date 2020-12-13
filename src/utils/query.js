@@ -1,12 +1,40 @@
+function escapeFieldName(name) {
+  return `\`${name}\``;
+}
+
+function escapeValue(value) {
+  if (value === null) {
+    return "NULL";
+  }
+
+  return `'${value}'`; // TODO: escape
+}
+
+function makeAssignment(field, value) {
+  if (value === null) {
+    return `${escapeFieldName(field)} = NULL`;
+  }
+
+  return `${escapeFieldName(field)} = ${escapeValue(value)}`;
+}
+
+function makeEquality(field, value) {
+  if (value === null) {
+    return `${escapeFieldName(field)} IS NULL`;
+  }
+
+  return `${escapeFieldName(field)} = ${escapeValue(value)}`;
+}
+
 export function makeSet(row) {
   return Object.keys(row)
-    .map((key) => `\`${key}\` = '${row[key]}'`)
+    .map((key) => makeAssignment(key, row[key]))
     .join(", ");
 }
 
 export function makeWhere(row) {
   return Object.keys(row)
-    .map((key) => `\`${key}\` = '${row[key]}'`)
+    .map((key) => makeEquality(key, row[key]))
     .join(" AND ");
 }
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Table,
   TableHead,
@@ -11,6 +11,10 @@ import {
 } from "react95";
 
 import { BoldIf } from "../../components/BoldIf";
+
+const Null = () => {
+  return <span style={{ fontStyle: "italic", opacity: 0.42 }}>NULL</span>;
+};
 
 export function BrowseResults({
   data,
@@ -80,7 +84,7 @@ export function BrowseResults({
                   key={`${index}-${valuesIndex}`}
                   style={{ whiteSpace: "nowrap" }}
                 >
-                  {value}
+                  {value === null ? <Null /> : value}
                 </TableDataCell>
               ))}
             </TableRow>

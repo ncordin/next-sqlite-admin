@@ -18,7 +18,7 @@ export function Edit({ row, execute, cancel }) {
   return (
     <>
       <p style={{ fontWeight: "bold" }}>Edit row</p>{" "}
-      <RowForm row={row} cancel={cancel} submit={save} />
+      <RowForm row={row} cancel={cancel} submit={save} submitText="Save" />
     </>
   );
 }

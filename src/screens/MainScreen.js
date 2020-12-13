@@ -89,7 +89,11 @@ export function MainScreen() {
             <StyledTab value="alter">Structure</StyledTab>
             <StyledTab value="management">Management</StyledTab>
           </Tabs>
-          <TabBody>{getTabBody(currentTable && currentTab)}</TabBody>
+          <TabBody>
+            {getTabBody(
+              (currentTable || currentTab === "create-table") && currentTab
+            )}
+          </TabBody>
         </Column>
       </FlexRow>
     </Layout>

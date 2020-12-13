@@ -1,11 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Checkbox, NumberField, TextField } from "react95";
 import styled from "styled-components";
 
 import { useTables } from "../contexts/Tables";
 
-// (bigint can be handle as numeric)
+// (bigint must be handled as string)
 const NUMERICS = ["int", "integer", "tinyint", "smallint", "mediumint"];
+
+const isNumericalType = (type) => {
+  const [split] = type.toLowerCase().split("(");
+
+  return NUMERICS.includes(split);
+};
 
 const StyledTable = styled.table`
   margin: 1rem 0;
@@ -17,14 +23,13 @@ const StyledTable = styled.table`
 `;
 
 function renderInput({ field, value, setValue }) {
-  const [type] = field.type.toLowerCase().split("(");
-
-  if (NUMERICS.includes(type)) {
+  if (isNumericalType(field.type)) {
     return (
       <NumberField
         defaultValue={value || ""}
         onChange={(value) => setValue(value)}
         width={300}
+        disabled={value === null}
       />
     );
   }
@@ -34,21 +39,34 @@ function renderInput({ field, value, setValue }) {
       value={value || ""}
       onChange={(event) => setValue(event.target.value)}
       style={{ width: 300 }}
+      disabled={value === null}
     />
   );
 }
 
-export function RowForm({ row: initialRow, cancel, submit }) {
+export function RowForm({ row: initialRow, cancel, submit, submitText }) {
   const { currentTable } = useTables();
   const [row, setRow] = useState(initialRow);
 
-  const updateField = (field) => (value) => {
+  useEffect(() => {
+    setRow(initialRow);
+  }, [currentTable?.name]);
+
+  const makeUpdateField = (field) => (value) => {
     setRow({ ...row, [field]: value });
   };
 
   const onSubmit = (event) => {
     event.preventDefault();
-    submit(row);
+    const cleanedRow = { ...row };
+
+    currentTable.structure.forEach((field) => {
+      if (isNumericalType(field.type) && cleanedRow[field.name] === "") {
+        delete cleanedRow[field.name];
+      }
+    });
+
+    submit(cleanedRow);
   };
 
   return (
@@ -56,19 +74,36 @@ export function RowForm({ row: initialRow, cancel, submit }) {
       <StyledTable style={{ width: "100%" }}>
         <tbody>
           {currentTable.structure.map((field) => {
+            const initialValue = row[field.name];
+            const hasDefaultValue =
+              field.defaultValue !== null || field.canBeNull;
+            const value =
+              initialValue === undefined && hasDefaultValue
+                ? field.defaultValue
+                : initialValue;
+
             return (
               <tr key={field.name}>
                 <td style={{ fontWeight: "bold" }}>{field.name}</td>
-                <td>{field.type}</td>
+                <td>{field.type.toUpperCase()}</td>
                 <td>
                   {renderInput({
                     field,
-                    value: row[field.name],
-                    setValue: updateField(field.name),
+                    value,
+                    setValue: makeUpdateField(field.name),
                   })}
                 </td>
                 <td>
-                  <Checkbox label="NULL" disabled={!field.canBeNull} />
+                  <Checkbox
+                    label="NULL"
+                    disabled={!field.canBeNull}
+                    checked={value === null}
+                    onChange={(event) =>
+                      makeUpdateField(field.name)(
+                        event.target.checked ? null : ""
+                      )
+                    }
+                  />
                 </td>
               </tr>
             );
@@ -78,7 +113,7 @@ export function RowForm({ row: initialRow, cancel, submit }) {
 
       <p>
         <Button type="submit" style={{ marginRight: "0.5rem" }}>
-          Submit
+          {submitText}
         </Button>
         {cancel && <Button onClick={cancel}>Cancel</Button>}
       </p>

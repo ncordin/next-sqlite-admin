@@ -7,12 +7,22 @@ const countLines = (tableName) => {
   return result["COUNT(*)"];
 };
 
+const removeQuotes = (string) => {
+  for (const quote of ['"', "'", "`"]) {
+    if (string.startsWith(quote) && string.endsWith(quote)) {
+      return string.slice(1, -1);
+    }
+  }
+
+  return string;
+};
+
 const getStructure = (tableName) => {
   return database.pragma(`table_info('${tableName}')`).map((tableInfo) => ({
     name: tableInfo.name,
     type: tableInfo.type,
     canBeNull: !tableInfo.notnull,
-    defaultValue: tableInfo.dftl_value,
+    defaultValue: tableInfo.dflt_value && removeQuotes(tableInfo.dflt_value),
     isPrimaryKey: !!tableInfo.pk,
   }));
 };
