@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Fieldset } from "react95";
+import { Button, Fieldset } from "react95";
 
 import { useTables } from "../../contexts/Tables";
 import { RowForm } from "../../components/RowForm";
@@ -9,20 +9,21 @@ import { InnerPanel } from "../../components/InnerPanel";
 export function InsertTab({ onCreated }) {
   const { currentTable, refresh } = useTables();
   const { executeQuery } = useApi();
-  const [loggedQuery, setLoggedQuery] = useState(null);
+  const [editingRow, setEditingRow] = useState({});
+  const [showQuery, setShowQuery] = useState(false);
 
-  const insertRow = async (row) => {
-    const fields = Object.keys(row)
-      .map((name) => `\`${name}\``)
-      .join(", ");
+  const fields = Object.keys(editingRow)
+    .map((name) => `\`${name}\``)
+    .join(", ");
 
-    const values = Object.values(row)
-      .map((value) => `'${value}'`)
-      .join(", ");
+  const values = Object.values(editingRow)
+    .map((value) => `'${value}'`)
+    .join(", ");
 
-    const query = `INSERT INTO \`${currentTable.name}\` (${fields}) VALUES (${values});`;
+  const query = `INSERT INTO \`${currentTable.name}\` (${fields}) VALUES (${values});`;
 
-    setLoggedQuery(query);
+  const onSubmit = async (event) => {
+    event.preventDefault();
 
     executeQuery(query).then(() => {
       onCreated();
@@ -31,11 +32,20 @@ export function InsertTab({ onCreated }) {
   };
 
   return (
-    <>
-      <Fieldset label={`Insert new ${currentTable.name}`}>
-        <RowForm row={{}} submit={insertRow} submitText="Insert" />
+    <form onSubmit={onSubmit}>
+      <Fieldset label={`Insert into ${currentTable.name}`}>
+        <RowForm row={editingRow} onChange={setEditingRow} />
       </Fieldset>
-      {loggedQuery && <InnerPanel>{loggedQuery}</InnerPanel>}
-    </>
+
+      <div style={{ margin: "1rem 0" }}>
+        <Button type="submit" style={{ marginRight: "0.5rem" }}>
+          Update
+        </Button>
+
+        <Button onClick={() => setShowQuery(!showQuery)}>Show query</Button>
+      </div>
+
+      {showQuery && <InnerPanel>{query}</InnerPanel>}
+    </form>
   );
 }

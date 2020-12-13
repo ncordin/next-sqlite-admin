@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Button, Checkbox, NumberField, TextField } from "react95";
+import React from "react";
+import { Checkbox, NumberField, TextField } from "react95";
 import styled from "styled-components";
 
 import { useTables } from "../contexts/Tables";
@@ -44,79 +44,60 @@ function renderInput({ field, value, setValue }) {
   );
 }
 
-export function RowForm({ row: initialRow, cancel, submit, submitText }) {
+export function RowForm({ row, onChange }) {
   const { currentTable } = useTables();
-  const [row, setRow] = useState(initialRow);
-
-  useEffect(() => {
-    setRow(initialRow);
-  }, [currentTable?.name]);
 
   const makeUpdateField = (field) => (value) => {
-    setRow({ ...row, [field]: value });
-  };
-
-  const onSubmit = (event) => {
-    event.preventDefault();
-    const cleanedRow = { ...row };
+    const newRow = { ...row, [field]: value };
 
     currentTable.structure.forEach((field) => {
-      if (isNumericalType(field.type) && cleanedRow[field.name] === "") {
-        delete cleanedRow[field.name];
+      if (isNumericalType(field.type) && newRow[field.name] === "") {
+        delete newRow[field.name];
       }
     });
 
-    submit(cleanedRow);
+    onChange(newRow);
   };
 
   return (
-    <form onSubmit={onSubmit}>
-      <StyledTable style={{ width: "100%" }}>
-        <tbody>
-          {currentTable.structure.map((field) => {
-            const initialValue = row[field.name];
-            const hasDefaultValue =
-              field.defaultValue !== null || field.canBeNull;
-            const value =
-              initialValue === undefined && hasDefaultValue
-                ? field.defaultValue
-                : initialValue;
+    <StyledTable style={{ width: "100%" }}>
+      <tbody>
+        {currentTable.structure.map((field) => {
+          const initialValue = row[field.name];
+          const hasDefaultValue =
+            field.defaultValue !== null || field.canBeNull;
+          const value =
+            initialValue === undefined && hasDefaultValue
+              ? field.defaultValue
+              : initialValue;
 
-            return (
-              <tr key={field.name}>
-                <td style={{ fontWeight: "bold" }}>{field.name}</td>
-                <td>{field.type.toUpperCase()}</td>
-                <td>
-                  {renderInput({
-                    field,
-                    value,
-                    setValue: makeUpdateField(field.name),
-                  })}
-                </td>
-                <td>
-                  <Checkbox
-                    label="NULL"
-                    disabled={!field.canBeNull}
-                    checked={value === null}
-                    onChange={(event) =>
-                      makeUpdateField(field.name)(
-                        event.target.checked ? null : ""
-                      )
-                    }
-                  />
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </StyledTable>
-
-      <p>
-        <Button type="submit" style={{ marginRight: "0.5rem" }}>
-          {submitText}
-        </Button>
-        {cancel && <Button onClick={cancel}>Cancel</Button>}
-      </p>
-    </form>
+          return (
+            <tr key={field.name}>
+              <td style={{ fontWeight: "bold" }}>{field.name}</td>
+              <td>{field.type.toUpperCase()}</td>
+              <td>
+                {renderInput({
+                  field,
+                  value,
+                  setValue: makeUpdateField(field.name),
+                })}
+              </td>
+              <td>
+                <Checkbox
+                  label="NULL"
+                  disabled={!field.canBeNull}
+                  checked={value === null}
+                  onChange={(event) =>
+                    makeUpdateField(field.name)(
+                      event.target.checked ? null : ""
+                    )
+                  }
+                />
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </StyledTable>
   );
 }
