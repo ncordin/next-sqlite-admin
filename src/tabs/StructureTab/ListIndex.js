@@ -1,28 +1,38 @@
-import React, { useEffect, useState } from "react";
-import { Fieldset } from "react95";
-import { useTables } from "../../contexts/Tables";
+import React from "react";
+import { Button, Fieldset } from "react95";
+import { FlexRow } from "../../components/FlexRow";
 import { useApi } from "../../utils/useApi";
 
-export function ListIndex() {
-  const { currentTable } = useTables();
+export function ListIndex({ indexes, refreshIndexes, currentTable }) {
   const { executeQuery } = useApi();
-  const [indexes, setIndexes] = useState([]);
-
-  useEffect(() => {
-    executeQuery(`PRAGMA index_list(${currentTable.name});`).then(setIndexes);
-  }, [currentTable?.name]);
+  const primaryKey = currentTable.structure
+    .filter((field) => field.isPrimaryKey)
+    .map((field) => field.name);
 
   return (
     <Fieldset label="Indexes">
-      Name / Origin / Partial / Seq / Unique
-      {indexes.map((index) => (
-        <div key={index.name}>
-          {index.name} {index.origin} {index.partial} {index.seq} {index.unique}
-        </div>
-      ))}
+      {primaryKey && (
+        <FlexRow between>
+          <span>{primaryKey}</span>
+          <span>primary key</span>
+        </FlexRow>
+      )}
+      {indexes.map((index) => {
+        const drop = async () => {
+          await executeQuery(`DROP INDEX "${index.name}"`);
+          refreshIndexes();
+        };
+
+        return (
+          <FlexRow key={index.name} between>
+            <span style={{ flexBasis: 200 }}>{index.name}</span>
+            {index.unique === "1" ? "unique" : ""}
+            <Button onClick={drop}>Drop</Button>
+          </FlexRow>
+        );
+      })}
     </Fieldset>
   );
 }
 
-// Index : Name | field[] | unique
 // DROP INDEX index_name;

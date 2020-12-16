@@ -38,18 +38,18 @@ export function makeWhere(row) {
     .join(" AND ");
 }
 
-export function makeFields(fields) {
-  return fields
-    .map((field) => {
-      const notNull = field.canBeNull ? "" : "NOT NULL";
-      const primary = field.primaryKey ? "PRIMARY KEY" : "";
-      const increment = field.autoIncrement ? "AUTOINCREMENT" : "";
-      const defaultValue =
-        field.defaultValue !== null ? `DEFAULT "${field.defaultValue}"` : "";
+function makeField(field) {
+  const notNull = field.canBeNull ? "" : "NOT NULL";
+  const primary = field.primaryKey ? "PRIMARY KEY" : "";
+  const increment = field.autoIncrement ? "AUTOINCREMENT" : "";
+  const defaultValue =
+    field.defaultValue !== null ? `DEFAULT "${field.defaultValue}"` : "";
 
-      return `\`${field.name}\` ${field.type} ${primary} ${increment} ${notNull} ${defaultValue}`;
-    })
-    .join(",  ");
+  return `"${field.name}" ${field.type} ${primary} ${increment} ${notNull} ${defaultValue}`;
+}
+
+export function makeFields(fields) {
+  return fields.map(makeField).join(",  ");
 }
 
 export function makeDelete(table, row) {
@@ -58,4 +58,18 @@ export function makeDelete(table, row) {
 
 export function makeCreateTable(table, fields) {
   return `CREATE TABLE \`${table}\` (${makeFields(fields)});`;
+}
+
+export function makeIndex({ name, fields, isUnique, tableName }) {
+  return `CREATE ${
+    isUnique ? "UNIQUE" : ""
+  } INDEX "${name}" ON "${tableName}"(${fields.join(", ")});`;
+}
+
+export function makeAddField({ field, tableName }) {
+  return `ALTER TABLE "${tableName}" ADD COLUMN ${makeField(field)}`;
+}
+
+export function makeRenameField({ currentName, newName, tableName }) {
+  return `ALTER TABLE "${tableName}" RENAME COLUMN "${currentName}" TO "${newName}";`;
 }

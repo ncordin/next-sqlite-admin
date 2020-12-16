@@ -32,6 +32,7 @@ const GlobalStyles = createGlobalStyle`
   ${styleReset}
   * {
     box-sizing: border-box;
+    letter-spacing: 0.5px;
   }
 `;
 

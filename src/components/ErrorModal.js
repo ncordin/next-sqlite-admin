@@ -3,10 +3,10 @@ import styled from "styled-components";
 import { Button, Window, WindowContent, WindowHeader } from "react95";
 
 const Container = styled.div`
-  position: absolute;
-  top: 15vh;
+  position: fixed;
+  top: 40%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateY(-50%);
 
   .window-header {
     display: flex;
