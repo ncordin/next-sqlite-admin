@@ -11,6 +11,7 @@ import { CreateTableTab } from "../tabs/CreateTableTab";
 import { ManagementTab } from "../tabs/ManagementTab/ManagementTab";
 import { useTables } from "../contexts/Tables";
 import { EmptyTab } from "../tabs/EmptyTab";
+import { StructureTab } from "../tabs/StructureTab";
 
 const FlexRow = styled.div`
   display: flex;
@@ -46,8 +47,8 @@ export function MainScreen() {
       case "sql":
         return <SqlTab />;
 
-      case "alter":
-        return "ALTER";
+      case "structure":
+        return <StructureTab />;
 
       case "management":
         return <ManagementTab />;
@@ -86,7 +87,7 @@ export function MainScreen() {
             <StyledTab value="browse">Browse</StyledTab>
             <StyledTab value="insert">Insert</StyledTab>
             <StyledTab value="sql">SQL</StyledTab>
-            <StyledTab value="alter">Structure</StyledTab>
+            <StyledTab value="structure">Structure</StyledTab>
             <StyledTab value="management">Management</StyledTab>
           </Tabs>
           <TabBody>

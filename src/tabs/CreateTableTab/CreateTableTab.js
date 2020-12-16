@@ -1,35 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Button, Checkbox, Fieldset, Select, TextField } from "react95";
-import styled from "styled-components";
 
 import { InnerPanel } from "../../components/InnerPanel";
+import { defaultField, NewFieldsForm } from "../../components/NewFieldsForm";
 import { useTables } from "../../contexts/Tables";
 import { makeCreateTable } from "../../utils/query";
 import { useApi } from "../../utils/useApi";
-
-const StyledTable = styled.table`
-  margin: 1rem 0;
-
-  td {
-    padding: 0.5rem;
-    vertical-align: middle;
-  }
-`;
-
-const typeOptions = [
-  { value: "INTEGER", label: "INTEGER" },
-  { value: "TEXT", label: "TEXT" },
-  { value: "REAL", label: "REAL" },
-];
-
-const defaultField = {
-  name: "",
-  type: "INTEGER",
-  canBeNull: false,
-  defaultValue: null,
-  primaryKey: false,
-  autoIncrement: false,
-};
 
 export function CreateTableTab({ onCreated }) {
   const [tableName, setTableName] = useState("");
@@ -39,9 +15,7 @@ export function CreateTableTab({ onCreated }) {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-
     const sql = makeCreateTable(tableName, fields);
-
     executeQuery(sql).then(refresh);
   };
 
@@ -66,77 +40,7 @@ export function CreateTableTab({ onCreated }) {
       </Fieldset>
 
       <Fieldset label="Table fields" style={{ marginBottom: 32 }}>
-        <StyledTable style={{ width: "100%" }}>
-          <thead>
-            <tr>
-              <td>Field name</td>
-              <td>Field type</td>
-              <td>Allow null</td>
-              <td>Default value</td>
-            </tr>
-          </thead>
-          <tbody>
-            {fields.map((field, index) => {
-              const updateField = (property, value) => {
-                const newFields = [...fields];
-                newFields[index] = { ...field, [property]: value };
-
-                setFields(newFields);
-              };
-
-              return (
-                <tr key={index}>
-                  <td>
-                    <TextField
-                      value={field.name}
-                      onChange={(event) =>
-                        updateField("name", event.target.value)
-                      }
-                    />
-                  </td>
-                  <td>
-                    <Select
-                      options={typeOptions}
-                      value={field.type}
-                      width={160}
-                      onChange={(event) =>
-                        updateField("type", event.target.value)
-                      }
-                    />
-                  </td>
-                  <td>
-                    <Checkbox
-                      label=""
-                      checked={field.canBeNull}
-                      onChange={(event) =>
-                        updateField("canBeNull", event.target.checked)
-                      }
-                    />
-                  </td>
-                  <td style={{ display: "flex" }}>
-                    <Checkbox
-                      label=""
-                      checked={field.defaultValue !== null}
-                      onChange={(event) =>
-                        updateField(
-                          "defaultValue",
-                          event.target.checked ? "" : null
-                        )
-                      }
-                    />
-                    <TextField
-                      value={field.defaultValue || ""}
-                      disabled={field.defaultValue === null}
-                      onChange={(event) =>
-                        updateField("defaultValue", event.target.value)
-                      }
-                    />
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </StyledTable>
+        <NewFieldsForm fields={fields} setFields={setFields} />
         <Button
           style={{ marginLeft: "0.5rem" }}
           onClick={() => setFields([...fields, defaultField])}

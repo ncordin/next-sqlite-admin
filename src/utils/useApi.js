@@ -17,8 +17,8 @@ export function useApi() {
     return coolFetch(route, payload);
   };
 
-  const executeQuery = async (query) => {
-    const data = await coolFetch("api/sql", { sql: query });
+  const executeQuery = async (query, params) => {
+    const data = await coolFetch("api/sql", { query, params });
 
     if (data.error) {
       open("SQL error!", data.error);

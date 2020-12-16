@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "module": "es2015",
+    "moduleResolution": "node",
+    "jsx": "react",
+    "checkJs": true
+  },
+  "include": ["src/**/*", "pages/**/*"],
+  "exclude": ["node_modules"]
+}

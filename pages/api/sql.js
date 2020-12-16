@@ -2,13 +2,13 @@ import sqlite from "better-sqlite3";
 const database = sqlite("myBase.db");
 database.defaultSafeIntegers(true);
 
-const executeSql = (sql) => {
-  const lowerSql = sql.trim().toLowerCase();
+const executeSql = (query, params = []) => {
+  const lowerSql = query.trim().toLowerCase();
 
-  if (lowerSql.startsWith("select ")) {
-    return database.prepare(sql).all();
+  if (lowerSql.startsWith("select ") || lowerSql.startsWith("pragma ")) {
+    return database.prepare(query).all(params);
   } else {
-    return [database.prepare(sql).run()];
+    return [database.prepare(query).run(params)];
   }
 };
 
@@ -28,7 +28,7 @@ const convertBigIntToString = (result) => {
 
 export default (request, response) => {
   try {
-    const result = executeSql(request.body.sql);
+    const result = executeSql(request.body.query, request.body.params);
     const resultSafe = convertBigIntToString(result);
 
     response.statusCode = 200;

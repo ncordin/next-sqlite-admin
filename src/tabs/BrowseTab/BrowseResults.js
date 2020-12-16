@@ -11,10 +11,7 @@ import {
 } from "react95";
 
 import { BoldIf } from "../../components/BoldIf";
-
-const Null = () => {
-  return <span style={{ fontStyle: "italic", opacity: 0.42 }}>NULL</span>;
-};
+import { Null } from "../../components/Null";
 
 export function BrowseResults({
   data,

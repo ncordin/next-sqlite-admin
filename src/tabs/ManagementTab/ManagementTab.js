@@ -36,29 +36,42 @@ export function ManagementTab() {
   return (
     <>
       <form onSubmit={renameTable}>
-        <Fieldset label="Rename table" style={{ marginBottom: 32 }}>
+        <Fieldset
+          label="Rename table"
+          style={{ marginBottom: 32, padding: "2rem" }}
+        >
           <TextField
             value={newTableName}
             onChange={(event) => setNewTableName(event.target.value)}
           />
-          <Button type="submit" style={{ marginTop: "0.5rem" }}>
+          <Button type="submit" style={{ marginTop: "1rem" }}>
             Rename
           </Button>
         </Fieldset>
       </form>
 
-      <Fieldset label="Danger zone" style={{ marginBottom: "2rem" }}>
+      <Fieldset
+        label="Danger zone"
+        style={{ marginBottom: "2rem", padding: "2rem" }}
+      >
+        <p style={{ marginBottom: "1rem" }}>
+          <span style={{ fontWeight: "bold" }}> {currentTable.name}</span> data
+          will be lost!
+        </p>
         <Button style={{ marginRight: 16 }} onClick={flushTable}>
-          EMPTY TABLE `{currentTable.name}`
+          Empty table
         </Button>
         <Button style={{ marginRight: 16 }} onClick={dropTable}>
-          DELETE TABLE `{currentTable.name}`
+          Delete table
         </Button>
       </Fieldset>
-      <Fieldset label="SQL Describe" style={{ marginBottom: "2rem" }}>
+
+      <Fieldset
+        label="SQL Describe"
+        style={{ marginBottom: "2rem", padding: "2rem" }}
+      >
         <InnerPanel>{currentTable.describe}</InnerPanel>
       </Fieldset>
-      <p>Vacuum / Dump / Primary key ? / Index ?</p>
     </>
   );
 }
