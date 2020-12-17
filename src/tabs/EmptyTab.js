@@ -6,7 +6,7 @@ export function EmptyTab() {
   return (
     <Centred>
       <Fieldset label="Oups!" style={{ padding: 64 }}>
-        <Centred>This table does not exts.</Centred>
+        <Centred>This table does not exits.</Centred>
       </Fieldset>
     </Centred>
   );

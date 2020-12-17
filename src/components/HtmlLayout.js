@@ -1,7 +1,7 @@
 import Head from "next/head";
 import React from "react";
 import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
-import { styleReset, Window, WindowHeader } from "react95";
+import { styleReset } from "react95";
 // import original from "react95/dist/themes/original";
 import original from "react95/dist/themes/tokyoDark";
 
@@ -38,10 +38,9 @@ const GlobalStyles = createGlobalStyle`
 
 const StyledLayout = styled.div`
   font-family: "ms_sans_serif";
-  padding: 16px;
 `;
 
-export function Layout({ title, children }) {
+export function HtmlLayout({ children }) {
   const { isOpen, title: titleModal, message, close } = useErrorModal();
 
   return (
@@ -52,12 +51,7 @@ export function Layout({ title, children }) {
           <title>SQLite 95</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <StyledLayout>
-          <Window style={{ minWidth: "100%" }}>
-            <WindowHeader>{title}</WindowHeader>
-            {children}
-          </Window>
-        </StyledLayout>
+        <StyledLayout>{children}</StyledLayout>
         {isOpen && (
           <ErrorModal title={titleModal} onClose={close}>
             {message}

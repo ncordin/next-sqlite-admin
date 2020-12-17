@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { Button, Toolbar, Bar, Tabs, Tab, TabBody } from "react95";
+import { Tab, TabBody, Tabs } from "react95";
 import styled from "styled-components";
 
-import { Layout } from "../components/Layout";
 import { TableList } from "../components/TableList";
-import { BrowseTab } from "../tabs/BrowseTab";
-import { InsertTab } from "../tabs/InsertTab/InsertTab";
-import { SqlTab } from "../tabs/SqlTab";
-import { CreateTableTab } from "../tabs/CreateTableTab";
-import { ManagementTab } from "../tabs/ManagementTab/ManagementTab";
+import { ClosableWindow } from "../components/ClosableWindow";
 import { useTables } from "../contexts/Tables";
+import { BrowseTab } from "../tabs/BrowseTab";
+import { CreateTableTab } from "../tabs/CreateTableTab";
 import { EmptyTab } from "../tabs/EmptyTab";
+import { InsertTab } from "../tabs/InsertTab/InsertTab";
+import { ManagementTab } from "../tabs/ManagementTab/ManagementTab";
+import { SqlTab } from "../tabs/SqlTab";
 import { StructureTab } from "../tabs/StructureTab";
+import { useDatabase } from "../contexts/Database";
+
+const Container = styled.div`
+  padding: 1rem;
+`;
 
 const FlexRow = styled.div`
   display: flex;
@@ -26,8 +31,9 @@ const StyledTab = styled(Tab)`
   padding: 0 1.2rem;
 `;
 
-export function MainScreen() {
+export function MainScreen({ onClose }) {
   const [currentTab, setCurrentTab] = useState("browse");
+  const { database } = useDatabase();
   const { currentTable } = useTables();
 
   useEffect(() => {
@@ -62,41 +68,35 @@ export function MainScreen() {
   };
 
   return (
-    <Layout title="SQLite 95 - myDatabase.db">
-      <Toolbar
-        style={{ marginBottom: 8, position: "relative", top: -4, left: -4 }}
+    <Container>
+      <ClosableWindow
+        title={`SQLite 95 - ${database}`}
+        onClose={onClose}
+        style={{ width: "100%" }}
       >
-        <Button variant="menu" size="sm">
-          Database
-        </Button>
-        <Bar size={24} />
-        <Button variant="menu" disabled size="sm">
-          Logout
-        </Button>
-      </Toolbar>
-
-      <FlexRow>
-        <Column>
-          <TableList createTable={() => setCurrentTab("create-table")} />
-        </Column>
-        <Column style={{ flex: 1, paddingLeft: 8, paddingBottom: 50 }}>
-          <Tabs
-            value={currentTab}
-            onChange={(e, value) => setCurrentTab(value)}
-          >
-            <StyledTab value="browse">Browse</StyledTab>
-            <StyledTab value="insert">Insert</StyledTab>
-            <StyledTab value="sql">SQL</StyledTab>
-            <StyledTab value="structure">Structure</StyledTab>
-            <StyledTab value="management">Management</StyledTab>
-          </Tabs>
-          <TabBody>
-            {getTabBody(
-              (currentTable || currentTab === "create-table") && currentTab
-            )}
-          </TabBody>
-        </Column>
-      </FlexRow>
-    </Layout>
+        <FlexRow>
+          <Column>
+            <TableList createTable={() => setCurrentTab("create-table")} />
+          </Column>
+          <Column style={{ flex: 1, paddingLeft: 8, paddingBottom: 50 }}>
+            <Tabs
+              value={currentTab}
+              onChange={(e, value) => setCurrentTab(value)}
+            >
+              <StyledTab value="browse">Browse</StyledTab>
+              <StyledTab value="insert">Insert</StyledTab>
+              <StyledTab value="sql">SQL</StyledTab>
+              <StyledTab value="structure">Structure</StyledTab>
+              <StyledTab value="management">Management</StyledTab>
+            </Tabs>
+            <TabBody>
+              {getTabBody(
+                (currentTable || currentTab === "create-table") && currentTab
+              )}
+            </TabBody>
+          </Column>
+        </FlexRow>
+      </ClosableWindow>
+    </Container>
   );
 }
