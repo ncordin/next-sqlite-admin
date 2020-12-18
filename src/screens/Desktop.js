@@ -4,6 +4,7 @@ import { MainScreen } from "../screens/MainScreen";
 import { ExploreScreen } from "../screens/ExploreScreen";
 import { Shortcut } from "../components/Shortcut";
 import { useDatabase } from "../contexts/Database";
+import { TablesProvider } from "../contexts/Tables";
 
 export function Desktop() {
   const { database, setDatabase } = useDatabase();
@@ -12,7 +13,11 @@ export function Desktop() {
 
   return (
     <>
-      {database && <MainScreen onClose={() => setDatabase(null)} />}
+      {database && (
+        <TablesProvider>
+          <MainScreen onClose={() => setDatabase(null)} />
+        </TablesProvider>
+      )}
 
       {path && (
         <ExploreScreen

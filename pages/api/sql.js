@@ -1,8 +1,7 @@
-import sqlite from "better-sqlite3";
-const database = sqlite("myBase.db");
-database.defaultSafeIntegers(true);
+import { convertBigIntToString, getDatabase } from "../../server/utils";
 
-const executeSql = (query, params = []) => {
+const executeSql = (databaseName, query, params = []) => {
+  const database = getDatabase(databaseName);
   const lowerSql = query.trim().toLowerCase();
 
   if (lowerSql.startsWith("select ") || lowerSql.startsWith("pragma ")) {
@@ -12,31 +11,19 @@ const executeSql = (query, params = []) => {
   }
 };
 
-const convertBigIntToString = (result) => {
-  return result.map((row) => {
-    return Object.keys(row).reduce((previous, current) => {
-      const value = row[current];
-      const newValue = typeof value === "bigint" ? value.toString() : value;
-
-      return {
-        ...previous,
-        [current]: newValue,
-      };
-    }, {});
-  });
-};
-
 export default (request, response) => {
   try {
-    const result = executeSql(request.body.query, request.body.params);
+    const result = executeSql(
+      request.headers.database,
+      request.body.query,
+      request.body.params
+    );
     const resultSafe = convertBigIntToString(result);
 
     response.statusCode = 200;
     response.json(resultSafe);
   } catch (error) {
     response.statusCode = 200;
-    response.json({ error: error.message });
+    response.json({ error: { title: "SQL error!", message: error.message } });
   }
 };
-
-// database.close();

@@ -1,8 +1,7 @@
-import sqlite from "better-sqlite3";
-const database = sqlite("myBase.db");
+import { convertBigIntToString, getDatabase } from "../../server/utils";
 
-const countLines = (tableName) => {
-  const result = database.prepare(`SELECT COUNT(*) FROM ${tableName}`).get();
+const countLines = (database, tableName) => {
+  const result = database.prepare(`SELECT COUNT(*) FROM "${tableName}"`).get();
 
   return result["COUNT(*)"];
 };
@@ -17,7 +16,7 @@ const removeQuotes = (string) => {
   return string;
 };
 
-const getStructure = (tableName) => {
+const getStructure = (database, tableName) => {
   return database.pragma(`table_info('${tableName}')`).map((tableInfo) => ({
     name: tableInfo.name,
     type: tableInfo.type,
@@ -27,28 +26,31 @@ const getStructure = (tableName) => {
   }));
 };
 
-const getTables = () => {
+const getTables = (database) => {
   const tables = database
     .prepare(
       "SELECT * FROM sqlite_master WHERE `type`='table' ORDER BY `name` ASC;"
     )
     .all();
 
-  const data = tables.map((table) => ({
+  return tables.map((table) => ({
     name: table.name,
-    lines: countLines(table.name),
-    structure: getStructure(table.name),
+    lines: countLines(database, table.name),
+    structure: getStructure(database, table.name),
     describe: table.sql,
   }));
-
-  return data;
 };
 
 export default (request, response) => {
-  const tables = getTables();
+  try {
+    const database = getDatabase(request.headers.database);
+    const tables = getTables(database);
+    const safeJson = convertBigIntToString(tables);
 
-  response.statusCode = 200;
-  response.json(tables);
+    response.statusCode = 200;
+    response.json(safeJson);
+  } catch (error) {
+    response.statusCode = 200;
+    response.json({ error: { message: error.message } });
+  }
 };
-
-// database.close();

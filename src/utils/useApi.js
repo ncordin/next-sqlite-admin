@@ -1,7 +1,7 @@
 import { useDatabase } from "../contexts/Database";
 import { useErrorModal } from "../contexts/ErrorModal";
 
-function coolFetch(url, params, database = "") {
+function fetchSqliteApi({ url, params, database = "" }) {
   return fetch(url, {
     method: "POST",
     headers: {
@@ -9,26 +9,26 @@ function coolFetch(url, params, database = "") {
       Database: database,
     },
     body: JSON.stringify(params),
-  }).then((res) => res.json());
+  }).then((response) => response.json());
 }
 
 export function useApi() {
   const { open } = useErrorModal();
   const { database } = useDatabase();
 
-  const fetch = (route, payload) => {
-    return coolFetch(route, payload, database);
-  };
+  const fetch = async (url, params) => {
+    const response = await fetchSqliteApi({ url, params, database });
 
-  const executeQuery = async (query, params) => {
-    const data = await coolFetch("api/sql", { query, params }, database);
-
-    if (data.error) {
-      open("SQL error!", data.error);
+    if (response.error) {
+      open(response.error.title || "Error!", response.error.message);
       return Promise.reject();
     }
 
-    return data;
+    return response;
+  };
+
+  const executeQuery = async (query, params) => {
+    return fetch("api/sql", { query, params });
   };
 
   return { fetch, executeQuery };

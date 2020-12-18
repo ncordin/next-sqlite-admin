@@ -37,6 +37,6 @@ export default (request, response) => {
     });
   } catch (error) {
     response.statusCode = 200;
-    response.json({ error: error.message });
+    response.json({ error: { message: error.message } });
   }
 };

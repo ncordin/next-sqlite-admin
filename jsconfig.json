@@ -5,6 +5,6 @@
     "jsx": "react",
     "checkJs": true
   },
-  "include": ["src/**/*", "pages/**/*"],
+  "include": ["src/**/*", "pages/**/*", "server/**/*"],
   "exclude": ["node_modules"]
 }

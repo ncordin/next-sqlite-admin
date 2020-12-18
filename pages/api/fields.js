@@ -1,9 +1,8 @@
-import sqlite from "better-sqlite3";
-const database = sqlite("myBase.db");
-database.defaultSafeIntegers(true);
+import { getDatabase } from "../../server/utils";
 
 export default (request, response) => {
   try {
+    const database = getDatabase(request.headers.database);
     const tableName = request.body.table;
     const fields = request.body.fields;
 
@@ -28,8 +27,6 @@ export default (request, response) => {
     response.json({});
   } catch (error) {
     response.statusCode = 200;
-    response.json({ error: error.message });
+    response.json({ error: { message: error.message } });
   }
 };
-
-// database.close();
