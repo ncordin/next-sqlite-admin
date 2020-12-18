@@ -2,7 +2,7 @@ import { useDatabase } from "../contexts/Database";
 import { useErrorModal } from "../contexts/ErrorModal";
 
 function fetchSqliteApi({ url, params, database = "" }) {
-  return fetch(url, {
+  return fetch(`${process.env.basePath}/${url}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

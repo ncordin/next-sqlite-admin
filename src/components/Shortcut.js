@@ -14,7 +14,12 @@ export function Shortcut({ icon, name, onClick }) {
   return (
     <Container onClick={onClick}>
       <div>
-        <Image src={`/${icon}.png`} alt={name} width="32" height="32" />
+        <Image
+          src={`${process.env.basePath}/${icon}.png`}
+          alt={name}
+          width="32"
+          height="32"
+        />
       </div>
       {name}
     </Container>

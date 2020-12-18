@@ -13,12 +13,12 @@ export function Desktop() {
 
   return (
     <>
+      basePath: {process.env.basePath}
       {database && (
         <TablesProvider>
           <MainScreen onClose={() => setDatabase(null)} />
         </TablesProvider>
       )}
-
       {path && (
         <ExploreScreen
           selectDatabase={(file) => {
@@ -28,7 +28,6 @@ export function Desktop() {
           onClose={() => setPath(null)}
         />
       )}
-
       {!database && !path && (
         <>
           <Shortcut
