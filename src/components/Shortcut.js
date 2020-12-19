@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import Image from "next/image";
 
 const Container = styled.div`
   display: inline-block;
@@ -14,7 +13,7 @@ export function Shortcut({ icon, name, onClick }) {
   return (
     <Container onClick={onClick}>
       <div>
-        <Image
+        <img
           src={`${process.env.basePath}/${icon}.png`}
           alt={name}
           width="32"

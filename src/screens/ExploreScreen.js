@@ -1,4 +1,3 @@
-import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { Table, TableBody, TableDataCell, TableRow } from "react95";
 import styled from "styled-components";
@@ -60,8 +59,7 @@ export function ExploreScreen({ selectDatabase, onClose }) {
                         display: "flex",
                       }}
                     >
-                      <Image src="/database.png" width={24} height={24} />{" "}
-                      {file}
+                      <img src="/database.png" width={24} height={24} /> {file}
                     </div>
                   ) : (
                     <span style={{ opacity: 0.2 }}>{file}</span>

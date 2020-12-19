@@ -13,7 +13,6 @@ export function Desktop() {
 
   return (
     <>
-      basePath: {process.env.basePath}
       {database && (
         <TablesProvider>
           <MainScreen onClose={() => setDatabase(null)} />

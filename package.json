@@ -3,24 +3,24 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "dev": "parcel public/index.html",
+    "build": "parcel build public/index.html"
   },
   "dependencies": {
-    "next": "10.0.3",
     "react": "17.0.1",
     "react-dom": "17.0.1",
-    "react-syntax-highlighter": "^15.4.2",
     "react95": "^3.4.1",
-    "sql-highlight": "^3.3.1",
-    "styled-components": "^5.2.1",
-    "swr": "^0.3.9"
+    "styled-components": "^5.2.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/plugin-proposal-optional-chaining": "^7.12.7",
     "better-sqlite3": "^7.1.1",
     "eslint": "^7.15.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-react": "^7.21.5"
-  }
+  },
+  "browserslist": [
+    "last 1 Chrome version"
+  ]
 }

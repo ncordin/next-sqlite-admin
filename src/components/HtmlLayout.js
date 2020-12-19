@@ -1,4 +1,3 @@
-import Head from "next/head";
 import React from "react";
 import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
 import { styleReset } from "react95";
@@ -47,10 +46,6 @@ export function HtmlLayout({ children }) {
     <>
       <GlobalStyles />
       <ThemeProvider theme={original}>
-        <Head>
-          <title>SQLite 95</title>
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
         <StyledLayout>{children}</StyledLayout>
         {isOpen && (
           <ErrorModal title={titleModal} onClose={close}>
