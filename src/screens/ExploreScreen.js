@@ -4,6 +4,9 @@ import styled from "styled-components";
 import { ClosableWindow } from "../components/ClosableWindow";
 import { useApi } from "../utils/useApi";
 
+// @ts-ignore
+import iconDatabase from "../assets/database.png";
+
 const Container = styled.div`
   padding: 1rem;
 `;
@@ -59,7 +62,7 @@ export function ExploreScreen({ selectDatabase, onClose }) {
                         display: "flex",
                       }}
                     >
-                      <img src="/database.png" width={24} height={24} /> {file}
+                      <img src={iconDatabase} width={24} height={24} /> {file}
                     </div>
                   ) : (
                     <span style={{ opacity: 0.2 }}>{file}</span>

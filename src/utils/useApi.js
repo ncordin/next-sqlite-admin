@@ -1,9 +1,13 @@
 import { useDatabase } from "../contexts/Database";
 import { useErrorModal } from "../contexts/ErrorModal";
 
+// eslint-disable-next-line no-undef
+const BASE_URL = process.env.IS_DEV_SERVER ? "http://localhost:8080/" : "";
+
 function fetchSqliteApi({ url, params, database = "" }) {
-  return fetch(`${process.env.basePath}/${url}`, {
+  return fetch(`${BASE_URL}${url}`, {
     method: "POST",
+    cache: "no-cache",
     headers: {
       "Content-Type": "application/json",
       Database: database,

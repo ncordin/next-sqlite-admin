@@ -8,18 +8,6 @@ import { useErrorModal } from "../contexts/ErrorModal";
 import { ErrorModal } from "./ErrorModal";
 
 const GlobalStyles = createGlobalStyle`
-  @font-face {
-    font-family: 'ms_sans_serif';
-    src: url('ms_sans_serif.woff2') format('woff2');
-    font-weight: 400;
-    font-style: normal
-  }
-  @font-face {
-    font-family: 'ms_sans_serif';
-    src: url('ms_sans_serif_bold.woff2') format('woff2');
-    font-weight: bold;
-    font-style: normal
-  }
   body {
     font-family: 'ms_sans_serif';
     background-color: teal;

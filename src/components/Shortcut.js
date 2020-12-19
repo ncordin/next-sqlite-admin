@@ -1,6 +1,19 @@
 import React from "react";
 import styled from "styled-components";
 
+// @ts-ignore
+import computer from "../assets/computer.png";
+// @ts-ignore
+import database from "../assets/database.png";
+// @ts-ignore
+import bin from "../assets/bin.png";
+
+const icons = {
+  computer,
+  database,
+  bin,
+};
+
 const Container = styled.div`
   display: inline-block;
   padding: 2rem;
@@ -14,7 +27,7 @@ export function Shortcut({ icon, name, onClick }) {
     <Container onClick={onClick}>
       <div>
         <img
-          src={`${process.env.basePath}/${icon}.png`}
+          src={icons[icon] ? icons[icon] : bin}
           alt={name}
           width="32"
           height="32"
