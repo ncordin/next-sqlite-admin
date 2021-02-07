@@ -1,0 +1,47 @@
+{
+  "name": "sqlite-95",
+  "description": "A set of Node utilities for building APIs.",
+  "version": "5.0.0",
+  "homepage": "https://github.com/ncordin/sqlite-95",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:ncordin/sqlite-95.git"
+  },
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "files": [
+    "build/",
+    "webapp/dist/"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "lint": "yarn run lint:ts && yarn run lint:prettier",
+    "lint:ts": "tsc",
+    "lint:prettier": "prettier --check '*/**/*.{js,ts,tsx}'",
+    "format": "prettier --write '*/**/*.{js,ts,tsx}'",
+    "ci": "yarn run lint",
+    "pre-push": "yarn run ci",
+    "prepublish": "yarn run build"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^5.4.1",
+    "@types/express": "^4.17.6",
+    "@types/node": "^14.0.1",
+    "@typescript-eslint/eslint-plugin": "^2.33.0",
+    "@typescript-eslint/parser": "^2.33.0",
+    "better-sqlite3": "^7.1.1",
+    "eslint": "^7.0.0",
+    "eslint-plugin-import": "^2.20.2",
+    "express": "^4.17.1",
+    "husky": "^4.2.5",
+    "prettier": "^2.0.5",
+    "ts-node": "^8.10.1",
+    "typescript": "^3.8.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "yarn run pre-push"
+    }
+  }
+}
