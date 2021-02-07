@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Table,
   TableHead,
@@ -6,7 +6,7 @@ import {
   TableHeadCell,
   TableBody,
   TableDataCell,
-} from "react95";
+} from 'react95';
 
 export function SqlResults({ data }) {
   const headers = data[0] ? Object.keys(data[0]) : [];
@@ -32,7 +32,7 @@ export function SqlResults({ data }) {
               {values.map((value, valuesIndex) => (
                 <TableDataCell
                   key={`${index}-${valuesIndex}`}
-                  style={{ whiteSpace: "nowrap" }}
+                  style={{ whiteSpace: 'nowrap' }}
                 >
                   {value}
                 </TableDataCell>

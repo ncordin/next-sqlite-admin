@@ -2,7 +2,7 @@ import express from 'express';
 
 import { apiFields } from './api/fields';
 import { apiSql } from './api/sql';
-import apiTables from './api/tables';
+import { apiTables } from './api/tables';
 
 export const adminRouter = express.Router();
 

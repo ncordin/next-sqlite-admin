@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { Tab, TabBody, Tabs } from "react95";
-import styled from "styled-components";
+import React, { useEffect, useState } from 'react';
+import { Tab, TabBody, Tabs } from 'react95';
+import styled from 'styled-components';
 
-import { TableList } from "../components/TableList";
-import { ClosableWindow } from "../components/ClosableWindow";
-import { useTables } from "../contexts/Tables";
-import { BrowseTab } from "../tabs/BrowseTab";
-import { CreateTableTab } from "../tabs/CreateTableTab";
-import { EmptyTab } from "../tabs/EmptyTab";
-import { InsertTab } from "../tabs/InsertTab/InsertTab";
-import { ManagementTab } from "../tabs/ManagementTab/ManagementTab";
-import { SqlTab } from "../tabs/SqlTab";
-import { StructureTab } from "../tabs/StructureTab";
-import { useDatabase } from "../contexts/Database";
+import { TableList } from '../components/TableList';
+import { ClosableWindow } from '../components/ClosableWindow';
+import { useTables } from '../contexts/Tables';
+import { BrowseTab } from '../tabs/BrowseTab';
+import { CreateTableTab } from '../tabs/CreateTableTab';
+import { EmptyTab } from '../tabs/EmptyTab';
+import { InsertTab } from '../tabs/InsertTab/InsertTab';
+import { ManagementTab } from '../tabs/ManagementTab/ManagementTab';
+import { SqlTab } from '../tabs/SqlTab';
+import { StructureTab } from '../tabs/StructureTab';
+import { useDatabase } from '../contexts/Database';
 
 const Container = styled.div`
   padding: 1rem;
@@ -32,35 +32,35 @@ const StyledTab = styled(Tab)`
 `;
 
 export function MainScreen({ onClose }) {
-  const [currentTab, setCurrentTab] = useState("browse");
+  const [currentTab, setCurrentTab] = useState('browse');
   const { database } = useDatabase();
   const { currentTable } = useTables();
 
   useEffect(() => {
-    if (currentTab === "create-table") {
-      setCurrentTab("browse");
+    if (currentTab === 'create-table') {
+      setCurrentTab('browse');
     }
   }, [currentTable?.name]);
 
   const getTabBody = (value) => {
     switch (value) {
-      case "browse":
+      case 'browse':
         return <BrowseTab />;
 
-      case "insert":
-        return <InsertTab onCreated={() => setCurrentTab("browse")} />;
+      case 'insert':
+        return <InsertTab onCreated={() => setCurrentTab('browse')} />;
 
-      case "sql":
+      case 'sql':
         return <SqlTab />;
 
-      case "structure":
+      case 'structure':
         return <StructureTab />;
 
-      case "management":
+      case 'management':
         return <ManagementTab />;
 
-      case "create-table":
-        return <CreateTableTab onCreated={() => setCurrentTab("browse")} />;
+      case 'create-table':
+        return <CreateTableTab onCreated={() => setCurrentTab('browse')} />;
 
       default:
         return <EmptyTab />;
@@ -72,11 +72,11 @@ export function MainScreen({ onClose }) {
       <ClosableWindow
         title={`SQLite 95 - ${database}`}
         onClose={onClose}
-        style={{ width: "100%" }}
+        style={{ width: '100%' }}
       >
         <FlexRow>
           <Column>
-            <TableList createTable={() => setCurrentTab("create-table")} />
+            <TableList createTable={() => setCurrentTab('create-table')} />
           </Column>
           <Column style={{ flex: 1, paddingLeft: 8, paddingBottom: 50 }}>
             <Tabs
@@ -91,7 +91,7 @@ export function MainScreen({ onClose }) {
             </Tabs>
             <TabBody>
               {getTabBody(
-                (currentTable || currentTab === "create-table") && currentTab
+                (currentTable || currentTab === 'create-table') && currentTab
               )}
             </TabBody>
           </Column>

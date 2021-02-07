@@ -1,11 +1,11 @@
-import React from "react";
-import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
-import { styleReset } from "react95";
+import React from 'react';
+import styled, { createGlobalStyle, ThemeProvider } from 'styled-components';
+import { styleReset } from 'react95';
 // import original from "react95/dist/themes/original";
-import original from "react95/dist/themes/tokyoDark";
+import original from 'react95/dist/themes/tokyoDark';
 
-import { useErrorModal } from "../contexts/ErrorModal";
-import { ErrorModal } from "./ErrorModal";
+import { useErrorModal } from '../contexts/ErrorModal';
+import { ErrorModal } from './ErrorModal';
 
 const GlobalStyles = createGlobalStyle`
   body {
@@ -24,7 +24,7 @@ const GlobalStyles = createGlobalStyle`
 `;
 
 const StyledLayout = styled.div`
-  font-family: "ms_sans_serif";
+  font-family: 'ms_sans_serif';
 `;
 
 export function HtmlLayout({ children }) {

@@ -1,6 +1,6 @@
-import React from "react";
-import { Fieldset } from "react95";
-import { Centred } from "../components/Centred";
+import React from 'react';
+import { Fieldset } from 'react95';
+import { Centred } from '../components/Centred';
 
 export function EmptyTab() {
   return (

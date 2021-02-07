@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { Anchor, Button, Fieldset, TextField } from "react95";
-import styled from "styled-components";
-import { FlexRow } from "../../components/FlexRow";
-import { defaultField, NewFieldsForm } from "../../components/NewFieldsForm";
-import { Null } from "../../components/Null";
-import { Space } from "../../components/Space";
-import { useTables } from "../../contexts/Tables";
-import { makeAddField, makeRenameField } from "../../utils/query";
-import { useApi } from "../../utils/useApi";
-import { CreateIndex } from "./CreateIndex";
-import { ListIndex } from "./ListIndex";
+import React, { useEffect, useState } from 'react';
+import { Anchor, Button, Fieldset, TextField } from 'react95';
+import styled from 'styled-components';
+import { FlexRow } from '../../components/FlexRow';
+import { defaultField, NewFieldsForm } from '../../components/NewFieldsForm';
+import { Null } from '../../components/Null';
+import { Space } from '../../components/Space';
+import { useTables } from '../../contexts/Tables';
+import { makeAddField, makeRenameField } from '../../utils/query';
+import { useApi } from '../../utils/useApi';
+import { CreateIndex } from './CreateIndex';
+import { ListIndex } from './ListIndex';
 
 const StyledTable = styled.table`
   margin: 1rem 0;
@@ -42,7 +42,7 @@ function getDefaultValue(field) {
     return <Null />;
   }
 
-  return "⚠️";
+  return '⚠️';
 }
 
 export function StructureTab() {
@@ -50,7 +50,7 @@ export function StructureTab() {
   const [fields, setFields] = useState([defaultField]);
   const [indexes, setIndexes] = useState([]);
   const [renamingField, setRenamingField] = useState(null);
-  const [newFieldName, setNewFieldName] = useState("");
+  const [newFieldName, setNewFieldName] = useState('');
   const { fetch, executeQuery } = useApi();
 
   const refreshIndexes = () => {
@@ -79,7 +79,7 @@ export function StructureTab() {
       .map(({ name }) => name)
       .filter((name) => name !== fieldName);
 
-    await fetch("api/fields", { table: currentTable.name, fields });
+    await fetch('api/fields', { table: currentTable.name, fields });
     await refresh();
   };
 
@@ -96,8 +96,8 @@ export function StructureTab() {
   return (
     <div>
       <Fieldset label="Fields">
-        <StyledTable style={{ width: "100%" }}>
-          <thead style={{ fontWeight: "bold" }}>
+        <StyledTable style={{ width: '100%' }}>
+          <thead style={{ fontWeight: 'bold' }}>
             <tr>
               <td>Name</td>
               <td>Type</td>
@@ -113,19 +113,19 @@ export function StructureTab() {
             {currentTable.structure.map((field) => {
               return (
                 <tr key={field.name}>
-                  <td style={{ fontWeight: "bold" }}>{field.name}</td>
+                  <td style={{ fontWeight: 'bold' }}>{field.name}</td>
                   <td>{field.type.toUpperCase()}</td>
                   <td>{getDefaultValue(field)}</td>
-                  <td style={{ textAlign: "right" }}>
+                  <td style={{ textAlign: 'right' }}>
                     <Link
                       onClick={() => {
                         setRenamingField(field.name);
-                        setNewFieldName("");
+                        setNewFieldName('');
                       }}
                     >
                       rename
-                    </Link>{" "}
-                    - <Link onClick={() => drop(field.name)}>drop</Link> -{" "}
+                    </Link>{' '}
+                    - <Link onClick={() => drop(field.name)}>drop</Link> -{' '}
                     <Link onClick={() => null}>move</Link>
                   </td>
                 </tr>

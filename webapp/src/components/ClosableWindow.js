@@ -1,6 +1,6 @@
-import React from "react";
-import { Button, Window, WindowContent, WindowHeader } from "react95";
-import styled from "styled-components";
+import React from 'react';
+import { Button, Window, WindowContent, WindowHeader } from 'react95';
+import styled from 'styled-components';
 
 const StyledWindow = styled(Window)`
   .window-header {
@@ -18,7 +18,7 @@ const StyledWindow = styled(Window)`
     position: relative;
     &:before,
     &:after {
-      content: "";
+      content: '';
       position: absolute;
       background: black;
     }
@@ -45,7 +45,7 @@ export function ClosableWindow({
   title,
   children,
   onClose,
-  className = "",
+  className = '',
   style = {},
 }) {
   return (

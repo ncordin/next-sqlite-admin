@@ -1,14 +1,14 @@
-import React from "react";
-import { Checkbox, NumberField, TextField } from "react95";
-import styled from "styled-components";
+import React from 'react';
+import { Checkbox, NumberField, TextField } from 'react95';
+import styled from 'styled-components';
 
-import { useTables } from "../contexts/Tables";
+import { useTables } from '../contexts/Tables';
 
 // (bigint must be handled as string)
-const NUMERICS = ["int", "integer", "tinyint", "smallint", "mediumint"];
+const NUMERICS = ['int', 'integer', 'tinyint', 'smallint', 'mediumint'];
 
 const isNumericalType = (type) => {
-  const [split] = type.toLowerCase().split("(");
+  const [split] = type.toLowerCase().split('(');
 
   return NUMERICS.includes(split);
 };
@@ -26,7 +26,7 @@ function renderInput({ field, value, setValue }) {
   if (isNumericalType(field.type)) {
     return (
       <NumberField
-        defaultValue={value || ""}
+        defaultValue={value || ''}
         onChange={(value) => setValue(value)}
         width={300}
         disabled={value === null}
@@ -36,7 +36,7 @@ function renderInput({ field, value, setValue }) {
 
   return (
     <TextField
-      value={value || ""}
+      value={value || ''}
       onChange={(event) => setValue(event.target.value)}
       style={{ width: 300 }}
       disabled={value === null}
@@ -51,7 +51,7 @@ export function RowForm({ row, onChange }) {
     const newRow = { ...row, [field]: value };
 
     currentTable.structure.forEach((field) => {
-      if (isNumericalType(field.type) && newRow[field.name] === "") {
+      if (isNumericalType(field.type) && newRow[field.name] === '') {
         delete newRow[field.name];
       }
     });
@@ -60,7 +60,7 @@ export function RowForm({ row, onChange }) {
   };
 
   return (
-    <StyledTable style={{ width: "100%" }}>
+    <StyledTable style={{ width: '100%' }}>
       <tbody>
         {currentTable.structure.map((field) => {
           const initialValue = row[field.name];
@@ -73,7 +73,7 @@ export function RowForm({ row, onChange }) {
 
           return (
             <tr key={field.name}>
-              <td style={{ fontWeight: "bold" }}>{field.name}</td>
+              <td style={{ fontWeight: 'bold' }}>{field.name}</td>
               <td>{field.type.toUpperCase()}</td>
               <td>
                 {renderInput({
@@ -89,7 +89,7 @@ export function RowForm({ row, onChange }) {
                   checked={value === null}
                   onChange={(event) =>
                     makeUpdateField(field.name)(
-                      event.target.checked ? null : ""
+                      event.target.checked ? null : ''
                     )
                   }
                 />

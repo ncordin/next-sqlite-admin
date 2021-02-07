@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 const StyledFlexRow = styled.div`
   display: flex;
@@ -8,7 +8,7 @@ const StyledFlexRow = styled.div`
 `;
 
 export const FlexRow = ({ between = false, children }) => (
-  <StyledFlexRow style={{ justifyContent: between ? "space-between" : "" }}>
+  <StyledFlexRow style={{ justifyContent: between ? 'space-between' : '' }}>
     {children}
   </StyledFlexRow>
 );

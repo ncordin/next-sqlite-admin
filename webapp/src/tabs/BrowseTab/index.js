@@ -1,1 +1,1 @@
-export * from "./BrowseTab";
+export * from './BrowseTab';

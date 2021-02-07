@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { Table, TableBody, TableDataCell, TableRow } from "react95";
-import styled from "styled-components";
-import { ClosableWindow } from "../components/ClosableWindow";
-import { useApi } from "../utils/useApi";
+import React, { useEffect, useState } from 'react';
+import { Table, TableBody, TableDataCell, TableRow } from 'react95';
+import styled from 'styled-components';
+import { ClosableWindow } from '../components/ClosableWindow';
+import { useApi } from '../utils/useApi';
 
 // @ts-ignore
-import iconDatabase from "../assets/database.png";
+import iconDatabase from '../assets/database.png';
 
 const Container = styled.div`
   padding: 1rem;
 `;
 
-const isDatabase = (name) => name.endsWith(".db");
+const isDatabase = (name) => name.endsWith('.db');
 
 export function ExploreScreen({ selectDatabase, onClose }) {
   const [path, setPath] = useState(null);
@@ -20,7 +20,7 @@ export function ExploreScreen({ selectDatabase, onClose }) {
   const { fetch } = useApi();
 
   useEffect(() => {
-    fetch("api/files", { path }).then((response) => {
+    fetch('api/files', { path }).then((response) => {
       if (response.path) {
         setPath(response.path);
         setDirectories(response.directories);
@@ -30,21 +30,21 @@ export function ExploreScreen({ selectDatabase, onClose }) {
   }, [path]);
 
   const up = () => {
-    setPath(path.split("/").slice(0, -1).join("/"));
+    setPath(path.split('/').slice(0, -1).join('/'));
   };
 
   return (
     <Container>
-      <ClosableWindow title={path} onClose={onClose} style={{ width: "70%" }}>
+      <ClosableWindow title={path} onClose={onClose} style={{ width: '70%' }}>
         <Table>
           <TableBody>
             <TableRow onClick={up}>
-              <TableDataCell style={{ cursor: "pointer" }}>..</TableDataCell>
+              <TableDataCell style={{ cursor: 'pointer' }}>..</TableDataCell>
             </TableRow>
             {directories.map((file, index) => (
               <TableRow key={index} onClick={() => setPath(`${path}/${file}`)}>
                 <TableDataCell
-                  style={{ fontWeight: "bold", cursor: "pointer" }}
+                  style={{ fontWeight: 'bold', cursor: 'pointer' }}
                 >
                   {file}/
                 </TableDataCell>
@@ -57,9 +57,9 @@ export function ExploreScreen({ selectDatabase, onClose }) {
                     <div
                       onClick={() => selectDatabase(`${path}/${file}`)}
                       style={{
-                        fontWeight: "bold",
-                        cursor: "pointer",
-                        display: "flex",
+                        fontWeight: 'bold',
+                        cursor: 'pointer',
+                        display: 'flex',
                       }}
                     >
                       <img src={iconDatabase} width={24} height={24} /> {file}

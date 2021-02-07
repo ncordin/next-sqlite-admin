@@ -1,17 +1,17 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 const initialState = {
   isOpen: false,
-  title: "",
-  message: "",
+  title: '',
+  message: '',
 };
 
 const ReactContext = React.createContext(initialState);
 
 function ErrorModalProvider({ children }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [title, setTitle] = useState("");
-  const [message, setMessage] = useState("");
+  const [title, setTitle] = useState('');
+  const [message, setMessage] = useState('');
 
   const open = (title, message) => {
     setTitle(title);

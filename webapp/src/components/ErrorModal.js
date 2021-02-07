@@ -1,6 +1,6 @@
-import React from "react";
-import styled from "styled-components";
-import { ClosableWindow } from "./ClosableWindow";
+import React from 'react';
+import styled from 'styled-components';
+import { ClosableWindow } from './ClosableWindow';
 
 const Container = styled.div`
   position: fixed;

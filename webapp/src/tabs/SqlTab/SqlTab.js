@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { TextField, Button, Panel } from "react95";
-import styled from "styled-components";
+import React, { useEffect, useState } from 'react';
+import { TextField, Button, Panel } from 'react95';
+import styled from 'styled-components';
 
-import { SqlResults } from "./SqlResults";
-import { useTables } from "../../contexts/Tables";
-import { useApi } from "../../utils/useApi";
+import { SqlResults } from './SqlResults';
+import { useTables } from '../../contexts/Tables';
+import { useApi } from '../../utils/useApi';
 
 const FlexRow = styled.div`
   display: flex;
@@ -57,8 +57,8 @@ export function SqlTab() {
         <Panel
           variant="well"
           style={{
-            padding: "0.1rem 0.25rem",
-            width: "100%",
+            padding: '0.1rem 0.25rem',
+            width: '100%',
           }}
         >
           {`${response ? response.length : 0} results`}

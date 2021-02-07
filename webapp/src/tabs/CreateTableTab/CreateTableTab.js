@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { Button, Checkbox, Fieldset, Select, TextField } from "react95";
+import React, { useEffect, useState } from 'react';
+import { Button, Checkbox, Fieldset, Select, TextField } from 'react95';
 
-import { InnerPanel } from "../../components/InnerPanel";
-import { defaultField, NewFieldsForm } from "../../components/NewFieldsForm";
-import { useTables } from "../../contexts/Tables";
-import { makeCreateTable } from "../../utils/query";
-import { useApi } from "../../utils/useApi";
+import { InnerPanel } from '../../components/InnerPanel';
+import { defaultField, NewFieldsForm } from '../../components/NewFieldsForm';
+import { useTables } from '../../contexts/Tables';
+import { makeCreateTable } from '../../utils/query';
+import { useApi } from '../../utils/useApi';
 
 export function CreateTableTab({ onCreated }) {
-  const [tableName, setTableName] = useState("");
+  const [tableName, setTableName] = useState('');
   const [fields, setFields] = useState([defaultField]);
   const { executeQuery } = useApi();
   const { refresh, tables, setCurrentTable } = useTables();
@@ -42,7 +42,7 @@ export function CreateTableTab({ onCreated }) {
       <Fieldset label="Table fields" style={{ marginBottom: 32 }}>
         <NewFieldsForm fields={fields} setFields={setFields} />
         <Button
-          style={{ marginLeft: "0.5rem" }}
+          style={{ marginLeft: '0.5rem' }}
           onClick={() => setFields([...fields, defaultField])}
         >
           Add one more field
@@ -51,7 +51,7 @@ export function CreateTableTab({ onCreated }) {
 
       <Fieldset
         label="Primary key"
-        style={{ marginBottom: 32, display: "flex" }}
+        style={{ marginBottom: 32, display: 'flex' }}
       >
         <Select
           style={{ marginRight: 16 }}
@@ -90,7 +90,7 @@ export function CreateTableTab({ onCreated }) {
         <Button
           type="submit"
           disabled={!tableName}
-          style={{ marginRight: "0.5rem" }}
+          style={{ marginRight: '0.5rem' }}
         >
           Create table
         </Button>

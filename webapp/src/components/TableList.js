@@ -1,7 +1,7 @@
-import React from "react";
-import { Button, ListItem, Fieldset } from "react95";
-import { useTables } from "../contexts/Tables";
-import { BoldIf } from "./BoldIf";
+import React from 'react';
+import { Button, ListItem, Fieldset } from 'react95';
+import { useTables } from '../contexts/Tables';
+import { BoldIf } from './BoldIf';
 
 export function TableList({ createTable }) {
   const { currentTable, setCurrentTable, tables, refresh } = useTables();
@@ -20,7 +20,7 @@ export function TableList({ createTable }) {
             <ListItem
               key={table.name}
               size="sm"
-              style={{ cursor: "pointer" }}
+              style={{ cursor: 'pointer' }}
               onClick={() => {
                 setCurrentTable(table);
               }}

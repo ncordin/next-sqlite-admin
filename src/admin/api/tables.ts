@@ -50,7 +50,7 @@ const getTables = (database: Database) => {
   }));
 };
 
-export default (request: Request, response: Response) => {
+export const apiTables = (request: Request, response: Response) => {
   try {
     const database = getDatabase(request.headers.database?.toString() || '');
     const tables = getTables(database);

@@ -1,1 +1,1 @@
-export * from "./CreateTableTab";
+export * from './CreateTableTab';

@@ -1,12 +1,12 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 // @ts-ignore
-import computer from "../assets/computer.png";
+import computer from '../assets/computer.png';
 // @ts-ignore
-import database from "../assets/database.png";
+import database from '../assets/database.png';
 // @ts-ignore
-import bin from "../assets/bin.png";
+import bin from '../assets/bin.png';
 
 const icons = {
   computer,

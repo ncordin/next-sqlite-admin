@@ -1,7 +1,7 @@
-import React from "react";
-import { Button, Fieldset } from "react95";
-import { FlexRow } from "../../components/FlexRow";
-import { useApi } from "../../utils/useApi";
+import React from 'react';
+import { Button, Fieldset } from 'react95';
+import { FlexRow } from '../../components/FlexRow';
+import { useApi } from '../../utils/useApi';
 
 export function ListIndex({ indexes, refreshIndexes, currentTable }) {
   const { executeQuery } = useApi();
@@ -26,7 +26,7 @@ export function ListIndex({ indexes, refreshIndexes, currentTable }) {
         return (
           <FlexRow key={index.name} between>
             <span style={{ flexBasis: 200 }}>{index.name}</span>
-            {index.unique === "1" ? "unique" : ""}
+            {index.unique === '1' ? 'unique' : ''}
             <Button onClick={drop}>Drop</Button>
           </FlexRow>
         );

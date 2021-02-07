@@ -1,16 +1,16 @@
-import React from "react";
-import { Checkbox, Select, TextField } from "react95";
-import styled from "styled-components";
+import React from 'react';
+import { Checkbox, Select, TextField } from 'react95';
+import styled from 'styled-components';
 
 const typeOptions = [
-  { value: "INTEGER", label: "INTEGER" },
-  { value: "TEXT", label: "TEXT" },
-  { value: "REAL", label: "REAL" },
+  { value: 'INTEGER', label: 'INTEGER' },
+  { value: 'TEXT', label: 'TEXT' },
+  { value: 'REAL', label: 'REAL' },
 ];
 
 export const defaultField = {
-  name: "",
-  type: "INTEGER",
+  name: '',
+  type: 'INTEGER',
   canBeNull: false,
   defaultValue: null,
   primaryKey: false,
@@ -28,7 +28,7 @@ const StyledTable = styled.table`
 
 export function NewFieldsForm({ fields, setFields }) {
   return (
-    <StyledTable style={{ width: "100%" }}>
+    <StyledTable style={{ width: '100%' }}>
       <thead>
         <tr>
           <td>Field name</td>
@@ -51,7 +51,7 @@ export function NewFieldsForm({ fields, setFields }) {
               <td>
                 <TextField
                   value={field.name}
-                  onChange={(event) => updateField("name", event.target.value)}
+                  onChange={(event) => updateField('name', event.target.value)}
                 />
               </td>
               <td>
@@ -59,7 +59,7 @@ export function NewFieldsForm({ fields, setFields }) {
                   options={typeOptions}
                   value={field.type}
                   width={160}
-                  onChange={(event) => updateField("type", event.target.value)}
+                  onChange={(event) => updateField('type', event.target.value)}
                 />
               </td>
               <td>
@@ -67,26 +67,26 @@ export function NewFieldsForm({ fields, setFields }) {
                   label=""
                   checked={field.canBeNull}
                   onChange={(event) =>
-                    updateField("canBeNull", event.target.checked)
+                    updateField('canBeNull', event.target.checked)
                   }
                 />
               </td>
-              <td style={{ display: "flex" }}>
+              <td style={{ display: 'flex' }}>
                 <Checkbox
                   label=""
                   checked={field.defaultValue !== null}
                   onChange={(event) =>
                     updateField(
-                      "defaultValue",
-                      event.target.checked ? "" : null
+                      'defaultValue',
+                      event.target.checked ? '' : null
                     )
                   }
                 />
                 <TextField
-                  value={field.defaultValue || ""}
+                  value={field.defaultValue || ''}
                   disabled={field.defaultValue === null}
                   onChange={(event) =>
-                    updateField("defaultValue", event.target.value)
+                    updateField('defaultValue', event.target.value)
                   }
                 />
               </td>

@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
-import { useTables } from "../../contexts/Tables";
-import { RowForm } from "../../components/RowForm";
-import { InnerPanel } from "../../components/InnerPanel";
-import { makeSet, makeWhere } from "../../utils/query";
-import { Button, Fieldset } from "react95";
+import { useTables } from '../../contexts/Tables';
+import { RowForm } from '../../components/RowForm';
+import { InnerPanel } from '../../components/InnerPanel';
+import { makeSet, makeWhere } from '../../utils/query';
+import { Button, Fieldset } from 'react95';
 
 export function Edit({ row, execute, cancel }) {
   const { currentTable } = useTables();
@@ -30,11 +30,11 @@ export function Edit({ row, execute, cancel }) {
         <RowForm row={editingRow} onChange={setEditingRow} />
       </Fieldset>
 
-      <div style={{ margin: "1rem 0" }}>
-        <Button type="submit" style={{ marginRight: "0.5rem" }}>
+      <div style={{ margin: '1rem 0' }}>
+        <Button type="submit" style={{ marginRight: '0.5rem' }}>
           Update
         </Button>
-        <Button onClick={cancel} style={{ marginRight: "0.5rem" }}>
+        <Button onClick={cancel} style={{ marginRight: '0.5rem' }}>
           Cancel
         </Button>
         <Button onClick={() => setShowQuery(!showQuery)}>Show query</Button>

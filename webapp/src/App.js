@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 
-import { ErrorModalProvider } from "./contexts/ErrorModal";
-import { HtmlLayout } from "./components/HtmlLayout";
-import { DatabaseProvider } from "./contexts/Database";
-import { Desktop } from "./screens/Desktop";
+import { ErrorModalProvider } from './contexts/ErrorModal';
+import { HtmlLayout } from './components/HtmlLayout';
+import { DatabaseProvider } from './contexts/Database';
+import { Desktop } from './screens/Desktop';
 
 export function App() {
   return (

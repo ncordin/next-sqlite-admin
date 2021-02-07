@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { Button, Checkbox, Fieldset, TextField } from "react95";
-import styled from "styled-components";
-import { FlexRow } from "../../components/FlexRow";
-import { useTables } from "../../contexts/Tables";
-import { makeIndex } from "../../utils/query";
-import { useApi } from "../../utils/useApi";
+import React, { useEffect, useState } from 'react';
+import { Button, Checkbox, Fieldset, TextField } from 'react95';
+import styled from 'styled-components';
+import { FlexRow } from '../../components/FlexRow';
+import { useTables } from '../../contexts/Tables';
+import { makeIndex } from '../../utils/query';
+import { useApi } from '../../utils/useApi';
 
 const Description = styled.div`
   flex-basis: 8rem;
@@ -16,7 +16,7 @@ export function CreateIndex({ refreshIndexes }) {
 
   const [fields, setFields] = useState([]);
   const [isUnique, setIsUnique] = useState(false);
-  const name = fields.join(":");
+  const name = fields.join(':');
 
   useEffect(() => {
     setFields([]);

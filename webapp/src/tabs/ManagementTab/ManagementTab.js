@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { Button, Fieldset, TextField } from "react95";
+import React, { useEffect, useState } from 'react';
+import { Button, Fieldset, TextField } from 'react95';
 
-import { useTables } from "../../contexts/Tables";
-import { InnerPanel } from "../../components/InnerPanel";
-import { useApi } from "../../utils/useApi";
+import { useTables } from '../../contexts/Tables';
+import { InnerPanel } from '../../components/InnerPanel';
+import { useApi } from '../../utils/useApi';
 
 export function ManagementTab() {
   const { currentTable, refresh } = useTables();
@@ -38,13 +38,13 @@ export function ManagementTab() {
       <form onSubmit={renameTable}>
         <Fieldset
           label="Rename table"
-          style={{ marginBottom: 32, padding: "2rem" }}
+          style={{ marginBottom: 32, padding: '2rem' }}
         >
           <TextField
             value={newTableName}
             onChange={(event) => setNewTableName(event.target.value)}
           />
-          <Button type="submit" style={{ marginTop: "1rem" }}>
+          <Button type="submit" style={{ marginTop: '1rem' }}>
             Rename
           </Button>
         </Fieldset>
@@ -52,10 +52,10 @@ export function ManagementTab() {
 
       <Fieldset
         label="Danger zone"
-        style={{ marginBottom: "2rem", padding: "2rem" }}
+        style={{ marginBottom: '2rem', padding: '2rem' }}
       >
-        <p style={{ marginBottom: "1rem" }}>
-          <span style={{ fontWeight: "bold" }}> {currentTable.name}</span> data
+        <p style={{ marginBottom: '1rem' }}>
+          <span style={{ fontWeight: 'bold' }}> {currentTable.name}</span> data
           will be lost!
         </p>
         <Button style={{ marginRight: 16 }} onClick={flushTable}>
@@ -68,7 +68,7 @@ export function ManagementTab() {
 
       <Fieldset
         label="SQL Describe"
-        style={{ marginBottom: "2rem", padding: "2rem" }}
+        style={{ marginBottom: '2rem', padding: '2rem' }}
       >
         <InnerPanel>{currentTable.describe}</InnerPanel>
       </Fieldset>

@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import { MainScreen } from "../screens/MainScreen";
-import { ExploreScreen } from "../screens/ExploreScreen";
-import { Shortcut } from "../components/Shortcut";
-import { useDatabase } from "../contexts/Database";
-import { TablesProvider } from "../contexts/Tables";
+import { MainScreen } from '../screens/MainScreen';
+import { ExploreScreen } from '../screens/ExploreScreen';
+import { Shortcut } from '../components/Shortcut';
+import { useDatabase } from '../contexts/Database';
+import { TablesProvider } from '../contexts/Tables';
 
 export function Desktop() {
   const { database, setDatabase } = useDatabase();
@@ -32,13 +32,13 @@ export function Desktop() {
           <Shortcut
             icon="computer"
             name="Explore"
-            onClick={() => setPath(".")}
+            onClick={() => setPath('.')}
           />
           {databases.map((file) => (
             <Shortcut
               key={file}
               icon="database"
-              name={file.split("/").slice(-1).join("")}
+              name={file.split('/').slice(-1).join('')}
               onClick={() => setDatabase(file)}
             />
           ))}

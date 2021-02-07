@@ -1,1 +1,1 @@
-export * from "./StructureTab";
+export * from './StructureTab';

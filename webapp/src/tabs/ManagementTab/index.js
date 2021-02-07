@@ -1,1 +1,1 @@
-export * from "./ManagementTab";
+export * from './ManagementTab';

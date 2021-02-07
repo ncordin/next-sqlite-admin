@@ -1,1 +1,1 @@
-export * from "./InsertTab";
+export * from './InsertTab';

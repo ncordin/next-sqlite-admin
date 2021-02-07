@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Table,
   TableHead,
@@ -8,10 +8,10 @@ import {
   TableDataCell,
   Checkbox,
   Anchor,
-} from "react95";
+} from 'react95';
 
-import { BoldIf } from "../../components/BoldIf";
-import { Null } from "../../components/Null";
+import { BoldIf } from '../../components/BoldIf';
+import { Null } from '../../components/Null';
 
 export function BrowseResults({
   data,
@@ -46,7 +46,7 @@ export function BrowseResults({
             <TableHeadCell
               key={header}
               onClick={() => changeOrderBy(header)}
-              style={{ cursor: "pointer" }}
+              style={{ cursor: 'pointer' }}
             >
               <BoldIf condition={orderBy === header}>{header}</BoldIf>
             </TableHeadCell>
@@ -69,7 +69,7 @@ export function BrowseResults({
               </TableDataCell>
               <TableDataCell style={{ width: 40 }}>
                 <Anchor
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: 'pointer' }}
                   onClick={() => selectEditingRow(row)}
                 >
                   edit
@@ -79,7 +79,7 @@ export function BrowseResults({
               {values.map((value, valuesIndex) => (
                 <TableDataCell
                   key={`${index}-${valuesIndex}`}
-                  style={{ whiteSpace: "nowrap" }}
+                  style={{ whiteSpace: 'nowrap' }}
                 >
                   {value === null ? <Null /> : value}
                 </TableDataCell>

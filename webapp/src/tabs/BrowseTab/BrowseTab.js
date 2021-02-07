@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { Button } from "react95";
-import styled from "styled-components";
+import React, { useEffect, useState } from 'react';
+import { Button } from 'react95';
+import styled from 'styled-components';
 
-import { InnerPanel } from "../../components/InnerPanel";
-import { BrowseResults } from "./BrowseResults";
-import { useTables } from "../../contexts/Tables";
-import { Edit } from "./Edit";
-import { makeDelete } from "../../utils/query";
-import { useApi } from "../../utils/useApi";
+import { InnerPanel } from '../../components/InnerPanel';
+import { BrowseResults } from './BrowseResults';
+import { useTables } from '../../contexts/Tables';
+import { Edit } from './Edit';
+import { makeDelete } from '../../utils/query';
+import { useApi } from '../../utils/useApi';
 
 const FlexRow = styled.div`
   display: flex;
@@ -25,7 +25,7 @@ export function BrowseTab() {
   const { currentTable, refresh } = useTables();
   const { executeQuery } = useApi();
 
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState('');
   const [response, setResponse] = useState(null);
   const [orderBy, setOrderBy] = useState(null);
   const [orderByDirection, setOrderByDirection] = useState(true);
@@ -43,7 +43,7 @@ export function BrowseTab() {
   useEffect(() => {
     if (currentTable && orderBy) {
       const orderCommand = `\`${orderBy}\` ${
-        orderByDirection ? "ASC" : "DESC"
+        orderByDirection ? 'ASC' : 'DESC'
       }`;
       const query = `SELECT * FROM \`${currentTable.name}\` ORDER BY ${orderCommand};`;
 
@@ -110,7 +110,7 @@ export function BrowseTab() {
         </FlexColumn>
 
         <InnerPanel>
-          {response ? `${response.length} results` : "Loading..."}
+          {response ? `${response.length} results` : 'Loading...'}
         </InnerPanel>
       </FlexRow>
       {response && (
