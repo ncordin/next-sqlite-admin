@@ -1,20 +1,21 @@
-import { convertBigIntToString, getDatabase } from "../../server/utils";
+import { Request, Response } from 'express';
+import { convertBigIntToString, getDatabase } from '../utils';
 
-const executeSql = (databaseName, query, params = []) => {
+const executeSql = (databaseName: string, query: string, params = []) => {
   const database = getDatabase(databaseName);
   const lowerSql = query.trim().toLowerCase();
 
-  if (lowerSql.startsWith("select ") || lowerSql.startsWith("pragma ")) {
+  if (lowerSql.startsWith('select ') || lowerSql.startsWith('pragma ')) {
     return database.prepare(query).all(params);
   } else {
     return [database.prepare(query).run(params)];
   }
 };
 
-export default (request, response) => {
+export const apiSql = (request: Request, response: Response) => {
   try {
     const result = executeSql(
-      request.headers.database,
+      request.headers.database?.toString() || '',
       request.body.query,
       request.body.params
     );
@@ -24,6 +25,6 @@ export default (request, response) => {
     response.json(resultSafe);
   } catch (error) {
     response.statusCode = 200;
-    response.json({ error: { title: "SQL error!", message: error.message } });
+    response.json({ error: { title: 'SQL error!', message: error.message } });
   }
 };

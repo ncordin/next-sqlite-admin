@@ -1,14 +1,15 @@
-import { getDatabase } from "../../server/utils";
+import { Request, Response } from 'express';
+import { getDatabase } from '../utils';
 
-export default (request, response) => {
+export const apiFields = (request: Request, response: Response) => {
   try {
-    const database = getDatabase(request.headers.database);
+    const database = getDatabase(request.headers.database?.toString() || '');
     const tableName = request.body.table;
-    const fields = request.body.fields;
+    const fields = request.body.fields as string[];
 
     const dropTransaction = database.transaction(() => {
       // Query A:
-      const fieldsString = fields.map((name) => `"${name}"`).join(", ");
+      const fieldsString = fields.map((name) => `"${name}"`).join(', ');
       const queryCreate = `CREATE TABLE "${tableName}_tmp_drop_column" AS SELECT ${fieldsString} FROM "${tableName}";`;
       database.prepare(queryCreate).run();
 
