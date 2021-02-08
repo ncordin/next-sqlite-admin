@@ -1,15 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { MainScreen } from '../screens/MainScreen';
-import { ExploreScreen } from '../screens/ExploreScreen';
 import { Shortcut } from '../components/Shortcut';
 import { useDatabase } from '../contexts/Database';
 import { TablesProvider } from '../contexts/Tables';
+import { useApi } from '../utils/useApi';
 
 export function Desktop() {
   const { database, setDatabase } = useDatabase();
+  const { fetch } = useApi();
   const [databases, setDatabases] = useState([]);
-  const [path, setPath] = useState(null);
+
+  useEffect(() => {
+    fetch('api/files').then((response) => {
+      setDatabases(response);
+    });
+  }, []);
 
   return (
     <>
@@ -18,27 +24,15 @@ export function Desktop() {
           <MainScreen onClose={() => setDatabase(null)} />
         </TablesProvider>
       )}
-      {path && (
-        <ExploreScreen
-          selectDatabase={(file) => {
-            !databases.includes(file) && setDatabases([...databases, file]);
-            setPath(null);
-          }}
-          onClose={() => setPath(null)}
-        />
-      )}
-      {!database && !path && (
+      {!database && (
         <>
-          <Shortcut
-            icon="computer"
-            name="Explore"
-            onClick={() => setPath('.')}
-          />
+          <Shortcut icon="computer" name="Explore" onClick={() => null} />
+
           {databases.map((file) => (
             <Shortcut
               key={file}
               icon="database"
-              name={file.split('/').slice(-1).join('')}
+              name={file}
               onClick={() => setDatabase(file)}
             />
           ))}

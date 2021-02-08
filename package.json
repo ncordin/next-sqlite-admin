@@ -1,7 +1,7 @@
 {
   "name": "sqlite-95",
   "description": "A set of Node utilities for building APIs.",
-  "version": "5.0.0",
+  "version": "2.1.0",
   "homepage": "https://github.com/ncordin/sqlite-95",
   "repository": {
     "type": "git",
@@ -15,6 +15,7 @@
   ],
   "license": "MIT",
   "scripts": {
+    "start": "yarn build && node src/admin/start.js",
     "build": "tsc",
     "lint": "yarn run lint:ts && yarn run lint:prettier",
     "lint:ts": "tsc",
@@ -31,6 +32,7 @@
     "@typescript-eslint/eslint-plugin": "^2.33.0",
     "@typescript-eslint/parser": "^2.33.0",
     "better-sqlite3": "^7.1.1",
+    "cors": "^2.8.5",
     "eslint": "^7.0.0",
     "eslint-plugin-import": "^2.20.2",
     "express": "^4.17.1",

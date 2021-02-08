@@ -1,6 +1,14 @@
 import sqlite, { Database } from 'better-sqlite3';
 
 const isClean = (file: string) => {
+  if (file.includes('/')) {
+    return false;
+  }
+
+  if (file.includes('..')) {
+    return false;
+  }
+
   return file.endsWith('.db');
 };
 
