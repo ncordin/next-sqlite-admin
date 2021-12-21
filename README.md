@@ -10,10 +10,12 @@ A set of Node utilities for building APIs.
 
 # TODOS
 
-- répertoire logs/ avec fichiers : sql.logs / controllers.log / others.log
-- comment se comporte un controller quand une sql failed ?
-- un wrapper pour lancer des commandes ? (comme scripts/ dans ECP)
-- ou sinon, une table errors
+- table errors ?
+- SQL: in(), group, having, sort, unique insert, count, has, limit.
+
+# Tips
+
+- remove async await from controllers (break exception trace)
 
 # Troubleshooting
 

@@ -1,15 +1,13 @@
 import { queryRun, queryGet } from './connection';
 import { makeSet, makeWhere } from './queryBuilder';
 import { SetOfComparisonValues, Value, ComparisonValue } from './types';
-import { AnyField } from './declaration';
+import { Fields } from './declaration';
 import { encode, encodeName, getAndFlushParameters } from './formatters/encode';
 import { decodeRaws } from './formatters/decode';
 
 type DeclarationOptions = {
   name: string;
-  fields: {
-    [key: string]: AnyField;
-  };
+  fields: Fields;
 };
 
 export type Insertable<TableType> = {
@@ -35,19 +33,18 @@ export const declareTable = <TableType>({
   /**
    * FindAll
    */
-  const findAll = async <Field extends keyof TableType>(
-    options: Options<Field>
-  ) => {
+  const findAll = <Field extends keyof TableType>(options: Options<Field>) => {
     const condition = makeWhere(
       name,
       fields,
       options.where as SetOfComparisonValues
     );
     const sql = `SELECT * FROM ${encodeName(name)} WHERE ${condition};`;
+    const parameters = getAndFlushParameters();
 
-    const rows = await queryGet(sql, getAndFlushParameters());
-
-    return decodeRaws<TableType>(rows, fields);
+    return queryGet({ sql, parameters, name, fields }).then((rows) =>
+      decodeRaws<TableType>(rows, fields)
+    );
   };
 
   /**
@@ -73,7 +70,9 @@ export const declareTable = <TableType>({
       name
     )} (${fieldNames}) VALUES (${values});`;
 
-    return queryRun(sql, getAndFlushParameters());
+    const parameters = getAndFlushParameters();
+
+    return queryRun({ sql, parameters, name, fields });
   };
 
   /**
@@ -86,8 +85,9 @@ export const declareTable = <TableType>({
       options.where as SetOfComparisonValues
     );
     const sql = `DELETE FROM ${encodeName(name)} WHERE ${condition};`;
+    const parameters = getAndFlushParameters();
 
-    return queryRun(sql, getAndFlushParameters());
+    return queryRun({ sql, parameters, name, fields });
   };
 
   /**
@@ -106,8 +106,9 @@ export const declareTable = <TableType>({
       options.where as SetOfComparisonValues
     );
     const sql = `UPDATE ${encodeName(name)} SET ${set} WHERE ${condition};`;
+    const parameters = getAndFlushParameters();
 
-    return queryRun(sql, getAndFlushParameters());
+    return queryRun({ sql, parameters, name, fields });
   };
 
   /**

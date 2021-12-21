@@ -1,4 +1,4 @@
-export type Value = number | string | null | { _SQL: string };
+export type Value = number | string | boolean | Date | null | { _SQL: string };
 
 export type ComparisonSymbol = '<' | '<=' | '>' | '>=' | '=';
 

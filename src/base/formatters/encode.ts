@@ -41,7 +41,7 @@ export const encode = (value: Value, field: AnyField): string => {
     }
   }
 
-  if (typeof value === 'object' && value._SQL) {
+  if (typeof value === 'object' && '_SQL' in value) {
     return value._SQL;
   }
 
