@@ -28,6 +28,10 @@ export function makeWhere(
         rawValue = value;
       }
 
+      if (value === null) {
+        comparison = 'IS';
+      }
+
       const escaped = encode(rawValue, fields[field]);
       const escapedField = `${encodeName(name)}.${encodeName(field)}`;
 

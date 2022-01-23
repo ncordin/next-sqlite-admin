@@ -21,10 +21,10 @@ function decode(value: unknown, field: AnyField) {
       return value; // see option defaultSafeIntegers
 
     case 'string':
-      return value;
+      return `${value}`;
 
     case 'enumerated':
-      return value;
+      return `${value}`;
 
     case 'datetime':
       return new Date(Date.parse(value as string));

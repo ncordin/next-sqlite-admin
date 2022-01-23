@@ -26,9 +26,11 @@ export const Players = Table.make<Player>({ name: 'players', fields });
 
 initDatabase({ file: 'youpi.db' });
 
-Players.findAll({ where: { id: 1, gold: { '<': 40 } } }).then((players) => {
-  console.log(players);
-});
+Players.findAll({ where: { id: 1, gold: { '<': 40 }, name: null } }).then(
+  (players) => {
+    console.log(players);
+  }
+);
 
 Players.insert({
   id: 1,
