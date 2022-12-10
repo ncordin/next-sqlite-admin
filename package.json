@@ -23,7 +23,6 @@
     "lint:eslint": "eslint ./src",
     "format": "prettier --write '*/**/*.{js,ts,tsx}'",
     "ci": "yarn run lint",
-    "pre-push": "yarn run ci",
     "prepublish": "yarn run build"
   },
   "devDependencies": {
@@ -37,14 +36,8 @@
     "eslint": "^8.29.0",
     "eslint-plugin-import": "^2.26.0",
     "express": "^4.17.14",
-    "husky": "^8.0.2",
     "prettier": "^2.8.1",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.4"
-  },
-  "husky": {
-    "hooks": {
-      "pre-push": "yarn run pre-push"
-    }
   }
 }
