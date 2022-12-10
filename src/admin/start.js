@@ -9,12 +9,11 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use('/', adminRouter);
-app.use('/', adminRouter);
 
 app.listen(PORT, () => {
   console.log('');
   console.log(`SQLite 95 ready! ✨`);
   console.log('');
-  console.log(`http://localhost/:${PORT}`);
+  console.log(`http://localhost:${PORT}`);
   console.log('');
 });

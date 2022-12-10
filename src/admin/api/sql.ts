@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { getError } from '../../utils/error';
 import { convertBigIntToString, getDatabase } from '../utils';
 
 const executeSql = (databaseName: string, query: string, params = []) => {
@@ -23,7 +24,8 @@ export const apiSql = (request: Request, response: Response) => {
 
     response.statusCode = 200;
     response.json(resultSafe);
-  } catch (error) {
+  } catch (e) {
+    const error = getError(e);
     response.statusCode = 200;
     response.json({ error: { title: 'SQL error!', message: error.message } });
   }

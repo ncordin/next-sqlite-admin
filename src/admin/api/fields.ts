@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { getError } from '../../utils/error';
 import { getDatabase } from '../utils';
 
 export const apiFields = (request: Request, response: Response) => {
@@ -26,7 +27,8 @@ export const apiFields = (request: Request, response: Response) => {
 
     response.statusCode = 200;
     response.json({});
-  } catch (error) {
+  } catch (e) {
+    const error = getError(e);
     response.statusCode = 200;
     response.json({ error: { message: error.message } });
   }

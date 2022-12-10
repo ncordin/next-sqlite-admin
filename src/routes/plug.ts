@@ -4,33 +4,32 @@ import { Controller, Route, Request, RequestData } from '../types';
 import { errorHandler } from './error';
 import { sanitizeJson } from './json';
 
-const wrap = (controller: Controller) => (
-  expressRequest: ExpressRequest,
-  expressResponse: Response
-) => {
-  const params = {
-    ...expressRequest.query,
-    ...expressRequest.body,
-    ...expressRequest.params,
-  };
+const wrap =
+  (controller: Controller) =>
+  (expressRequest: ExpressRequest, expressResponse: Response) => {
+    const params = {
+      ...expressRequest.query,
+      ...expressRequest.body,
+      ...expressRequest.params,
+    };
 
-  const request: Request = {
-    headers: expressRequest.headers as RequestData,
-    params,
-    ip: expressRequest.ip,
-  };
+    const request: Request = {
+      headers: expressRequest.headers as RequestData,
+      params,
+      ip: expressRequest.ip,
+    };
 
-  try {
-    controller(request)
-      .then((value) => {
-        const safe = sanitizeJson(value);
-        expressResponse.json(safe);
-      })
-      .catch(errorHandler(expressResponse));
-  } catch (error) {
-    errorHandler(expressResponse)(error);
-  }
-};
+    try {
+      controller(request)
+        .then((value) => {
+          const safe = sanitizeJson(value);
+          expressResponse.json(safe);
+        })
+        .catch(errorHandler(expressResponse));
+    } catch (error) {
+      errorHandler(expressResponse)(error as Error);
+    }
+  };
 
 const plug = (router: Router) => (route: Route) => {
   switch (route.method) {

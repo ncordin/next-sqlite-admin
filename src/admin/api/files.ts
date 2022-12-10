@@ -1,5 +1,6 @@
 import fileSystem from 'fs';
 import { Request, Response } from 'express';
+import { getError } from '../../utils/error';
 
 export const apiFiles = (request: Request, response: Response) => {
   try {
@@ -10,7 +11,8 @@ export const apiFiles = (request: Request, response: Response) => {
 
     response.statusCode = 200;
     response.json(files);
-  } catch (error) {
+  } catch (e) {
+    const error = getError(e);
     response.statusCode = 200;
     response.json({ error: { message: error.message } });
   }

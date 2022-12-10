@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function sanitizeJson(json: any): any {
   const type = typeof json;
 
