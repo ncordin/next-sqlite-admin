@@ -47,13 +47,10 @@ export const encode = (value: Value, field: AnyField): string => {
 
   switch (field.type) {
     case 'datetime':
-      return quotify(convertToUTCSqlDate(value as unknown as Date), `'`);
+      return quotify(convertToUTCSqlDate((value as unknown) as Date), `'`);
 
     case 'number':
       return `${parseInt(value as string, 10)}`;
-
-    case 'bigint':
-      return `${BigInt(value as number)}`;
 
     case 'boolean':
       return value ? '1' : '0';

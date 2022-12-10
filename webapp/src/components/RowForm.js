@@ -4,7 +4,6 @@ import styled from 'styled-components';
 
 import { useTables } from '../contexts/Tables';
 
-// (bigint must be handled as string)
 const NUMERICS = ['int', 'integer', 'tinyint', 'smallint', 'mediumint'];
 
 const isNumericalType = (type) => {

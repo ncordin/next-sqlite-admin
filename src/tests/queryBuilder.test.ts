@@ -4,8 +4,8 @@ import { makeCreateTable } from '../base/queryBuilder';
 const RESSOURCES = ['gaz', 'electricity', 'water'];
 
 const fields = {
-  id: Table.bigInt({}),
-  user: Table.bigInt({}),
+  id: Table.number({}),
+  user: Table.number({}),
   ressource: Table.enumerated({ values: RESSOURCES }),
   date: Table.string({ maxLength: 20 }),
   value: Table.number({}),

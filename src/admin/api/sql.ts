@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { getError } from '../../utils/error';
-import { convertBigIntToString, getDatabase } from '../utils';
+import { getDatabase } from '../utils';
 
 const executeSql = (databaseName: string, query: string, params = []) => {
   const database = getDatabase(databaseName);
@@ -20,10 +20,9 @@ export const apiSql = (request: Request, response: Response) => {
       request.body.query,
       request.body.params
     );
-    const resultSafe = convertBigIntToString(result);
 
     response.statusCode = 200;
-    response.json(resultSafe);
+    response.json(result);
   } catch (e) {
     const error = getError(e);
     response.statusCode = 200;

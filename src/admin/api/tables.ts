@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { Database } from 'better-sqlite3';
 
-import { convertBigIntToString, getDatabase } from '../utils';
+import { getDatabase } from '../utils';
 import { getError } from '../../utils/error';
 
 const countLines = (database: Database, tableName: string) => {
@@ -55,10 +55,9 @@ export const apiTables = (request: Request, response: Response) => {
   try {
     const database = getDatabase(request.headers.database?.toString() || '');
     const tables = getTables(database);
-    const safeJson = convertBigIntToString(tables);
 
     response.statusCode = 200;
-    response.json(safeJson);
+    response.json(tables);
   } catch (e) {
     const error = getError(e);
     response.statusCode = 200;

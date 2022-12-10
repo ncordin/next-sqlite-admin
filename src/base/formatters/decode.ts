@@ -17,9 +17,6 @@ function decode(value: unknown, field: AnyField) {
     case 'number':
       return parseInt(value as string, 10);
 
-    case 'bigint':
-      return value; // see option defaultSafeIntegers
-
     case 'string':
       return `${value}`;
 

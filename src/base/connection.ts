@@ -19,7 +19,6 @@ type QueryOptions = {
 
 export const initDatabase = function (config: DatabaseConfiguration) {
   database = sqlite(config.file);
-  database.defaultSafeIntegers(true);
 };
 
 export const queryGet = ({ sql, parameters, name, fields }: QueryOptions) => {

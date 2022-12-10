@@ -1,7 +1,6 @@
 /*
 TYPE          WRITE                 READ
 number        parseInt              parseInt
-bigint        parseBigInt           parseBigInt
 float         parseFloat            parseFloat
 string        param length?         rien length ?
 bool          to 0/1                to true/false

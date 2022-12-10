@@ -22,29 +22,6 @@ export const number = (options: {
 };
 
 /**
- * BigInt
- */
-type BigIntField = {
-  type: 'bigint';
-  canBeNull: boolean;
-  default: number | null;
-  primaryKey: boolean;
-};
-
-export const bigInt = (options: {
-  canBeNull?: boolean;
-  default?: number | null;
-  primaryKey?: boolean;
-}): BigIntField => {
-  return {
-    type: 'bigint',
-    canBeNull: options.canBeNull || false,
-    default: options.default || null,
-    primaryKey: options.primaryKey || false,
-  };
-};
-
-/**
  * String
  */
 type StringField = {
@@ -147,7 +124,6 @@ export const dateTime = (options: {
  */
 export type AnyField =
   | NumberField
-  | BigIntField
   | StringField
   | BooleanField
   | EnumeratedField
