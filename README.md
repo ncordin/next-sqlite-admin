@@ -15,6 +15,7 @@ A set of Node utilities for building APIs.
 - handle enum / bool / date in the admin form.
 - make server start command runnable from any directory
 - use `rowid` during edition and in url
+- drop bigint support
 
 # Tips
 

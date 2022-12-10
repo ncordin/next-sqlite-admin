@@ -1,1 +1,0 @@
-export { plugAllRoutes } from './plug';

@@ -1,4 +1,4 @@
 export { initDatabase, Insertable, Table } from './base';
-export { Controller, Route } from './types';
-export { plugAllRoutes } from './routes';
+export { Controller } from './types';
+export { wrapController } from './controller';
 export { adminRouter } from './admin';
