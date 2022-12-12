@@ -1,5 +1,5 @@
 {
-  "name": "sqlite-95-webapp",
+  "name": "sqlite-95-admin-webapp",
   "version": "1.0.0",
   "scripts": {
     "start": "IS_DEV_SERVER=true parcel public/index.html",

@@ -1,6 +1,6 @@
 # SQLite 95 / ORM
 
-A set of Node utilities for building APIs.
+SQLite ORM with a web admin.
 
 # TODOS
 

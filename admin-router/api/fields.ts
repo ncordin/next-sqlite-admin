@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getError } from '../../utils/error';
+import { getError } from '../../orm/utils/error';
 import { getDatabase } from '../utils';
 
 export const apiFields = (request: Request, response: Response) => {

@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { Database } from 'better-sqlite3';
 
 import { getDatabase } from '../utils';
-import { getError } from '../../utils/error';
+import { getError } from '../../orm/utils/error';
 
 const countLines = (database: Database, tableName: string) => {
   const result = database.prepare(`SELECT COUNT(*) FROM "${tableName}"`).get();

@@ -1,6 +1,6 @@
 import fileSystem from 'fs';
 import { Request, Response } from 'express';
-import { getError } from '../../utils/error';
+import { getError } from '../../orm/utils/error';
 
 export const apiFiles = (request: Request, response: Response) => {
   try {

@@ -7,11 +7,3 @@ export type Request = {
 };
 
 export type Controller = (request: Request) => Promise<unknown>;
-
-export type DatabaseConfiguration = {
-  file: string;
-};
-
-export type RawRow = {
-  [key: string]: string;
-};

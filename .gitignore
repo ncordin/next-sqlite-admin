@@ -1,15 +1,15 @@
 # dependencies
 /node_modules
-/webapp/node_modules
+/admin-webapp/node_modules
 
 # production
 /build
-/webapp/dist
+/admin-webapp/dist
 
 # misc
 .DS_Store
 *.pem
-/webapp/.cache
+/admin-webapp/.cache
 
 # debug
 npm-debug.log*

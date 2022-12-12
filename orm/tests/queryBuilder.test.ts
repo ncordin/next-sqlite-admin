@@ -1,5 +1,5 @@
-import { Table } from '../base';
-import { makeCreateTable } from '../base/queryBuilder';
+import { Table } from '../';
+import { makeCreateTable } from '../queryBuilder';
 
 const RESSOURCES = ['gaz', 'electricity', 'water'];
 

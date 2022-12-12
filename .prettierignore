@@ -1,4 +1,4 @@
-build/
-webapp/dist
-/webapp/.cache
-.prettierignore
+/build
+/admin-webapp/dist
+/admin-webapp/.cache
+/.prettierignore

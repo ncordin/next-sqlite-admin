@@ -1,4 +1,4 @@
-import { initDatabase, Table } from '../base';
+import { initDatabase, Table } from '../';
 
 const fields = {
   id: Table.number({ canBeNull: false, default: 42 }),
@@ -24,7 +24,7 @@ type Player = {
 
 export const Players = Table.make<Player>({ name: 'players', fields });
 
-initDatabase({ file: 'youpi.db' });
+initDatabase({ file: 'base-tests.db' });
 
 Players.findAll({ where: { id: 1, gold: { '<': 40 }, name: null } }).then(
   (players) => {
