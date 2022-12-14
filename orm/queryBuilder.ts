@@ -1,51 +1,38 @@
 import { AnyField, Fields } from './declaration';
 import { encode, encodeName } from './formatters/encode';
-import { SetOfComparisonValues, SetOfValues } from './types';
+import { ComparisonSymbol, Set, Where } from './types';
 
-export function makeWhere(
-  name: string,
-  fields: Fields,
-  conditions: SetOfComparisonValues = {}
-) {
+const OPERATORS: ComparisonSymbol[] = ['<', '<=', '>', '>=', '=', '!='];
+
+export function makeWhere(name: string, fields: Fields, conditions: Where[]) {
   if (Object.keys(conditions).length === 0) {
     return '1 = 1';
   }
 
-  return Object.entries(conditions)
-    .map(([field, value]) => {
-      let comparison = '=';
-      let rawValue = null;
-
-      if (typeof value === 'object' && value) {
-        const [action, content] = Object.entries(value)[0];
-        const definedContent = content === undefined ? null : content;
-
-        if (['<', '<=', '>', '>=', '='].includes(action)) {
-          comparison = action;
-          rawValue = definedContent;
-        }
-      } else {
-        rawValue = value;
+  return conditions
+    .map(({ fieldName, comparison, value }) => {
+      if (!OPERATORS.includes(comparison)) {
+        throw new Error(`Invalid comparison operator ${comparison}`);
       }
 
       if (value === null) {
-        comparison = 'IS';
+        // comparison = 'IS';
       }
 
-      const escaped = encode(rawValue, fields[field]);
-      const escapedField = `${encodeName(name)}.${encodeName(field)}`;
+      const escapedField = `${encodeName(name)}.${encodeName(fieldName)}`;
+      const escapedValue = encode(value, fields[fieldName]);
 
-      return `${escapedField} ${comparison} ${escaped}`;
+      return `${escapedField} ${comparison} ${escapedValue}`;
     })
     .join(' AND ');
 }
 
-export function makeSet(name: string, fields: Fields, data: SetOfValues) {
-  return Object.entries(data)
-    .map(([field, value]) => {
-      const escaped = encode(value, fields[field]);
+export function makeSet(name: string, fields: Fields, data: Set[]) {
+  return data
+    .map(({ fieldName, value }) => {
+      const escaped = encode(value, fields[fieldName]);
 
-      return `${encodeName(field)} = ${escaped}`;
+      return `${encodeName(fieldName)} = ${escaped}`;
     })
     .join(', ');
 }
@@ -68,7 +55,7 @@ function makeField(name: string, field: AnyField) {
   }
 
   if (field.default !== null) {
-    sql = `${sql} DEFAULT ${encode(field.default, field)}`;
+    sql = `${sql} DEFAULT ${encode(field.default, field, false)}`;
   }
 
   return sql;

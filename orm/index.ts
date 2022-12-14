@@ -1,9 +1,11 @@
 import { declareTable } from './table';
 import { boolean, number, string, enumerated, dateTime } from './declaration';
 
-export { initDatabase, queryRun, queryGet } from './connection';
-export { Insertable } from './table';
+export { Insertable } from './types';
 
+export { initDatabase, queryRun, queryGet } from './connection';
+
+// Weird error
 export const Table = {
   make: declareTable,
   boolean,

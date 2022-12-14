@@ -1,6 +1,13 @@
 import { queryRun, queryGet } from './connection';
 import { makeSet, makeWhere } from './queryBuilder';
-import { SetOfComparisonValues, Value, ComparisonValue } from './types';
+import {
+  ComparisonSymbol,
+  Insertable,
+  Set,
+  Value,
+  Where,
+  WriteResult,
+} from './types';
 import { Fields } from './declaration';
 import { encode, encodeName, getAndFlushParameters } from './formatters/encode';
 import { decodeRaws } from './formatters/decode';
@@ -10,54 +17,88 @@ type DeclarationOptions = {
   fields: Fields;
 };
 
-export type Insertable<TableType> = {
-  [PropertyType in keyof TableType]: TableType[PropertyType] | { _SQL: string };
-};
+type TableInstance<TableType> = {
+  // State:
+  sets: Array<Set>;
+  wheres: Array<Where>;
 
-type Options<WhereField extends string | number | symbol> = {
-  where?: { [key in WhereField]: ComparisonValue };
-};
+  // Setters:
+  set: <Field extends keyof TableType>(
+    fieldName: Field,
+    value: TableType[Field]
+  ) => TableInstance<TableType>;
+  where: <Field extends keyof TableType>(
+    fieldName: Field,
+    operator: ComparisonSymbol,
+    value: TableType[Field]
+  ) => TableInstance<TableType>;
 
-type UpdateOptions<
-  SetField extends string | number | symbol,
-  WhereField extends string | number | symbol
-> = {
-  set: { [key in SetField]: Value };
-  where?: { [key in WhereField]: ComparisonValue };
+  // Action:
+  findAll: () => Promise<TableType[]>;
+  findOne: () => Promise<TableType | null>;
+  insert: (data: Insertable<TableType>) => Promise<WriteResult>;
+  remove: () => Promise<WriteResult>;
+  update: () => Promise<WriteResult>;
 };
 
 export const declareTable = <TableType>({
   name,
   fields,
-}: DeclarationOptions) => {
+}: DeclarationOptions): TableInstance<TableType> => ({
+  sets: [],
+  wheres: [],
+
+  /**
+   * Set
+   */
+  set: function (fieldName, value) {
+    const newSet: Set = {
+      fieldName: String(fieldName),
+      value: value as Value,
+    };
+    this.sets.push(newSet);
+    return this;
+  },
+
+  /**
+   * Where
+   */
+  where: function (fieldName, comparison, value) {
+    const newWhere: Where = {
+      fieldName: String(fieldName),
+      comparison,
+      value: value as Value,
+    };
+    this.wheres.push(newWhere);
+    return this;
+  },
+
   /**
    * FindAll
    */
-  const findAll = <Field extends keyof TableType>(options: Options<Field>) => {
-    const condition = makeWhere(
-      name,
-      fields,
-      options.where as SetOfComparisonValues
-    );
+  findAll: function () {
+    const condition = makeWhere(name, fields, this.wheres);
     const sql = `SELECT * FROM ${encodeName(name)} WHERE ${condition};`;
     const parameters = getAndFlushParameters();
+
+    this.wheres = [];
 
     return queryGet({ sql, parameters, name, fields }).then((rows) =>
       decodeRaws<TableType>(rows, fields)
     );
-  };
+  },
 
   /**
    * FindOne
    */
-  const findOne = <Field extends keyof TableType>(options: Options<Field>) => {
-    return findAll(options).then((rows) => (rows.length ? rows[0] : null));
-  };
+  findOne: function () {
+    return this.findAll().then((rows) => (rows.length ? rows[0] : null));
+  },
 
   /**
    * Insert
    */
-  const insert = (data: Insertable<TableType>) => {
+  insert: function (data: Insertable<TableType>) {
     const fieldNames = Object.keys(data)
       .map((field) => encodeName(field))
       .join(', ');
@@ -73,57 +114,44 @@ export const declareTable = <TableType>({
     const parameters = getAndFlushParameters();
 
     return queryRun({ sql, parameters, name, fields });
-  };
+  },
 
   /**
    * Remove
    */
-  const remove = <Field extends keyof TableType>(options: Options<Field>) => {
-    const condition = makeWhere(
-      name,
-      fields,
-      options.where as SetOfComparisonValues
-    );
+  remove: function () {
+    if (this.wheres.length === 0) {
+      throw new Error('Refused to flush the table to avoid disaster.');
+    }
+
+    const condition = makeWhere(name, fields, this.wheres);
     const sql = `DELETE FROM ${encodeName(name)} WHERE ${condition};`;
     const parameters = getAndFlushParameters();
 
+    this.wheres = [];
+
     return queryRun({ sql, parameters, name, fields });
-  };
+  },
 
   /**
    * Update
    */
-  const update = <
-    SetField extends keyof TableType,
-    WhereField extends keyof TableType
-  >(
-    options: UpdateOptions<SetField, WhereField>
-  ) => {
-    const set = makeSet(name, fields, options.set);
-    const condition = makeWhere(
-      name,
-      fields,
-      options.where as SetOfComparisonValues
-    );
+  update: function () {
+    const set = makeSet(name, fields, this.sets);
+    const condition = makeWhere(name, fields, this.wheres);
     const sql = `UPDATE ${encodeName(name)} SET ${set} WHERE ${condition};`;
     const parameters = getAndFlushParameters();
 
+    this.sets = [];
+    this.wheres = [];
+
     return queryRun({ sql, parameters, name, fields });
-  };
+  },
 
   /**
    * Sql
    */
-  const sql = (sqlString: string) => {
-    return { _SQL: sqlString };
-  };
-
-  return {
-    findAll,
-    findOne,
-    insert,
-    remove,
-    update,
-    sql,
-  };
-};
+  // const sql = (sqlString: string) => {
+  //   return { _SQL: sqlString };
+  // };
+});

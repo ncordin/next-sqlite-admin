@@ -2,7 +2,7 @@ import { AnyField } from '../declaration';
 import { Value } from '../types';
 
 const quotify = (string: string, quote: string) => {
-  return `${quote}${string}${quote}`;
+  return `${quote}${string}${quote}`; // Backslash should be done here.
 };
 
 const convertToUTCSqlDate = (date: Date) => {
@@ -32,7 +32,11 @@ export const getAndFlushParameters = () => {
   return parameters;
 };
 
-export const encode = (value: Value, field: AnyField): string => {
+export const encode = (
+  value: Value,
+  field: AnyField,
+  useEscaper = true
+): string => {
   if (value === null) {
     if (field.canBeNull) {
       return 'null';
@@ -56,8 +60,12 @@ export const encode = (value: Value, field: AnyField): string => {
       return value ? '1' : '0';
 
     case 'string':
-      addParameters((value as string).slice(0, field.maxLength));
-      return '?';
+      if (useEscaper) {
+        addParameters((value as string).slice(0, field.maxLength));
+        return '?';
+      } else {
+        return quotify(`${value}`, '"');
+      }
 
     case 'enumerated':
       if (field.values.includes(value as string)) {

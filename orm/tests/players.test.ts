@@ -26,11 +26,18 @@ export const Players = Table.make<Player>({ name: 'players', fields });
 
 initDatabase({ file: 'base-tests.db' });
 
-Players.findAll({ where: { id: 1, gold: { '<': 40 }, name: null } }).then(
-  (players) => {
-    console.log(players);
-  }
-);
+Players.where('gold', '>', 2)
+  .where('id', '=', 1)
+  .findAll()
+  .then((players) => {
+    console.log({ players });
+  });
+
+Players.where('gold', '=', 100)
+  .findOne()
+  .then((player) => {
+    console.log({ player });
+  });
 
 Players.insert({
   id: 1,
@@ -39,4 +46,19 @@ Players.insert({
   isCool: true,
   state: 'data-A',
   createdAt: new Date(),
+}).then((result) => {
+  console.log(result);
 });
+
+Players.where('gold', '<', 10000)
+  .remove()
+  .then((result) => {
+    console.log(result);
+  });
+
+Players.set('name', 'Coco')
+  .where('name', '!=', 'Coco')
+  .update()
+  .then((result) => {
+    console.log(result);
+  });

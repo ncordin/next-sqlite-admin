@@ -10,7 +10,6 @@ function decode(value: unknown, field: AnyField) {
     return undefined;
   }
 
-  console.log(field.type);
   switch (field.type) {
     case 'boolean':
       return !!value;
