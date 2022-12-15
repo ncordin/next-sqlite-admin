@@ -1,5 +1,5 @@
 import { Table } from '../';
-import { makeCreateTable } from '../queryBuilder';
+import { makeCreateTable } from '../table/queryBuilder';
 
 const RESSOURCES = ['gaz', 'electricity', 'water'];
 
@@ -15,5 +15,3 @@ const fields = {
 const query = makeCreateTable('readings', fields);
 
 console.log(query);
-
-// TODO tester TOUTES les possibilites.

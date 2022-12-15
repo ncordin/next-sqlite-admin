@@ -5,13 +5,12 @@ SQLite ORM with a web admin.
 # TODOS
 
 - table logs / errors ?
-- SQL: in(), group, having, sort, unique insert, count, has, limit.
+- SQL: in(), group, having, sort, unique insert, limit.
 - Show version on initDatabase?
 - where: {url : undefined} <-- crash in formater.
 - how to run tests ? npx ts-node src/test/[...]
-- need in comparators `!=` ?
 - Table.lastQuery for debug.
-- auto create table dont not write types.
+- auto create table dont write types.
 - handle enum / bool / date in the admin form.
 - make server start command runnable from any directory
 - use `rowid` during edition and in url
@@ -43,7 +42,3 @@ Can not access admin interface:
 
 - Check for empty PREFIX, can cause bad URL like http://localhost//admin/
 - The node command MUST be run from the server project directory
-
-`gyp: No Xcode or CLT version detected!`
-
-> xcode-select --install

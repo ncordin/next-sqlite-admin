@@ -39,6 +39,7 @@ export type TableInstance<TableType> = {
   insert: (data: Insertable<TableType>) => Promise<WriteResult>;
   remove: () => Promise<WriteResult>;
   update: () => Promise<WriteResult>;
+  count: () => Promise<number>;
 };
 
 export const declareTable = <TableType>({
@@ -146,6 +147,21 @@ export const declareTable = <TableType>({
     this.wheres = [];
 
     return queryRun({ sql, parameters, name, fields });
+  },
+
+  /**
+   * Count
+   */
+  count: function () {
+    const condition = makeWhere(name, fields, this.wheres);
+    const sql = `SELECT COUNT(*) FROM ${encodeName(name)} WHERE ${condition};`;
+    const parameters = getAndFlushParameters();
+
+    this.wheres = [];
+
+    return queryGet({ sql, parameters, name, fields }).then((rows) =>
+      parseInt(rows[0]['COUNT(*)'], 10)
+    );
   },
 
   /**

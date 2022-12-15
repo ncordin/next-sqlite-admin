@@ -1,8 +1,20 @@
 import { AnyField, Fields } from '../fields/declaration';
 import { encode, encodeName } from '../fields/encode';
-import { ComparisonSymbol, Set, Where } from '../types';
+import { ComparisonSymbol, Set, Value, Where } from '../types';
 
 const OPERATORS: ComparisonSymbol[] = ['<', '<=', '>', '>=', '=', '!='];
+
+const escapeOperator = (operator: ComparisonSymbol, value: Value) => {
+  if (OPERATORS.includes(operator) === false) {
+    throw new Error(`Invalid comparison operator ${operator}`);
+  }
+
+  if (value === null) {
+    return operator === '=' ? 'IS' : 'IS NOT';
+  }
+
+  return operator;
+};
 
 export function makeWhere(name: string, fields: Fields, conditions: Where[]) {
   if (Object.keys(conditions).length === 0) {
@@ -11,18 +23,11 @@ export function makeWhere(name: string, fields: Fields, conditions: Where[]) {
 
   return conditions
     .map(({ fieldName, comparison, value }) => {
-      if (!OPERATORS.includes(comparison)) {
-        throw new Error(`Invalid comparison operator ${comparison}`);
-      }
-
-      if (value === null) {
-        // comparison = 'IS';
-      }
-
       const escapedField = `${encodeName(name)}.${encodeName(fieldName)}`;
+      const escapedOperator = escapeOperator(comparison, value);
       const escapedValue = encode(value, fields[fieldName]);
 
-      return `${escapedField} ${comparison} ${escapedValue}`;
+      return `${escapedField} ${escapedOperator} ${escapedValue}`;
     })
     .join(' AND ');
 }

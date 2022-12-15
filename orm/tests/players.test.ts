@@ -21,6 +21,12 @@ const main = async () => {
     console.log(result);
   });
 
+  await Players.where('gold', '!=', null)
+    .count()
+    .then((count) => {
+      console.log({ count });
+    });
+
   await Players.set('name', 'Coca')
     .where('name', '!=', 'Coca')
     .update()
@@ -43,3 +49,17 @@ const main = async () => {
 };
 
 main();
+
+/*
+- auto create table
+
+- createdAt: Readings.sql('now()'),
+- set: { value: Readings.sql('value - 10') },
+- selectAs: {averageValue: "AVG(value)"}
+- in [...]
+- group: [ fieldA, fieldB ]
+- having: whereOptions
+- sortBy: { fieldA: "desc" },
+- limit: { offset: 10, limit: 10 },
+- SQL: in(), group, having, sort, unique insert, count, has, limit.
+*/

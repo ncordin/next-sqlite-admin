@@ -16,7 +16,7 @@ const fields = {
 type Player = {
   id: number;
   name: string;
-  gold: number;
+  gold: number | null;
   isCool: boolean;
   state: 'data-A' | 'data-B';
   createdAt: Date;
