@@ -1,11 +1,16 @@
 import { declareTable } from './table';
-import { boolean, number, string, enumerated, dateTime } from './declaration';
+import {
+  boolean,
+  number,
+  string,
+  enumerated,
+  dateTime,
+} from './fields/declaration';
 
 export { Insertable } from './types';
 
-export { initDatabase, queryRun, queryGet } from './connection';
+export { initDatabase } from './drivers';
 
-// Weird error
 export const Table = {
   make: declareTable,
   boolean,

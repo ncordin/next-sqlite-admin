@@ -1,4 +1,4 @@
-import { AnyField } from '../declaration';
+import { AnyField } from './declaration';
 import { Value } from '../types';
 
 const quotify = (string: string, quote: string) => {

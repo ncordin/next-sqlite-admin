@@ -1,10 +1,11 @@
 import sqlite, { Database } from 'better-sqlite3';
-import { DatabaseConfiguration, RawRow, WriteResult } from './types';
-import { getError } from './utils/error';
-import { logQuery } from './utils/logger';
-import { Fields } from './declaration';
-import { getAndFlushParameters } from './formatters/encode';
-import { makeCreateTable } from './queryBuilder';
+
+import { Fields } from '../fields/declaration';
+import { getAndFlushParameters } from '../fields/encode';
+import { makeCreateTable } from '../table/queryBuilder';
+import { DatabaseConfiguration, RawRow, WriteResult } from '../types';
+import { getError } from '../utils/error';
+import { logQuery } from '../utils/logger';
 
 let database: Database | null = null;
 

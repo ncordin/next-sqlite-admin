@@ -1,4 +1,4 @@
-import { queryRun, queryGet } from './connection';
+import { queryRun, queryGet } from '../drivers';
 import { makeSet, makeWhere } from './queryBuilder';
 import {
   ComparisonSymbol,
@@ -7,18 +7,18 @@ import {
   Value,
   Where,
   WriteResult,
-} from './types';
-import { Fields } from './declaration';
-import { encode, encodeName, getAndFlushParameters } from './formatters/encode';
-import { decodeRaws } from './formatters/decode';
+} from '../types';
+import { Fields } from '../fields/declaration';
+import { encode, encodeName, getAndFlushParameters } from '../fields/encode';
+import { decodeRaws } from '../fields/decode';
 
 type DeclarationOptions = {
   name: string;
   fields: Fields;
 };
 
-type TableInstance<TableType> = {
-  // State:
+export type TableInstance<TableType> = {
+  // Internal states:
   sets: Array<Set>;
   wheres: Array<Where>;
 

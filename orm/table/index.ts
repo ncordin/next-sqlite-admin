@@ -1,0 +1,1 @@
+export { declareTable } from './table';

@@ -1,5 +1,5 @@
 import { RawRow } from '../types';
-import { AnyField, Fields } from '../declaration';
+import { AnyField, Fields } from './declaration';
 
 function decode(value: unknown, field: AnyField) {
   if (value === null) {

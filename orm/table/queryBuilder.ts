@@ -1,6 +1,6 @@
-import { AnyField, Fields } from './declaration';
-import { encode, encodeName } from './formatters/encode';
-import { ComparisonSymbol, Set, Where } from './types';
+import { AnyField, Fields } from '../fields/declaration';
+import { encode, encodeName } from '../fields/encode';
+import { ComparisonSymbol, Set, Where } from '../types';
 
 const OPERATORS: ComparisonSymbol[] = ['<', '<=', '>', '>=', '=', '!='];
 
