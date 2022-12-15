@@ -5,9 +5,8 @@ SQLite ORM with a web admin.
 # TODOS
 
 - table logs / errors ?
-- SQL: in(), group, having, sort, unique insert, limit.
+- SQL: in(), group, having, unique insert.
 - Show version on initDatabase?
-- where: {url : undefined} <-- crash in formater.
 - how to run tests ? npx ts-node src/test/[...]
 - Table.lastQuery for debug.
 - auto create table dont write types.

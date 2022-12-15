@@ -13,7 +13,7 @@ const main = async () => {
   await Players.insert({
     id: 1,
     name: 'Coco',
-    gold: 5,
+    gold: Players.rawSql('10 + 10'),
     isCool: true,
     state: 'data-A',
     createdAt: new Date(),
@@ -28,6 +28,7 @@ const main = async () => {
     });
 
   await Players.set('name', 'Coca')
+    .set('gold', Players.rawSql('gold + 1'))
     .where('name', '!=', 'Coca')
     .update()
     .then((result) => {
@@ -36,12 +37,16 @@ const main = async () => {
 
   await Players.where('gold', '>', 2)
     .where('isCool', '=', true)
+    .orderBy('gold', 'ASC')
+    .orderBy('createdAt', 'DESC')
+    .limit(100, 0)
     .findAll()
     .then((players) => {
       console.log({ players });
     });
 
   await Players.where('gold', '<', 10000)
+    .limit(20)
     .remove()
     .then((result) => {
       console.log(result);
@@ -51,15 +56,10 @@ const main = async () => {
 main();
 
 /*
+- unique insert
 - auto create table
-
-- createdAt: Readings.sql('now()'),
-- set: { value: Readings.sql('value - 10') },
-- selectAs: {averageValue: "AVG(value)"}
 - in [...]
+- selectAs: {averageValue: "AVG(value)"} {min: MIN()}
 - group: [ fieldA, fieldB ]
 - having: whereOptions
-- sortBy: { fieldA: "desc" },
-- limit: { offset: 10, limit: 10 },
-- SQL: in(), group, having, sort, unique insert, count, has, limit.
 */

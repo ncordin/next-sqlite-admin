@@ -1,4 +1,6 @@
-export type Value = number | string | boolean | Date | null | { _SQL: string };
+export type RawSQL = { _SQL: string };
+
+export type Value = number | string | boolean | Date | null | RawSQL;
 
 export type ComparisonSymbol = '<' | '<=' | '>' | '>=' | '=' | '!=';
 
@@ -11,6 +13,16 @@ export type Where = {
   fieldName: string;
   comparison: ComparisonSymbol;
   value: Value;
+};
+
+export type OrderBy = {
+  fieldName: string;
+  direction: 'ASC' | 'DESC';
+};
+
+export type Limit = {
+  quantity: number;
+  position?: number;
 };
 
 export type RawRow = {
@@ -27,5 +39,5 @@ export type WriteResult = {
 };
 
 export type Insertable<TableType> = {
-  [PropertyType in keyof TableType]: TableType[PropertyType] | { _SQL: string };
+  [PropertyType in keyof TableType]: TableType[PropertyType] | RawSQL;
 };

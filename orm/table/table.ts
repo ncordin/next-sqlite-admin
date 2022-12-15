@@ -1,8 +1,11 @@
 import { queryRun, queryGet } from '../drivers';
-import { makeSet, makeWhere } from './queryBuilder';
+import { makeLimit, makeOrders, makeSet, makeWhere } from './queryBuilder';
 import {
   ComparisonSymbol,
   Insertable,
+  Limit,
+  OrderBy,
+  RawSQL,
   Set,
   Value,
   Where,
@@ -21,17 +24,25 @@ export type TableInstance<TableType> = {
   // Internal states:
   sets: Array<Set>;
   wheres: Array<Where>;
+  orders: Array<OrderBy>;
+  limitState: Limit | null;
+  clearState: () => void;
 
   // Setters:
   set: <Field extends keyof TableType>(
     fieldName: Field,
-    value: TableType[Field]
+    value: TableType[Field] | RawSQL
   ) => TableInstance<TableType>;
   where: <Field extends keyof TableType>(
     fieldName: Field,
     operator: ComparisonSymbol,
-    value: TableType[Field]
+    value: TableType[Field] | RawSQL
   ) => TableInstance<TableType>;
+  orderBy: <Field extends keyof TableType>(
+    fieldName: Field,
+    direction: 'ASC' | 'DESC'
+  ) => TableInstance<TableType>;
+  limit: (quantity: number, position?: number) => TableInstance<TableType>;
 
   // Action:
   findAll: () => Promise<TableType[]>;
@@ -40,6 +51,7 @@ export type TableInstance<TableType> = {
   remove: () => Promise<WriteResult>;
   update: () => Promise<WriteResult>;
   count: () => Promise<number>;
+  rawSql: (sql: string) => RawSQL;
 };
 
 export const declareTable = <TableType>({
@@ -48,6 +60,8 @@ export const declareTable = <TableType>({
 }: DeclarationOptions): TableInstance<TableType> => ({
   sets: [],
   wheres: [],
+  orders: [],
+  limitState: null,
 
   /**
    * Set
@@ -75,14 +89,40 @@ export const declareTable = <TableType>({
   },
 
   /**
+   * Order By
+   */
+  orderBy: function (fieldName, direction) {
+    this.orders.push({
+      fieldName: String(fieldName),
+      direction,
+    });
+
+    return this;
+  },
+
+  /**
+   * Limit
+   */
+  limit: function (quantity, position) {
+    this.limitState = { quantity, position };
+
+    return this;
+  },
+
+  /**
    * FindAll
    */
   findAll: function () {
     const condition = makeWhere(name, fields, this.wheres);
-    const sql = `SELECT * FROM ${encodeName(name)} WHERE ${condition};`;
+    const orders = makeOrders(name, fields, this.orders);
+    const limit = makeLimit(name, fields, this.limitState);
+
+    const sql = `SELECT * FROM ${encodeName(
+      name
+    )} WHERE ${condition}${orders}${limit};`;
     const parameters = getAndFlushParameters();
 
-    this.wheres = [];
+    this.clearState();
 
     return queryGet({ sql, parameters, name, fields }).then((rows) =>
       decodeRaws<TableType>(rows, fields)
@@ -93,7 +133,9 @@ export const declareTable = <TableType>({
    * FindOne
    */
   findOne: function () {
-    return this.findAll().then((rows) => (rows.length ? rows[0] : null));
+    return this.limit(1)
+      .findAll()
+      .then((rows) => (rows.length ? rows[0] : null));
   },
 
   /**
@@ -126,10 +168,12 @@ export const declareTable = <TableType>({
     }
 
     const condition = makeWhere(name, fields, this.wheres);
-    const sql = `DELETE FROM ${encodeName(name)} WHERE ${condition};`;
-    const parameters = getAndFlushParameters();
+    const limit = makeLimit(name, fields, this.limitState);
 
-    this.wheres = [];
+    const sql = `DELETE FROM ${encodeName(name)} WHERE ${condition}${limit};`;
+
+    const parameters = getAndFlushParameters();
+    this.clearState();
 
     return queryRun({ sql, parameters, name, fields });
   },
@@ -140,11 +184,14 @@ export const declareTable = <TableType>({
   update: function () {
     const set = makeSet(name, fields, this.sets);
     const condition = makeWhere(name, fields, this.wheres);
-    const sql = `UPDATE ${encodeName(name)} SET ${set} WHERE ${condition};`;
-    const parameters = getAndFlushParameters();
+    const limit = makeLimit(name, fields, this.limitState);
 
-    this.sets = [];
-    this.wheres = [];
+    const sql = `UPDATE ${encodeName(
+      name
+    )} SET ${set} WHERE ${condition}${limit};`;
+
+    const parameters = getAndFlushParameters();
+    this.clearState();
 
     return queryRun({ sql, parameters, name, fields });
   },
@@ -157,7 +204,7 @@ export const declareTable = <TableType>({
     const sql = `SELECT COUNT(*) FROM ${encodeName(name)} WHERE ${condition};`;
     const parameters = getAndFlushParameters();
 
-    this.wheres = [];
+    this.clearState();
 
     return queryGet({ sql, parameters, name, fields }).then((rows) =>
       parseInt(rows[0]['COUNT(*)'], 10)
@@ -167,7 +214,14 @@ export const declareTable = <TableType>({
   /**
    * Sql
    */
-  // const sql = (sqlString: string) => {
-  //   return { _SQL: sqlString };
-  // };
+  rawSql: function (sqlString: string) {
+    return { _SQL: sqlString };
+  },
+
+  clearState: function () {
+    this.sets = [];
+    this.wheres = [];
+    this.orders = [];
+    this.limitState = null;
+  },
 });

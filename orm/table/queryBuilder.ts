@@ -1,6 +1,6 @@
 import { AnyField, Fields } from '../fields/declaration';
 import { encode, encodeName } from '../fields/encode';
-import { ComparisonSymbol, Set, Value, Where } from '../types';
+import { ComparisonSymbol, Limit, OrderBy, Set, Value, Where } from '../types';
 
 const OPERATORS: ComparisonSymbol[] = ['<', '<=', '>', '>=', '=', '!='];
 
@@ -30,6 +30,36 @@ export function makeWhere(name: string, fields: Fields, conditions: Where[]) {
       return `${escapedField} ${escapedOperator} ${escapedValue}`;
     })
     .join(' AND ');
+}
+
+export function makeOrders(name: string, fields: Fields, orders: OrderBy[]) {
+  if (Object.keys(orders).length === 0) {
+    return '';
+  }
+
+  return (
+    ` ORDER BY ` +
+    orders
+      .map(({ fieldName, direction }) => {
+        const escapedField = `${encodeName(name)}.${encodeName(fieldName)}`;
+        const escapedDirection = direction === 'ASC' ? 'ASC' : 'DESC';
+
+        return `${escapedField} ${escapedDirection}`;
+      })
+      .join(', ')
+  );
+}
+
+export function makeLimit(name: string, fields: Fields, limit: Limit | null) {
+  if (limit === null) {
+    return '';
+  }
+
+  if (limit.position === undefined) {
+    return ` LIMIT ${limit.quantity}`;
+  }
+
+  return ` LIMIT ${limit.quantity} OFFSET ${limit.position}`;
 }
 
 export function makeSet(name: string, fields: Fields, data: Set[]) {

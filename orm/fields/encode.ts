@@ -49,6 +49,7 @@ export const encode = (
     return value._SQL;
   }
 
+  // TODO: value may be undefined (and certainly other things).
   switch (field.type) {
     case 'datetime':
       return quotify(convertToUTCSqlDate(value as unknown as Date), `'`);
