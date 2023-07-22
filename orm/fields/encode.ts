@@ -5,14 +5,14 @@ const quotify = (string: string, quote: string) => {
   return `${quote}${string}${quote}`; // Backslash should be done here.
 };
 
-const convertToUTCSqlDate = (date: Date) => {
+const convertToSqlDate = (date: Date) => {
   const parts = [
-    date.getUTCFullYear(),
-    date.getUTCMonth() + 1,
-    date.getUTCDate(),
-    date.getUTCHours(),
-    date.getUTCMinutes(),
-    date.getUTCSeconds(),
+    date.getFullYear(),
+    date.getMonth() + 1,
+    date.getDate(),
+    date.getHours(),
+    date.getMinutes(),
+    date.getSeconds(),
   ].map((value) => String(value).padStart(2, '0'));
 
   return `${parts[0]}-${parts[1]}-${parts[2]} ${parts[3]}:${parts[4]}:${parts[5]}`;
@@ -52,7 +52,7 @@ export const encode = (
   // TODO: value may be undefined (and certainly other things).
   switch (field.type) {
     case 'datetime':
-      return quotify(convertToUTCSqlDate(value as unknown as Date), `'`);
+      return quotify(convertToSqlDate(value as unknown as Date), `'`);
 
     case 'number':
       return `${parseInt(value as string, 10)}`;
