@@ -54,7 +54,7 @@ export function StructureTab() {
   const { fetch, executeQuery } = useApi();
 
   const refreshIndexes = () => {
-    executeQuery(`PRAGMA index_list(${currentTable.name});`).then(setIndexes);
+    executeQuery(`PRAGMA index_list("${currentTable.name}");`).then(setIndexes);
   };
 
   useEffect(() => {
