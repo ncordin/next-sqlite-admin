@@ -9,7 +9,6 @@ SQLite ORM with a web admin.
 - show version on initDatabase?
 - how to run tests ? npx ts-node src/test/[...]
 - Table.lastQuery for debug.
-- auto create table dont write types.
 - handle enum / bool / date in the admin form.
 - make server start command runnable from any directory
 - use `rowid` during edition and in url
@@ -17,7 +16,7 @@ SQLite ORM with a web admin.
 
 # Bugs
 
-- when i drop a field via admin, then all fields types are NUM https://www.sqlite.org/lang_altertable.html
+- Empty.
 
 # Tips
 

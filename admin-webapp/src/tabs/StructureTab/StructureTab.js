@@ -6,7 +6,11 @@ import { defaultField, NewFieldsForm } from '../../components/NewFieldsForm';
 import { Null } from '../../components/Null';
 import { Space } from '../../components/Space';
 import { useTables } from '../../contexts/Tables';
-import { makeAddField, makeRenameField } from '../../utils/query';
+import {
+  makeAddField,
+  makeDropField,
+  makeRenameField,
+} from '../../utils/query';
 import { useApi } from '../../utils/useApi';
 import { CreateIndex } from './CreateIndex';
 import { ListIndex } from './ListIndex';
@@ -51,7 +55,7 @@ export function StructureTab() {
   const [indexes, setIndexes] = useState([]);
   const [renamingField, setRenamingField] = useState(null);
   const [newFieldName, setNewFieldName] = useState('');
-  const { fetch, executeQuery } = useApi();
+  const { executeQuery } = useApi();
 
   const refreshIndexes = () => {
     executeQuery(`PRAGMA index_list("${currentTable.name}");`).then(setIndexes);
@@ -75,11 +79,12 @@ export function StructureTab() {
   };
 
   const drop = async (fieldName) => {
-    const fields = currentTable.structure
-      .map(({ name }) => name)
-      .filter((name) => name !== fieldName);
+    const query = makeDropField({
+      fieldName,
+      tableName: currentTable.name,
+    });
 
-    await fetch('api/fields', { table: currentTable.name, fields });
+    await executeQuery(query);
     await refresh();
   };
 

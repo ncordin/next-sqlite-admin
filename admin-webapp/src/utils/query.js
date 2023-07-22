@@ -73,3 +73,7 @@ export function makeAddField({ field, tableName }) {
 export function makeRenameField({ currentName, newName, tableName }) {
   return `ALTER TABLE "${tableName}" RENAME COLUMN "${currentName}" TO "${newName}";`;
 }
+
+export function makeDropField({ fieldName, tableName }) {
+  return `ALTER TABLE "${tableName}" DROP COLUMN "${fieldName}";`;
+}
