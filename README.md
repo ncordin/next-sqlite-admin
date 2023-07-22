@@ -6,13 +6,18 @@ SQLite ORM with a web admin.
 
 - table logs / errors ?
 - SQL: in(), group, having, unique insert.
-- Show version on initDatabase?
+- show version on initDatabase?
 - how to run tests ? npx ts-node src/test/[...]
 - Table.lastQuery for debug.
 - auto create table dont write types.
 - handle enum / bool / date in the admin form.
 - make server start command runnable from any directory
 - use `rowid` during edition and in url
+- write a complete Getting started guide https://khalilstemmler.com/blogs/typescript/node-starter-project/
+
+# Bugs
+
+- when i drop a field via admin, then all fields types are NUM https://www.sqlite.org/lang_altertable.html
 
 # Tips
 
@@ -21,6 +26,7 @@ SQLite ORM with a web admin.
 # How to publish new version
 
 - Run tests
+- Build admin-webapp
 - npm version patch|minor|major
 - npm publish
 
@@ -37,7 +43,8 @@ SQLite ORM with a web admin.
 
 # Troubleshooting
 
-Can not access admin interface:
+`Cannot GET /admin/`, Can not access admin interface:
 
 - Check for empty PREFIX, can cause bad URL like http://localhost//admin/
 - The node command MUST be run from the server project directory
+- Check node_module/sqlite-95/admin-webapp/dist exists
