@@ -10,9 +10,11 @@ SQLite ORM with a web admin.
 - how to run tests ? npx ts-node src/test/[...]
 - Table.lastQuery for debug.
 - handle enum / bool / date in the admin form.
-- make server start command runnable from any directory
-- use `rowid` during edition and in url
+- make server start command runnable from any directory.
+- use `rowid` during edition and in url.
+- type utils to infer table type from field definition.
 - write a complete Getting started guide https://khalilstemmler.com/blogs/typescript/node-starter-project/
+- search in admin
 
 # Bugs
 

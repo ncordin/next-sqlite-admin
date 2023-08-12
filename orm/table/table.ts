@@ -45,12 +45,12 @@ export type TableInstance<TableType> = {
   limit: (quantity: number, position?: number) => TableInstance<TableType>;
 
   // Action:
-  findAll: () => Promise<TableType[]>;
-  findOne: () => Promise<TableType | null>;
-  insert: (data: Insertable<TableType>) => Promise<WriteResult>;
-  remove: () => Promise<WriteResult>;
-  update: () => Promise<WriteResult>;
-  count: () => Promise<number>;
+  findAll: () => TableType[];
+  findOne: () => TableType | null;
+  insert: (data: Insertable<TableType>) => WriteResult;
+  remove: () => WriteResult;
+  update: () => WriteResult;
+  count: () => number;
   rawSql: (sql: string) => RawSQL;
 };
 
@@ -124,18 +124,18 @@ export const declareTable = <TableType>({
 
     this.clearState();
 
-    return queryGet({ sql, parameters, name, fields }).then((rows) =>
-      decodeRaws<TableType>(rows, fields)
-    );
+    const rows = queryGet({ sql, parameters, name, fields });
+
+    return decodeRaws<TableType>(rows, fields);
   },
 
   /**
    * FindOne
    */
   findOne: function () {
-    return this.limit(1)
-      .findAll()
-      .then((rows) => (rows.length ? rows[0] : null));
+    const rows = this.limit(1).findAll();
+
+    return rows.length ? rows[0] : null;
   },
 
   /**
@@ -206,9 +206,9 @@ export const declareTable = <TableType>({
 
     this.clearState();
 
-    return queryGet({ sql, parameters, name, fields }).then((rows) =>
-      parseInt(rows[0]['COUNT(*)'], 10)
-    );
+    const rows = queryGet({ sql, parameters, name, fields });
+
+    return parseInt(rows[0]['COUNT(*)'], 10);
   },
 
   /**

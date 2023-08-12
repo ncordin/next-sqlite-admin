@@ -26,7 +26,7 @@ export const wrapController =
     };
 
     try {
-      controller(request)
+      Promise.resolve(controller(request))
         .then((value) => {
           expressResponse.json(value);
         })

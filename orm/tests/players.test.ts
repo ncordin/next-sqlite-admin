@@ -3,55 +3,40 @@ import { Players } from './players.table';
 
 initDatabase({ file: 'base-tests.db' });
 
-const main = async () => {
-  await Players.where('gold', '=', 100)
-    .findOne()
-    .then((player) => {
-      console.log({ player });
-    });
+function main() {
+  const player = Players.where('gold', '=', 100).findOne();
+  console.log({ player });
 
-  await Players.insert({
+  const result = Players.insert({
     id: 1,
     name: 'Coco',
     gold: Players.rawSql('10 + 10'),
     isCool: true,
     state: 'data-A',
     createdAt: new Date(),
-  }).then((result) => {
-    console.log(result);
   });
+  console.log(result);
 
-  await Players.where('gold', '!=', null)
-    .count()
-    .then((count) => {
-      console.log({ count });
-    });
+  const count = Players.where('gold', '!=', null).count();
+  console.log({ count });
 
-  await Players.set('name', 'Coca')
+  const updateResult = Players.set('name', 'Coca')
     .set('gold', Players.rawSql('gold + 1'))
     .where('name', '!=', 'Coca')
-    .update()
-    .then((result) => {
-      console.log(result);
-    });
+    .update();
+  console.log(updateResult);
 
-  await Players.where('gold', '>', 2)
+  const players = Players.where('gold', '>', 2)
     .where('isCool', '=', true)
     .orderBy('gold', 'ASC')
     .orderBy('createdAt', 'DESC')
     .limit(100, 0)
-    .findAll()
-    .then((players) => {
-      console.log({ players });
-    });
+    .findAll();
+  console.log({ players });
 
-  await Players.where('gold', '<', 10000)
-    .limit(20)
-    .remove()
-    .then((result) => {
-      console.log(result);
-    });
-};
+  const removeResult = Players.where('gold', '<', 10000).limit(20).remove();
+  console.log(removeResult);
+}
 
 main();
 

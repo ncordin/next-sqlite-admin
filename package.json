@@ -16,6 +16,7 @@
   "license": "MIT",
   "scripts": {
     "start": "yarn build && node admin-router/start.js",
+    "test": "npx ts-node orm/tests/players.test.ts",
     "build": "tsc",
     "lint": "yarn run lint:ts && yarn run lint:eslint && yarn run lint:prettier",
     "lint:ts": "tsc",

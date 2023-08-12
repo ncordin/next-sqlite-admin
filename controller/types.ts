@@ -6,4 +6,4 @@ export type Request = {
   ip: string;
 };
 
-export type Controller = (request: Request) => Promise<unknown>;
+export type Controller = (request: Request) => unknown | Promise<unknown>;

@@ -21,6 +21,15 @@ type QueryOptions = {
 
 export const initDatabase = function (config: DatabaseConfiguration) {
   database = sqlite(config.file);
+
+  const [{ version }] = database
+    .prepare('SELECT sqlite_version() AS version;')
+    .all();
+
+  console.log('');
+  console.log(`💾 SQLite 95 version 3.1.0`);
+  console.log(`• Using: ${config.file}`);
+  console.log(`• SQLite version ${version}`);
 };
 
 export const queryGet = ({
@@ -29,17 +38,15 @@ export const queryGet = ({
   name,
   fields,
   recursive,
-}: QueryOptions): Promise<RawRow[]> => {
+}: QueryOptions): RawRow[] => {
   logQuery(sql, parameters);
 
   if (!database) {
-    return Promise.reject('Query failed, connection is not ready. ' + sql);
+    throw new Error('Query failed, connection is not ready. ' + sql);
   }
 
   try {
-    const results = database.prepare(sql).all(parameters);
-
-    return Promise.resolve(results as RawRow[]);
+    return database.prepare(sql).all(parameters) as RawRow[];
   } catch (e) {
     const error = getError(e);
 
@@ -53,7 +60,7 @@ export const queryGet = ({
       return queryGet({ sql, parameters, name, fields, recursive: true });
     }
 
-    return Promise.reject(error);
+    throw new Error(error.message);
   }
 };
 
@@ -63,20 +70,20 @@ export const queryRun = ({
   name,
   fields,
   recursive,
-}: QueryOptions): Promise<WriteResult> => {
+}: QueryOptions): WriteResult => {
   logQuery(sql, parameters);
 
   if (!database) {
-    return Promise.reject('Query failed, connection is not ready. ' + sql);
+    throw new Error('Query failed, connection is not ready. ' + sql);
   }
 
   try {
     const results = database.prepare(sql).run(parameters);
 
-    return Promise.resolve({
+    return {
       affectedRows: results.changes,
       lastId: parseInt(`${results.lastInsertRowid}`, 10), // <- seems to be the rowId? what about auto increment?
-    });
+    };
   } catch (e) {
     const error = getError(e);
 
@@ -90,6 +97,6 @@ export const queryRun = ({
       return queryRun({ sql, parameters, name, fields, recursive: true });
     }
 
-    return Promise.reject(error);
+    throw new Error(error.message);
   }
 };
