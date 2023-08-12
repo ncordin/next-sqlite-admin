@@ -26,8 +26,7 @@ SQLite ORM with a web admin.
 
 # How to publish new version
 
-- Run tests
-- Build admin-webapp
+- npm run test
 - npm version patch|minor|major
 - npm publish
 

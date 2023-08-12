@@ -6,6 +6,7 @@ import { makeCreateTable } from '../table/queryBuilder';
 import { DatabaseConfiguration, RawRow, WriteResult } from '../types';
 import { getError } from '../utils/error';
 import { logQuery } from '../utils/logger';
+import { readFileSync } from 'fs';
 
 let database: Database | null = null;
 
@@ -19,6 +20,19 @@ type QueryOptions = {
   recursive?: boolean;
 };
 
+function getPackageVersion() {
+  try {
+    const root = __dirname.replace('/orm/drivers', '').replace('/build', '');
+    const packageJsonFileRelativeToBuildPosition = `${root}/package.json`;
+    const content = readFileSync(packageJsonFileRelativeToBuildPosition);
+    const matches = content.toString().match(/"version": "(\d\.\d\.\d)",/);
+
+    return matches ? matches[1] : '?';
+  } catch (error) {
+    return '?';
+  }
+}
+
 export const initDatabase = function (config: DatabaseConfiguration) {
   database = sqlite(config.file);
 
@@ -27,7 +41,7 @@ export const initDatabase = function (config: DatabaseConfiguration) {
     .all();
 
   console.log('');
-  console.log(`💾 SQLite 95 version 3.1.0`);
+  console.log(`💾 SQLite 95 version ${getPackageVersion()}`);
   console.log(`• Using: ${config.file}`);
   console.log(`• SQLite version ${version}`);
 };

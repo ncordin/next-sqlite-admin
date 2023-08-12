@@ -18,13 +18,14 @@
     "start": "yarn build && node admin-router/start.js",
     "test": "npx ts-node orm/tests/players.test.ts",
     "build": "tsc",
+    "build:admin": "cd admin-webapp && yarn build",
     "lint": "yarn run lint:ts && yarn run lint:eslint && yarn run lint:prettier",
     "lint:ts": "tsc",
     "lint:prettier": "prettier --check '*/**/*.{js,ts,tsx}'",
     "lint:eslint": "eslint ./orm ./controller ./admin-router",
     "format": "prettier --write '*/**/*.{js,ts,tsx}'",
     "ci": "yarn run lint",
-    "prepublish": "yarn run build"
+    "prepublish": "yarn run build && yarn run build:admin"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.3",
