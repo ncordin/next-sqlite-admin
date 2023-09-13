@@ -25,7 +25,6 @@ const removeQuotes = (string: string) => {
 const getStructure = (database: Database, tableName: string) => {
   const infos = database.query(`PRAGMA table_info('${tableName}')`).all();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return infos.map((tableInfo: any) => ({
     name: tableInfo.name,
     type: tableInfo.type,
@@ -42,7 +41,6 @@ const getTables = (database: Database) => {
     )
     .all();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return tables.map((table: any) => ({
     name: table.name,
     lines: countLines(database, table.name),

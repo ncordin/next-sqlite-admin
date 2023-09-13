@@ -15,6 +15,7 @@ SQLite ORM with a web admin.
 - write a complete Getting started guide https://khalilstemmler.com/blogs/typescript/node-starter-project/
 - search in admin
 - set a password to the admin interface
+- hide Bun error 500 page on production
 
 # Bugs
 
@@ -26,7 +27,7 @@ SQLite ORM with a web admin.
 
 # How to publish new version
 
-- npm run test
+- bun run test
 - npm version patch|minor|major
 - npm publish
 
