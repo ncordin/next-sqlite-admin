@@ -1,13 +1,15 @@
+import Database from 'bun:sqlite';
 import { Request, Response } from 'express';
-import { Database } from 'better-sqlite3';
 
 import { getDatabase } from '../utils';
 import { getError } from '../../orm/utils/error';
 
 const countLines = (database: Database, tableName: string) => {
-  const result = database.prepare(`SELECT COUNT(*) FROM "${tableName}"`).get();
+  const result = database
+    .query<{ 'COUNT(*)': number }, null>(`SELECT COUNT(*) FROM "${tableName}"`)
+    .get(null);
 
-  return result['COUNT(*)'];
+  return result ? result['COUNT(*)'] : 0;
 };
 
 const removeQuotes = (string: string) => {
@@ -21,29 +23,27 @@ const removeQuotes = (string: string) => {
 };
 
 const getStructure = (database: Database, tableName: string) => {
-  return (
-    database
-      .pragma(`table_info('${tableName}')`)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .map((tableInfo: any) => ({
-        name: tableInfo.name,
-        type: tableInfo.type,
-        canBeNull: !tableInfo.notnull,
-        defaultValue:
-          tableInfo.dflt_value && removeQuotes(tableInfo.dflt_value),
-        isPrimaryKey: !!tableInfo.pk,
-      }))
-  );
+  const infos = database.query(`PRAGMA table_info('${tableName}')`).all();
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return infos.map((tableInfo: any) => ({
+    name: tableInfo.name,
+    type: tableInfo.type,
+    canBeNull: !tableInfo.notnull,
+    defaultValue: tableInfo.dflt_value && removeQuotes(tableInfo.dflt_value),
+    isPrimaryKey: !!tableInfo.pk,
+  }));
 };
 
 const getTables = (database: Database) => {
   const tables = database
-    .prepare(
+    .query(
       "SELECT * FROM sqlite_master WHERE `type`='table' ORDER BY `name` ASC;"
     )
     .all();
 
-  return tables.map((table) => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return tables.map((table: any) => ({
     name: table.name,
     lines: countLines(database, table.name),
     structure: getStructure(database, table.name),

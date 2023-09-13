@@ -1,4 +1,5 @@
-import sqlite, { Database } from 'better-sqlite3';
+import { Database } from 'bun:sqlite';
+import { existsSync } from 'node:fs';
 
 const isClean = (file: string) => {
   if (file.includes('/')) {
@@ -13,12 +14,11 @@ const isClean = (file: string) => {
 };
 
 export function getDatabase(file: string): Database {
-  if (!isClean(file)) {
+  if (!isClean(file) || !existsSync(file)) {
     throw new Error(`Incorrect database file: ${file}`);
   }
 
-  const options = { fileMustExist: true };
-  const database = sqlite(file, options);
+  const database = new Database(file);
 
   return database;
 }

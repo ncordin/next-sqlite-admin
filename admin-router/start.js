@@ -1,7 +1,7 @@
 /* eslint-disable */
 const express = require('express');
 const cors = require('cors');
-const { adminRouter } = require('../build');
+const { adminRouter } = require('./');
 
 const PORT = 8080;
 const app = express();

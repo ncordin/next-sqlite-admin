@@ -1,23 +1,24 @@
 {
   "name": "sqlite-95",
   "description": "SQLite ORM with a web admin",
-  "version": "3.2.1",
+  "version": "4.0.0",
   "homepage": "https://github.com/ncordin/sqlite-95",
   "repository": {
     "type": "git",
     "url": "git@github.com:ncordin/sqlite-95.git"
   },
-  "main": "build/index.js",
-  "types": "build/index.d.ts",
+  "main": "index.ts",
   "files": [
-    "build/",
+    "./index.ts",
+    "orm/",
+    "admin-router/",
+    "controller/",
     "admin-webapp/dist/"
   ],
   "license": "MIT",
   "scripts": {
-    "start": "yarn build && node admin-router/start.js",
-    "test": "npx ts-node orm/tests/players.test.ts",
-    "build": "tsc",
+    "start": "bun admin-router/start.js",
+    "test": "bun orm/tests/players.test.ts",
     "build:admin": "cd admin-webapp && yarn build",
     "lint": "yarn run lint:ts && yarn run lint:eslint && yarn run lint:prettier",
     "lint:ts": "tsc",
@@ -25,20 +26,18 @@
     "lint:eslint": "eslint ./orm ./controller ./admin-router",
     "format": "prettier --write '*/**/*.{js,ts,tsx}'",
     "ci": "yarn run lint",
-    "prepublish": "yarn run build && yarn run build:admin"
+    "prepublish": "yarn run build:admin"
   },
   "devDependencies": {
-    "@types/better-sqlite3": "^7.6.3",
     "@types/express": "^4.17.14",
-    "@types/node": "^18.11.12",
     "@typescript-eslint/eslint-plugin": "^5.46.0",
     "@typescript-eslint/parser": "^5.46.0",
-    "better-sqlite3": "^8.0.1",
+    "bun-types": "^1.0.1",
     "cors": "^2.8.5",
     "eslint": "^8.29.0",
     "eslint-plugin-import": "^2.26.0",
     "express": "^4.17.14",
     "prettier": "^2.8.1",
-    "typescript": "^4.9.4"
+    "typescript": "^5.2.2"
   }
 }

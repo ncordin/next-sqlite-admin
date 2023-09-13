@@ -1,4 +1,5 @@
-import sqlite, { Database } from 'better-sqlite3';
+import { Database } from 'bun:sqlite';
+import { readFileSync } from 'fs';
 
 import { Fields } from '../fields/declaration';
 import { getAndFlushParameters } from '../fields/encode';
@@ -6,7 +7,6 @@ import { makeCreateTable } from '../table/queryBuilder';
 import { DatabaseConfiguration, RawRow, WriteResult } from '../types';
 import { getError } from '../utils/error';
 import { logQuery } from '../utils/logger';
-import { readFileSync } from 'fs';
 
 let database: Database | null = null;
 
@@ -22,7 +22,7 @@ type QueryOptions = {
 
 function getPackageVersion() {
   try {
-    const root = __dirname.replace('/orm/drivers', '').replace('/build', '');
+    const root = __dirname.replace('/orm/drivers', '');
     const packageJsonFileRelativeToBuildPosition = `${root}/package.json`;
     const content = readFileSync(packageJsonFileRelativeToBuildPosition);
     const matches = content.toString().match(/"version": "(\d\.\d\.\d)",/);
@@ -34,11 +34,11 @@ function getPackageVersion() {
 }
 
 export const initDatabase = function (config: DatabaseConfiguration) {
-  database = sqlite(config.file);
+  database = new Database(config.file);
 
   const [{ version }] = database
-    .prepare('SELECT sqlite_version() AS version;')
-    .all();
+    .query<{ version: string }, null>('SELECT sqlite_version() AS version;')
+    .all(null);
 
   console.log('');
   console.log(`💾 SQLite 95 version ${getPackageVersion()}`);
@@ -60,7 +60,7 @@ export const queryGet = ({
   }
 
   try {
-    return database.prepare(sql).all(parameters) as RawRow[];
+    return database.query<RawRow, string[]>(sql).all(...parameters);
   } catch (e) {
     const error = getError(e);
 
@@ -69,7 +69,7 @@ export const queryGet = ({
       const createTableParameters = getAndFlushParameters();
 
       logQuery(createTable, createTableParameters);
-      database.prepare(createTable).run(createTableParameters);
+      database.query(createTable).run(...createTableParameters);
 
       return queryGet({ sql, parameters, name, fields, recursive: true });
     }
@@ -92,11 +92,12 @@ export const queryRun = ({
   }
 
   try {
-    const results = database.prepare(sql).run(parameters);
+    const affectedRows = database
+      .query(sql)
+      .all(...parameters) as unknown as number;
 
     return {
-      affectedRows: results.changes,
-      lastId: parseInt(`${results.lastInsertRowid}`, 10), // <- seems to be the rowId? what about auto increment?
+      affectedRows,
     };
   } catch (e) {
     const error = getError(e);
@@ -106,7 +107,7 @@ export const queryRun = ({
       const createTableParameters = getAndFlushParameters();
 
       logQuery(createTable, createTableParameters);
-      database.prepare(createTable).run(createTableParameters);
+      database.query(createTable).run(...createTableParameters);
 
       return queryRun({ sql, parameters, name, fields, recursive: true });
     }

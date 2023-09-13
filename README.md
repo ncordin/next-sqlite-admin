@@ -6,7 +6,6 @@ SQLite ORM with a web admin.
 
 - table logs / errors ?
 - SQL: in(), group, having, unique insert.
-- show version on initDatabase?
 - how to run tests ? npx ts-node src/test/[...]
 - Table.lastQuery for debug.
 - handle enum / bool / date in the admin form.
@@ -15,6 +14,7 @@ SQLite ORM with a web admin.
 - type utils to infer table type from field definition.
 - write a complete Getting started guide https://khalilstemmler.com/blogs/typescript/node-starter-project/
 - search in admin
+- set a password to the admin interface
 
 # Bugs
 
@@ -30,11 +30,10 @@ SQLite ORM with a web admin.
 - npm version patch|minor|major
 - npm publish
 
-# How to run and production
+# How to run on production
 
 - Create .env file `TEMPLATE`
-- Use Node LTS >= 16 with better-sqlite3 support.
-- Use .jsm files for good handling of javascript ES modules in Node (or Typescript).
+- Use Bun >= 1.0.0 (not compatible with Node)
 - pm2 start src/index.jsm
 - Add Nginx proxy for HTTPS
 
@@ -48,3 +47,7 @@ SQLite ORM with a web admin.
 - Check for empty PREFIX, can cause bad URL like http://localhost//admin/
 - The node command MUST be run from the server project directory
 - Check node_module/sqlite-95/admin-webapp/dist exists
+
+# Size history
+
+- better-sql: 143MB / 247 modules.

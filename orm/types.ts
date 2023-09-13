@@ -35,7 +35,6 @@ export type DatabaseConfiguration = {
 
 export type WriteResult = {
   affectedRows: number;
-  lastId: number;
 };
 
 export type Insertable<TableType> = {

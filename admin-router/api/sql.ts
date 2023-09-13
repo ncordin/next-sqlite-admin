@@ -2,14 +2,18 @@ import { Request, Response } from 'express';
 import { getError } from '../../orm/utils/error';
 import { getDatabase } from '../utils';
 
-const executeSql = (databaseName: string, query: string, params = []) => {
+const executeSql = (
+  databaseName: string,
+  query: string,
+  params: string[] = []
+) => {
   const database = getDatabase(databaseName);
   const lowerSql = query.trim().toLowerCase();
 
   if (lowerSql.startsWith('select ') || lowerSql.startsWith('pragma ')) {
-    return database.prepare(query).all(params);
+    return database.query(query).all(...params);
   } else {
-    return [database.prepare(query).run(params)];
+    return [database.query(query).run(...params)];
   }
 };
 

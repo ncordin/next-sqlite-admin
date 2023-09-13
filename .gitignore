@@ -3,7 +3,6 @@
 /admin-webapp/node_modules
 
 # production
-/build
 /admin-webapp/dist
 
 # misc

@@ -7,8 +7,6 @@ import {
   dateTime,
 } from './fields/declaration';
 
-export { Insertable } from './types';
-
 export { initDatabase } from './drivers';
 
 export const Table = {
