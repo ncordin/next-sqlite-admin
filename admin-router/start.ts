@@ -19,6 +19,15 @@ const jsonMiddleware = (
   next();
 };
 
+const queryMiddleware = (
+  request: { _parsedUrl: { query: unknown }; query: unknown },
+  response: HTTPResponse,
+  next: () => void
+) => {
+  request.query = request._parsedUrl.query;
+  next();
+};
+
 const bodyMiddleware = (
   request: HTTPRequest<string | {}>,
   response: HTTPResponse,
@@ -64,6 +73,7 @@ const bodyMiddleware = (
 
 app.use(cors());
 app.use(jsonMiddleware);
+app.use(queryMiddleware);
 app.use(bodyMiddleware);
 app.use('/', adminRouter);
 

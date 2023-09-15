@@ -15,12 +15,11 @@ export type HTTPRequest<BodyType = null> = {
   url: string;
   path: string;
   search: string;
-  _parsedUrl: {
-    query: { [key: string]: string };
-  };
-  body: BodyType;
   headers: Headers;
   on: On;
+  // Added by custom middlewares:
+  query: { [key: string]: string };
+  body: BodyType;
 };
 
 export type HTTPResponse = {

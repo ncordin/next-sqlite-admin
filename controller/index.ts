@@ -12,7 +12,7 @@ export const wrapController =
   (controller: Controller) =>
   (httpRequest: HTTPRequest<{}>, httpResponse: HTTPResponse) => {
     const params = {
-      ...httpRequest._parsedUrl.query,
+      ...(httpRequest.query || {}),
       ...(httpRequest.body || {}),
     };
 

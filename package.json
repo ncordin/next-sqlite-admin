@@ -17,7 +17,7 @@
   ],
   "license": "MIT",
   "scripts": {
-    "start": "bun admin-router/start.js",
+    "start": "bun --watch admin-router/start.ts",
     "test": "bun orm/tests/players.test.ts",
     "build:admin": "cd admin-webapp && yarn build",
     "prepublish": "yarn run build:admin"
