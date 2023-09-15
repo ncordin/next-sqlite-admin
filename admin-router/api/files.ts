@@ -1,8 +1,8 @@
 import fileSystem from 'fs';
-import { Request, Response } from 'express';
+import { HTTPRequest, HTTPResponse } from '../../controller/types';
 import { getError } from '../../orm/utils/error';
 
-export const apiFiles = (request: Request, response: Response) => {
+export const apiFiles = (request: HTTPRequest, response: HTTPResponse) => {
   try {
     const path = process.cwd();
     const files = fileSystem

@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { HTTPRequest, HTTPResponse } from '../../controller/types';
 import { getError } from '../../orm/utils/error';
 import { getDatabase } from '../utils';
 
@@ -17,7 +17,15 @@ const executeSql = (
   }
 };
 
-export const apiSql = (request: Request, response: Response) => {
+type SqlBody = {
+  query: string;
+  params: string[];
+};
+
+export const apiSql = (
+  request: HTTPRequest<SqlBody>,
+  response: HTTPResponse
+) => {
   try {
     const result = executeSql(
       request.headers.database?.toString() || '',

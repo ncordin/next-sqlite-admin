@@ -1,9 +1,7 @@
-import { Request as ExpressRequest, Response } from 'express';
+import { Controller, HTTPRequest, HTTPResponse, Request } from './types';
 
-import { Controller, Request, RequestData } from './types';
-
-const errorHandler = (response: Response) => (error: Error) => {
-  response.status(500);
+const errorHandler = (response: HTTPResponse) => (error: Error) => {
+  response.statusCode = 500;
   response.json({
     message: error.toString(),
     stack: error.stack || '',
@@ -12,26 +10,24 @@ const errorHandler = (response: Response) => (error: Error) => {
 
 export const wrapController =
   (controller: Controller) =>
-  (expressRequest: ExpressRequest, expressResponse: Response) => {
+  (httpRequest: HTTPRequest<{}>, httpResponse: HTTPResponse) => {
     const params = {
-      ...expressRequest.query,
-      ...expressRequest.body,
-      ...expressRequest.params,
+      ...httpRequest._parsedUrl.query,
+      ...(httpRequest.body || {}),
     };
 
     const request: Request = {
-      headers: expressRequest.headers as RequestData,
+      headers: httpRequest.headers,
       params,
-      ip: expressRequest.ip,
     };
 
     try {
       Promise.resolve(controller(request))
         .then((value) => {
-          expressResponse.json(value);
+          httpResponse.json(value);
         })
-        .catch(errorHandler(expressResponse));
+        .catch(errorHandler(httpResponse));
     } catch (error) {
-      errorHandler(expressResponse)(error as Error);
+      errorHandler(httpResponse)(error as Error);
     }
   };

@@ -1,8 +1,8 @@
 import Database from 'bun:sqlite';
-import { Request, Response } from 'express';
 
-import { getDatabase } from '../utils';
+import { HTTPRequest, HTTPResponse } from '../../controller/types';
 import { getError } from '../../orm/utils/error';
+import { getDatabase } from '../utils';
 
 const countLines = (database: Database, tableName: string) => {
   const result = database
@@ -49,7 +49,7 @@ const getTables = (database: Database) => {
   }));
 };
 
-export const apiTables = (request: Request, response: Response) => {
+export const apiTables = (request: HTTPRequest, response: HTTPResponse) => {
   try {
     const database = getDatabase(request.headers.database?.toString() || '');
     const tables = getTables(database);

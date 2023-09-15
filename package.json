@@ -22,11 +22,8 @@
     "build:admin": "cd admin-webapp && yarn build",
     "prepublish": "yarn run build:admin"
   },
-  "devDependencies": {
-    "@types/express": "^4.17.14",
-    "bun-types": "^1.0.1",
-    "cors": "^2.8.5",
-    "express": "^4.17.14"
+  "dependencies": {
+    "bun-types": "^1.0.1"
   },
   "peerDependencies": {
     "typescript": "^5.2.2"

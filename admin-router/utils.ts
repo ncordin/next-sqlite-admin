@@ -18,7 +18,5 @@ export function getDatabase(file: string): Database {
     throw new Error(`Incorrect database file: ${file}`);
   }
 
-  const database = new Database(file);
-
-  return database;
+  return new Database(file);
 }
