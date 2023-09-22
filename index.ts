@@ -6,6 +6,9 @@ export type Controller = ControllerTypes.Controller;
 export type Insertable<T> = ORMTypes.Insertable<T>;
 // End of fix.
 
+export * as libs from './libs';
+export * as middlewares from './controller/middlewares';
+
 export { initDatabase, Table } from './orm';
 export { wrapController } from './controller';
 export { adminRouter } from './admin-router';

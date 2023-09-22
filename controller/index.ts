@@ -1,4 +1,4 @@
-import { Controller, HTTPRequest, HTTPResponse, Request } from './types';
+import { Controller, HTTPResponse, Request } from './types';
 
 const errorHandler = (response: HTTPResponse) => (error: Error) => {
   response.statusCode = 500;
@@ -8,9 +8,15 @@ const errorHandler = (response: HTTPResponse) => (error: Error) => {
   });
 };
 
-export const wrapController =
-  (controller: Controller) =>
-  (httpRequest: HTTPRequest<{}>, httpResponse: HTTPResponse) => {
+type RequestHandler = (
+  httpRequest: any, // Must fit into other libs (express / polka) Request types.
+  httpResponse: any // Same for the response.
+) => void;
+
+type Wrapper = (controller: Controller) => RequestHandler;
+
+export const wrapController: Wrapper =
+  (controller) => (httpRequest, httpResponse) => {
     const params = {
       ...(httpRequest.query || {}),
       ...(httpRequest.body || {}),
