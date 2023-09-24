@@ -1,19 +1,18 @@
 import fileSystem from 'fs';
-import { HTTPRequest, HTTPResponse } from '../../controller/types';
+import { Controller } from '../..';
 import { getError } from '../../orm/utils/error';
 
-export const apiFiles = (request: HTTPRequest, response: HTTPResponse) => {
+export const apiFiles: Controller = () => {
   try {
     const path = process.cwd();
     const files = fileSystem
       .readdirSync(path)
       .filter((name) => name.endsWith('.db'));
 
-    response.statusCode = 200;
-    response.json(files);
+    return files;
   } catch (e) {
     const error = getError(e);
-    response.statusCode = 200;
-    response.json({ error: { message: error.message } });
+
+    return { error: { message: error.message } };
   }
 };

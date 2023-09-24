@@ -1,6 +1,6 @@
 import Database from 'bun:sqlite';
 
-import { HTTPRequest, HTTPResponse } from '../../controller/types';
+import { Controller } from '../../controller/types';
 import { getError } from '../../orm/utils/error';
 import { getDatabase } from '../utils';
 
@@ -49,16 +49,14 @@ const getTables = (database: Database) => {
   }));
 };
 
-export const apiTables = (request: HTTPRequest, response: HTTPResponse) => {
+export const apiTables: Controller = (request) => {
   try {
     const database = getDatabase(request.headers.database?.toString() || '');
     const tables = getTables(database);
 
-    response.statusCode = 200;
-    response.json(tables);
+    return tables;
   } catch (e) {
     const error = getError(e);
-    response.statusCode = 200;
-    response.json({ error: { message: error.message } });
+    return { error: { message: error.message } };
   }
 };

@@ -11,14 +11,12 @@ export const requestQuery =
     next();
   };
 
-export const requestBody =
-  () =>
-  (
-    request: HTTPRequest<string | {}>,
-    response: HTTPResponse,
-    next: () => void
-  ) => {
-    if (request.method === 'POST') {
+export const requestJsonBody =
+  () => (request: HTTPRequest, response: HTTPResponse, next: () => void) => {
+    if (
+      request.method === 'POST' &&
+      request.headers['content-type'] === 'application/json'
+    ) {
       const body: Uint8Array[] = [];
       request
         .on('data', (chunk) => {
@@ -26,22 +24,18 @@ export const requestBody =
           body.push(chunk);
         })
         .on('end', () => {
-          const fullBody = Buffer.concat(body).toString();
+          const rawBody = Buffer.concat(body).toString();
 
-          if (request.headers['content-type'] === 'application/json') {
-            if (fullBody.trim()) {
-              try {
-                const json = JSON.parse(fullBody);
-                request.body = json;
-              } catch (e) {
-                response.statusCode = 400;
-                response.end('Invalid JSON');
-              }
-            } else {
-              request.body = {};
+          if (rawBody.trim()) {
+            try {
+              const json = JSON.parse(rawBody);
+              request.body = json;
+            } catch (e) {
+              response.statusCode = 400;
+              response.end('Invalid JSON');
             }
           } else {
-            request.body = fullBody;
+            request.body = {};
           }
 
           next();

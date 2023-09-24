@@ -1,4 +1,4 @@
-import { HTTPRequest, HTTPResponse } from '../../controller/types';
+import { Controller } from '../../controller/types';
 import { getError } from '../../orm/utils/error';
 import { getDatabase } from '../utils';
 
@@ -17,27 +17,22 @@ const executeSql = (
   }
 };
 
-type SqlBody = {
-  query: string;
-  params: string[];
-};
+export const apiSql: Controller = (request, response) => {
+  // Think about a tool to check data and apply types:
+  const params = request.body.params as unknown as string[];
 
-export const apiSql = (
-  request: HTTPRequest<SqlBody>,
-  response: HTTPResponse
-) => {
   try {
     const result = executeSql(
-      request.headers.database?.toString() || '',
-      request.body.query,
-      request.body.params
+      String(request.headers.database),
+      String(request.body.query),
+      params
     );
 
-    response.statusCode = 200;
-    response.json(result);
+    response.setStatusCode(202);
+    return result;
   } catch (e) {
     const error = getError(e);
-    response.statusCode = 200;
-    response.json({ error: { title: 'SQL error!', message: error.message } });
+
+    return { error: { title: 'SQL error!', message: error.message } };
   }
 };

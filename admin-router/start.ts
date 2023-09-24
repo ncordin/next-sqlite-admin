@@ -1,7 +1,7 @@
 import { adminRouter } from '.';
 import {
   requestQuery,
-  requestBody,
+  requestJsonBody,
   jsonResponse,
 } from '../controller/middlewares';
 import { cors, polka } from '../libs';
@@ -11,7 +11,7 @@ const app = polka();
 
 app.use(cors());
 app.use(requestQuery());
-app.use(requestBody());
+app.use(requestJsonBody());
 app.use(jsonResponse());
 
 app.use('/', adminRouter);

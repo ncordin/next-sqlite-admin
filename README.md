@@ -16,6 +16,8 @@ SQLite ORM with a web admin.
 - search in admin
 - set a password to the admin interface
 - hide Bun error 500 page on production
+- add more Response types: redirection, image, etc...
+- add cookies to request, and setCookie to response
 
 # Bugs
 

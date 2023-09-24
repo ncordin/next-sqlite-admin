@@ -10,7 +10,7 @@ type Headers = {
 
 type On = (event: string, handler: (data?: any) => void) => { on: On };
 
-export type HTTPRequest<BodyType = null> = {
+export type HTTPRequest = {
   method: 'GET' | 'POST' | 'PUT' | 'DELETE';
   url: string;
   path: string;
@@ -19,7 +19,7 @@ export type HTTPRequest<BodyType = null> = {
   on: On;
   // Added by custom middlewares:
   query: { [key: string]: string };
-  body: BodyType;
+  body: { [key: string]: string | number | boolean | null };
 };
 
 export type HTTPResponse = {
@@ -29,9 +29,20 @@ export type HTTPResponse = {
   end: (data?: unknown) => void;
 };
 
-export type Request = {
+type ControllerRequest = {
+  url: string;
+  path: string;
+  body: HTTPRequest['body'];
+  query: HTTPRequest['query'];
+  method: HTTPRequest['method'];
   headers: Headers;
-  params: { [key: string]: string | undefined };
 };
 
-export type Controller = (request: Request) => unknown | Promise<unknown>;
+type ControllerResponse = {
+  setStatusCode: (code: number) => void;
+};
+
+export type Controller = (
+  request: ControllerRequest,
+  response: ControllerResponse
+) => unknown | Promise<unknown>;
