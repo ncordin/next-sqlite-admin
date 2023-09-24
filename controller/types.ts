@@ -16,16 +16,15 @@ export type HTTPRequest = {
   path: string;
   search: string;
   headers: Headers;
+  _parsedUrl: { query: { [key: string]: string } };
   on: On;
   // Added by custom middlewares:
-  query: { [key: string]: string };
   body: { [key: string]: string | number | boolean | null };
 };
 
 export type HTTPResponse = {
   statusCode: number;
   setHeader: (name: string, value: string) => void;
-  json: (data: unknown) => void;
   end: (data?: unknown) => void;
 };
 
@@ -33,7 +32,7 @@ type ControllerRequest = {
   url: string;
   path: string;
   body: HTTPRequest['body'];
-  query: HTTPRequest['query'];
+  query: HTTPRequest['_parsedUrl']['query'];
   method: HTTPRequest['method'];
   headers: Headers;
 };

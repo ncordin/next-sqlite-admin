@@ -1,16 +1,5 @@
 import { HTTPRequest, HTTPResponse } from './types';
 
-export const requestQuery =
-  () =>
-  (
-    request: { _parsedUrl: { query: unknown }; query: unknown },
-    response: HTTPResponse,
-    next: () => void
-  ) => {
-    request.query = request._parsedUrl.query;
-    next();
-  };
-
 export const requestJsonBody =
   () => (request: HTTPRequest, response: HTTPResponse, next: () => void) => {
     if (
@@ -48,14 +37,4 @@ export const requestJsonBody =
     } else {
       next();
     }
-  };
-
-export const jsonResponse =
-  () => (request: HTTPRequest, response: HTTPResponse, next: () => void) => {
-    response.json = (payload) => {
-      response.setHeader('Content-Type', 'application/json');
-      const jsonResponse = JSON.stringify(payload);
-      response.end(jsonResponse);
-    };
-    next();
   };

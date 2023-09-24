@@ -1,18 +1,12 @@
 import { adminRouter } from '.';
-import {
-  requestQuery,
-  requestJsonBody,
-  jsonResponse,
-} from '../controller/middlewares';
+import { requestJsonBody } from '../controller/middlewares';
 import { cors, polka } from '../libs';
 
 const PORT = 8080;
 const app = polka();
 
 app.use(cors());
-app.use(requestQuery());
 app.use(requestJsonBody());
-app.use(jsonResponse());
 
 app.use('/', adminRouter);
 

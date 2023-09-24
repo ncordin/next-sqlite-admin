@@ -21,7 +21,7 @@ export const wrapController: Wrapper =
       url: httpRequest.url,
       path: httpRequest.path,
       body: httpRequest.body || {},
-      query: httpRequest.query || {},
+      query: httpRequest._parsedUrl.query || {},
       method: httpRequest.method,
       headers: httpRequest.headers,
     };
@@ -40,7 +40,9 @@ export const wrapController: Wrapper =
       Promise.resolve(controller(request, response))
         .then((value) => {
           httpResponse.statusCode = responseCode;
-          httpResponse.json(value);
+          httpResponse.setHeader('Content-Type', 'application/json');
+          httpResponse.end(JSON.stringify(value));
+
           console.log(`🟢 ${responseCode}`);
         })
         .catch(errorHandler(httpResponse));
