@@ -1,10 +1,14 @@
 type Headers = {
+  'accept-encoding': string;
+  'accept-language': string;
   'content-length': string;
   'content-type': string;
   'user-agent': string;
   accept: string;
+  cookie: string;
   connection: string;
   host: string;
+  referer: string;
   [key: string]: string;
 };
 

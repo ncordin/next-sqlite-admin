@@ -2,10 +2,13 @@ import { Controller, HTTPRequest, HTTPResponse } from './types';
 
 const errorHandler = (response: HTTPResponse) => (error: Error) => {
   response.statusCode = 500;
-  response.json({
-    message: error.toString(),
-    stack: error.stack || '',
-  });
+  response.setHeader('Content-Type', 'application/json');
+  response.end(
+    JSON.stringify({
+      message: error.toString(),
+      stack: error.stack || '',
+    })
+  );
 };
 
 type RequestHandler = (
@@ -34,7 +37,7 @@ export const wrapController: Wrapper =
       },
     };
 
-    console.log(`📄 [${request.method}] ${request.path}`);
+    console.log(`🎯 ${request.method} ${request.path}`);
 
     try {
       Promise.resolve(controller(request, response))
@@ -43,11 +46,11 @@ export const wrapController: Wrapper =
           httpResponse.setHeader('Content-Type', 'application/json');
           httpResponse.end(JSON.stringify(value));
 
-          console.log(`🟢 ${responseCode}`);
+          console.log(`🟢 ${responseCode}\n`);
         })
         .catch(errorHandler(httpResponse));
     } catch (error) {
-      console.log(`🔴 exception...`);
+      console.log(`🔴 500 caught by wrapController`);
       console.log(error); // Show in server console.
       errorHandler(httpResponse)(error as Error);
     }

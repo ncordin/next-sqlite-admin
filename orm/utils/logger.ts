@@ -10,5 +10,5 @@ const injectParameters = (sql: string, parameters: string[]) => {
 };
 
 export const logQuery = (sql: string, parameters: string[]) => {
-  console.log(`\n⚡ ${injectParameters(sql, parameters)} \n\n`);
+  console.log(`⚡ ${injectParameters(sql, parameters)}`);
 };
