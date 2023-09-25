@@ -2,7 +2,7 @@ import { AnyField, Fields } from '../fields/declaration';
 import { encode, encodeName } from '../fields/encode';
 import { ComparisonSymbol, Limit, OrderBy, Set, Value, Where } from '../types';
 
-const OPERATORS: ComparisonSymbol[] = ['<', '<=', '>', '>=', '=', '!='];
+const OPERATORS: ComparisonSymbol[] = ['<', '<=', '>', '>=', '=', '!=', 'LIKE'];
 
 const escapeOperator = (operator: ComparisonSymbol, value: Value) => {
   if (OPERATORS.includes(operator) === false) {

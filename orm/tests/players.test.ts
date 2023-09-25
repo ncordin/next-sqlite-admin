@@ -6,6 +6,7 @@ initDatabase({ file: 'base-tests.db' });
 function main() {
   const player = Players.where('gold', '=', 100).findOne();
   console.log('#', player);
+  console.log('');
 
   const result = Players.insert({
     id: 1,
@@ -16,15 +17,18 @@ function main() {
     createdAt: new Date(),
   });
   console.log('#', result);
+  console.log('');
 
   const count = Players.where('gold', '!=', null).count();
   console.log('#', count);
+  console.log('');
 
   const updateResult = Players.set('name', 'Coca')
     .set('gold', Players.rawSql('gold + 1'))
     .where('name', '!=', 'Coca')
     .update();
   console.log('#', updateResult);
+  console.log('');
 
   const players = Players.where('gold', '>', 2)
     .where('isCool', '=', true)
@@ -33,9 +37,15 @@ function main() {
     .limit(100, 0)
     .findAll();
   console.log('#', players);
+  console.log('');
 
   const removeResult = Players.where('gold', '<', 10000).limit(20).remove();
   console.log('#', removeResult);
+  console.log('');
+
+  const playerLike = Players.where('name', 'LIKE', `Co%`).findOne();
+  console.log('#', playerLike);
+  console.log('');
 }
 
 main();

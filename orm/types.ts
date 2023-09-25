@@ -2,7 +2,7 @@ export type RawSQL = { _SQL: string };
 
 export type Value = number | string | boolean | Date | null | RawSQL;
 
-export type ComparisonSymbol = '<' | '<=' | '>' | '>=' | '=' | '!=';
+export type ComparisonSymbol = '<' | '<=' | '>' | '>=' | '=' | '!=' | 'LIKE';
 
 export type Set = {
   fieldName: string;

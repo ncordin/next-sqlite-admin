@@ -43,7 +43,7 @@ export const initDatabase = function (config: DatabaseConfiguration) {
   console.log('');
   console.log(`💾 SQLite 95 version ${getPackageVersion()}`);
   console.log(`• Using: ${config.file}`);
-  console.log(`• SQLite version ${version}`);
+  console.log(`• SQLite version ${version}\n`);
 };
 
 export const queryGet = ({
