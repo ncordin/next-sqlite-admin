@@ -23,7 +23,7 @@ export function makeWhere(name: string, fields: Fields, conditions: Where[]) {
 
   return conditions
     .map(({ fieldName, comparison, value }) => {
-      const escapedField = `${encodeName(name)}.${encodeName(fieldName)}`;
+      const escapedField = encodeName(fieldName);
       const escapedOperator = escapeOperator(comparison, value);
       const escapedValue = encode(value, fields[fieldName]);
 
@@ -41,7 +41,7 @@ export function makeOrders(name: string, fields: Fields, orders: OrderBy[]) {
     ` ORDER BY ` +
     orders
       .map(({ fieldName, direction }) => {
-        const escapedField = `${encodeName(name)}.${encodeName(fieldName)}`;
+        const escapedField = encodeName(fieldName);
         const escapedDirection = direction === 'ASC' ? 'ASC' : 'DESC';
 
         return `${escapedField} ${escapedDirection}`;
@@ -75,14 +75,16 @@ export function makeSet(name: string, fields: Fields, data: Set[]) {
 function makeField(name: string, field: AnyField) {
   let sql = `"${name}" ${field.type}`;
 
-  // TODO: AUTOINCREMENT (index)
-
   if (field.type === 'string' && field.maxLength) {
     sql = `${sql}(${field.maxLength})`;
   }
 
   if (field.primaryKey) {
     sql = `${sql} PRIMARY KEY`;
+  }
+
+  if (field.type === 'number' && field.autoIncrement) {
+    sql = `${sql} AUTOINCREMENT`;
   }
 
   if (field.canBeNull === false) {

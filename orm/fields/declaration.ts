@@ -6,18 +6,21 @@ type NumberField = {
   canBeNull: boolean;
   default: number | null;
   primaryKey: boolean;
+  autoIncrement: boolean;
 };
 
 export const number = (options: {
   canBeNull?: boolean;
   default?: number | null;
   primaryKey?: boolean;
+  autoIncrement?: boolean;
 }): NumberField => {
   return {
     type: 'number',
     canBeNull: options.canBeNull || false,
     default: options.default || null,
     primaryKey: options.primaryKey || false,
+    autoIncrement: options.autoIncrement || false,
   };
 };
 
