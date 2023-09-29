@@ -38,5 +38,5 @@ export type WriteResult = {
 };
 
 export type Insertable<TableType> = {
-  [PropertyType in keyof TableType]: TableType[PropertyType] | RawSQL;
+  [Name in keyof Omit<TableType, 'id'>]: TableType[Name] | RawSQL;
 };
