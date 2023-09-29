@@ -83,7 +83,7 @@ function makeField(name: string, field: AnyField) {
     sql = `${sql} PRIMARY KEY`;
   }
 
-  if (field.type === 'number' && field.autoIncrement) {
+  if (field.type === 'integer' && field.autoIncrement) {
     sql = `${sql} AUTOINCREMENT`;
   }
 

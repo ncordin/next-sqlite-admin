@@ -54,7 +54,7 @@ export const encode = (
     case 'datetime':
       return quotify(convertToSqlDate(value as unknown as Date), `'`);
 
-    case 'number':
+    case 'integer':
       return `${parseInt(value as string, 10)}`;
 
     case 'boolean':

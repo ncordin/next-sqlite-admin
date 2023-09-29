@@ -14,7 +14,7 @@ function decode(value: unknown, field: AnyField) {
     case 'boolean':
       return !!value;
 
-    case 'number':
+    case 'integer':
       return parseInt(value as string, 10);
 
     case 'string':

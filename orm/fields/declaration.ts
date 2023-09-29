@@ -2,7 +2,7 @@
  * Number
  */
 type NumberField = {
-  type: 'number';
+  type: 'integer';
   canBeNull: boolean;
   default: number | null;
   primaryKey: boolean;
@@ -16,7 +16,7 @@ export const number = (options: {
   autoIncrement?: boolean;
 }): NumberField => {
   return {
-    type: 'number',
+    type: 'integer',
     canBeNull: options.canBeNull || false,
     default: options.default || null,
     primaryKey: options.primaryKey || false,
