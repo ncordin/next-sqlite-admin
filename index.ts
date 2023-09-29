@@ -9,6 +9,6 @@ export type Insertable<T> = ORMTypes.Insertable<T>;
 export * as libs from './libs';
 export * as middlewares from './controller/middlewares';
 
-export { initDatabase, Table } from './orm';
+export { initDatabase, Table, InferFromFields } from './orm';
 export { wrapController } from './controller';
 export { adminRouter } from './admin-router';

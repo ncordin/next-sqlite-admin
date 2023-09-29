@@ -76,20 +76,20 @@ export const boolean = (options: {
 /**
  * Enumerated
  */
-type EnumeratedField = {
+type EnumeratedField<T extends string> = {
   type: 'enumerated';
-  values: string[];
+  values: T[];
   canBeNull: boolean;
   default: string | null;
   primaryKey: boolean;
 };
 
-export const enumerated = (options: {
-  values: string[];
+export const enumerated = <T extends string>(options: {
+  values: T[];
   canBeNull?: boolean;
   default?: string | null;
   primaryKey?: boolean;
-}): EnumeratedField => {
+}): EnumeratedField<T> => {
   return {
     type: 'enumerated',
     values: options.values,
@@ -129,9 +129,25 @@ export type AnyField =
   | NumberField
   | StringField
   | BooleanField
-  | EnumeratedField
+  | EnumeratedField<any>
   | DateTimeField;
 
 export type Fields = {
   [key: string]: AnyField;
+};
+
+type TypeOfField<Field> = Field extends NumberField
+  ? number
+  : Field extends StringField
+  ? string
+  : Field extends BooleanField
+  ? boolean
+  : Field extends EnumeratedField<any>
+  ? Field['values']
+  : Field extends DateTimeField
+  ? Date
+  : never;
+
+export type InferFromFields<Fields extends { [key: string]: AnyField }> = {
+  [key in keyof Fields]: TypeOfField<Fields[key]>;
 };

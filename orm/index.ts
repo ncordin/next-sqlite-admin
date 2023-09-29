@@ -5,6 +5,7 @@ import {
   string,
   enumerated,
   dateTime,
+  InferFromFields,
 } from './fields/declaration';
 
 export { initDatabase } from './drivers';
@@ -17,3 +18,5 @@ export const Table = {
   enumerated,
   dateTime,
 };
+
+export { InferFromFields };
