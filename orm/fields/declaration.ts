@@ -1,20 +1,34 @@
+type Prettify<T> = {
+  [K in keyof T]: T[K];
+} & {};
+
 /**
  * Number
  */
-type NumberField = {
+type NumberField<CanBeNull extends boolean> = {
   type: 'integer';
-  canBeNull: boolean;
+  canBeNull: CanBeNull;
   default: number | null;
   primaryKey: boolean;
   autoIncrement: boolean;
 };
 
-export const number = (options: {
-  canBeNull?: boolean;
+type NumberOptions<CanBeNull> = {
+  canBeNull?: CanBeNull;
   default?: number | null;
   primaryKey?: boolean;
   autoIncrement?: boolean;
-}): NumberField => {
+};
+
+export function number(
+  options: Prettify<NumberOptions<false>>
+): NumberField<false>;
+export function number(
+  options: Prettify<NumberOptions<true>>
+): NumberField<true>;
+export function number(
+  options: NumberOptions<boolean>
+): NumberField<false> | NumberField<true> {
   return {
     type: 'integer',
     canBeNull: options.canBeNull || false,
@@ -22,25 +36,35 @@ export const number = (options: {
     primaryKey: options.primaryKey || false,
     autoIncrement: options.autoIncrement || false,
   };
-};
+}
 
 /**
  * String
  */
-type StringField = {
+type StringField<CanBeNull extends boolean> = {
   type: 'string';
   maxLength: number;
-  canBeNull: boolean;
+  canBeNull: CanBeNull;
   default: string | null;
   primaryKey: boolean;
 };
 
-export const string = (options: {
+type StringOptions<CanBeNull> = {
   maxLength: number;
-  canBeNull?: boolean;
+  canBeNull?: CanBeNull;
   default?: string | null;
   primaryKey?: boolean;
-}): StringField => {
+};
+
+export function string(
+  options: Prettify<StringOptions<false>>
+): StringField<false>;
+export function string(
+  options: Prettify<StringOptions<true>>
+): StringField<true>;
+export function string(
+  options: StringOptions<boolean>
+): StringField<false> | StringField<true> {
   return {
     type: 'string',
     maxLength: options.maxLength,
@@ -48,48 +72,68 @@ export const string = (options: {
     default: options.default || null,
     primaryKey: options.primaryKey || false,
   };
-};
+}
 
 /**
  * Boolean
  */
-type BooleanField = {
+type BooleanField<CanBeNull extends boolean> = {
   type: 'boolean';
-  canBeNull: boolean;
+  canBeNull: CanBeNull;
   default: boolean | null;
   primaryKey: boolean;
 };
 
-export const boolean = (options: {
-  canBeNull?: boolean;
+type BooleanOptions<CanBeNull> = {
+  canBeNull?: CanBeNull;
   default?: boolean | null;
   primaryKey?: boolean;
-}): BooleanField => {
+};
+
+export function boolean(
+  options: Prettify<BooleanOptions<false>>
+): BooleanField<false>;
+export function boolean(
+  options: Prettify<BooleanOptions<true>>
+): BooleanField<true>;
+export function boolean(
+  options: BooleanOptions<boolean>
+): BooleanField<false> | BooleanField<true> {
   return {
     type: 'boolean',
     canBeNull: options.canBeNull || false,
     default: options.default || null,
     primaryKey: options.primaryKey || false,
   };
-};
+}
 
 /**
  * Enumerated
  */
-type EnumeratedField<T extends string> = {
+type EnumeratedField<T extends string, canBeNull extends boolean> = {
   type: 'enumerated';
   values: T[];
-  canBeNull: boolean;
+  canBeNull: canBeNull;
   default: string | null;
   primaryKey: boolean;
 };
 
-export const enumerated = <T extends string>(options: {
+type EnumeratedOptions<T, CanBeNull> = {
   values: T[];
-  canBeNull?: boolean;
+  canBeNull?: CanBeNull;
   default?: string | null;
   primaryKey?: boolean;
-}): EnumeratedField<T> => {
+};
+
+export function enumerated<T extends string>(
+  options: Prettify<EnumeratedOptions<T, false>>
+): EnumeratedField<T, false>;
+export function enumerated<T extends string>(
+  options: Prettify<EnumeratedOptions<T, true>>
+): EnumeratedField<T, true>;
+export function enumerated<T extends string>(
+  options: EnumeratedOptions<T, boolean>
+): EnumeratedField<T, false> | EnumeratedField<T, true> {
   return {
     type: 'enumerated',
     values: options.values,
@@ -97,54 +141,75 @@ export const enumerated = <T extends string>(options: {
     default: options.default || null,
     primaryKey: options.primaryKey || false,
   };
-};
+}
 
 /**
  * DateTime
  */
-type DateTimeField = {
+type DateTimeField<CanBeNull extends boolean> = {
   type: 'datetime';
-  canBeNull: boolean;
+  canBeNull: CanBeNull;
   default: Date | null;
   primaryKey: boolean;
 };
 
-export const dateTime = (options: {
-  canBeNull?: boolean;
+type DateOptions<CanBeNull> = {
+  canBeNull?: CanBeNull;
   default?: Date | null;
   primaryKey?: boolean;
-}): DateTimeField => {
+};
+
+export function dateTime(options: DateOptions<false>): DateTimeField<false>;
+export function dateTime(options: DateOptions<true>): DateTimeField<true>;
+export function dateTime(
+  options: DateOptions<boolean>
+): DateTimeField<false> | DateTimeField<true> {
   return {
     type: 'datetime',
     canBeNull: options.canBeNull || false,
     default: options.default || null,
     primaryKey: options.primaryKey || false,
   };
-};
+}
 
 /**
  * Any Field
  */
 export type AnyField =
-  | NumberField
-  | StringField
-  | BooleanField
-  | EnumeratedField<any>
-  | DateTimeField;
+  | NumberField<true>
+  | NumberField<false>
+  | StringField<true>
+  | StringField<false>
+  | BooleanField<true>
+  | BooleanField<false>
+  | EnumeratedField<any, true>
+  | EnumeratedField<any, false>
+  | DateTimeField<true>
+  | DateTimeField<false>;
 
 export type Fields = {
   [key: string]: AnyField;
 };
 
-type TypeOfField<Field> = Field extends NumberField
+type TypeOfField<Field> = Field extends NumberField<true>
+  ? number | null
+  : Field extends NumberField<false>
   ? number
-  : Field extends StringField
+  : Field extends StringField<true>
+  ? string | null
+  : Field extends StringField<false>
   ? string
-  : Field extends BooleanField
+  : Field extends BooleanField<true>
+  ? boolean | null
+  : Field extends BooleanField<false>
   ? boolean
-  : Field extends EnumeratedField<any>
+  : Field extends EnumeratedField<any, true>
+  ? Field['values'][number] | null
+  : Field extends EnumeratedField<any, false>
   ? Field['values'][number]
-  : Field extends DateTimeField
+  : Field extends DateTimeField<true>
+  ? Date | null
+  : Field extends DateTimeField<false>
   ? Date
   : never;
 
