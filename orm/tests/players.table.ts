@@ -1,4 +1,5 @@
 import { Table } from '../';
+import { InferFromFields } from '../..';
 
 const fields = {
   id: Table.number({ canBeNull: false, default: 42 }),
@@ -13,13 +14,6 @@ const fields = {
   createdAt: Table.dateTime({ canBeNull: true, default: new Date() }),
 };
 
-type Player = {
-  id: number;
-  name: string;
-  gold: number | null;
-  isCool: boolean;
-  state: 'data-A' | 'data-B';
-  createdAt: Date;
-};
+type Player = InferFromFields<typeof fields>;
 
 export const Players = Table.make<Player>({ name: 'players', fields });

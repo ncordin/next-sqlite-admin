@@ -1,10 +1,8 @@
 // Fix for Bun 1.0.1
 import { Controller } from './controller/types';
-import { Insertable } from './orm/types';
 import { InferFromFields } from './orm/fields/declaration';
 
 export type { Controller };
-export type { Insertable };
 export type { InferFromFields };
 // End of fix.
 

@@ -143,7 +143,7 @@ type TypeOfField<Field> = Field extends NumberField
   : Field extends BooleanField
   ? boolean
   : Field extends EnumeratedField<any>
-  ? Field['values']
+  ? Field['values'][number]
   : Field extends DateTimeField
   ? Date
   : never;
