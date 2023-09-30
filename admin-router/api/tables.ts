@@ -37,7 +37,7 @@ const getStructure = (database: Database, tableName: string) => {
 const getTables = (database: Database) => {
   const tables = database
     .query(
-      "SELECT * FROM sqlite_master WHERE `type`='table' ORDER BY `name` ASC;"
+      "SELECT * FROM sqlite_master WHERE `type`='table' AND name NOT LIKE 'sqlite_%' ORDER BY `name` ASC;"
     )
     .all();
 
