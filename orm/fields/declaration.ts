@@ -159,8 +159,12 @@ type DateOptions<CanBeNull> = {
   primaryKey?: boolean;
 };
 
-export function dateTime(options: DateOptions<false>): DateTimeField<false>;
-export function dateTime(options: DateOptions<true>): DateTimeField<true>;
+export function dateTime(
+  options: Prettify<DateOptions<false>>
+): DateTimeField<false>;
+export function dateTime(
+  options: Prettify<DateOptions<true>>
+): DateTimeField<true>;
 export function dateTime(
   options: DateOptions<boolean>
 ): DateTimeField<false> | DateTimeField<true> {

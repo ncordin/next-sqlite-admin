@@ -18,6 +18,7 @@ SQLite ORM with a web admin.
 - hide Bun error 500 page on production
 - add more Response types: redirection, image, etc...
 - add cookies to request, and setCookie to response
+- /admin should redirect to /admin/ automatically
 
 # Bugs
 

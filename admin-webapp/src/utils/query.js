@@ -63,7 +63,9 @@ export function makeCreateTable(table, fields) {
 export function makeIndex({ name, fields, isUnique, tableName }) {
   return `CREATE ${
     isUnique ? 'UNIQUE' : ''
-  } INDEX "${name}" ON "${tableName}"(${fields.join(', ')});`;
+  } INDEX "${name}" ON "${tableName}"(${fields
+    .map((name) => escapeFieldName(name))
+    .join(', ')});`;
 }
 
 export function makeAddField({ field, tableName }) {
