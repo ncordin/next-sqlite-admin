@@ -14,6 +14,7 @@ import {
 import { Fields } from '../fields/declaration';
 import { encode, encodeName, getAndFlushParameters } from '../fields/encode';
 import { decodeRaws } from '../fields/decode';
+import { getError } from '../utils/error';
 
 type DeclarationOptions = {
   name: string;
@@ -48,6 +49,7 @@ export type TableInstance<TableType> = {
   findAll: () => TableType[];
   findOne: () => TableType | null;
   insert: (data: Insertable<TableType>) => WriteResult;
+  insertIfPossible: (data: Insertable<TableType>) => WriteResult;
   remove: () => WriteResult;
   update: () => WriteResult;
   count: () => number;
@@ -157,6 +159,20 @@ export const declareTable = <TableType>({
     const parameters = getAndFlushParameters();
 
     return queryRun({ sql, parameters, name, fields });
+  },
+
+  insertIfPossible: function (data: Insertable<TableType>) {
+    try {
+      return this.insert(data);
+    } catch (e) {
+      const error = getError(e);
+
+      if (error.message === 'constraint failed') {
+        return { affectedRows: 0 };
+      }
+
+      throw error;
+    }
   },
 
   /**
