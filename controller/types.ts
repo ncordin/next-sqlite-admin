@@ -32,6 +32,31 @@ export type HTTPResponse = {
   end: (data?: unknown) => void;
 };
 
+function read<T>(
+  from: 'query' | 'body',
+  name: string,
+  type: 'string',
+  defaultValue: T
+): string | T;
+function read<T>(
+  from: 'query' | 'body',
+  name: string,
+  type: 'number',
+  defaultValue: T
+): number | T;
+function read<T>(
+  from: 'query' | 'body',
+  name: string,
+  type: 'boolean',
+  defaultValue: T
+): boolean | T;
+function read<T>(
+  from: 'query' | 'body',
+  name: string,
+  type: 'string' | 'number' | 'boolean',
+  defaultValue: T
+) {}
+
 type ControllerRequest = {
   url: string;
   path: string;
@@ -39,6 +64,7 @@ type ControllerRequest = {
   query: HTTPRequest['_parsedUrl']['query'];
   method: HTTPRequest['method'];
   headers: Headers;
+  read: typeof read;
 };
 
 type ControllerResponse = {

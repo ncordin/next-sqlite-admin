@@ -1,3 +1,4 @@
+import { read } from './read';
 import { Controller, HTTPRequest, HTTPResponse } from './types';
 
 const errorHandler = (response: HTTPResponse) => (error: Error) => {
@@ -27,6 +28,26 @@ export const wrapController: Wrapper =
       query: httpRequest._parsedUrl.query || {},
       method: httpRequest.method,
       headers: httpRequest.headers,
+      read: (
+        from: 'query' | 'body',
+        name: string,
+        type: 'string' | 'number' | 'boolean',
+        defaultValue: unknown
+      ) => {
+        const value = ((from === 'query'
+          ? httpRequest._parsedUrl.query
+          : httpRequest.body) || {})[name];
+
+        if (type === 'boolean') {
+          return read(value, 'boolean', defaultValue);
+        }
+        if (type === 'number') {
+          return read(value, 'number', defaultValue);
+        }
+        if (type === 'string') {
+          return read(value, 'string', defaultValue);
+        }
+      },
     };
 
     let responseCode = 200;
