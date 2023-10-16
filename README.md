@@ -5,28 +5,26 @@ SQLite ORM with a web admin.
 # TODOS
 
 - table logs / errors ?
-- SQL: in(), group, having, unique insert.
-- how to run tests ? npx ts-node src/test/[...]
+- SQL: in(), group, having.
 - Table.lastQuery for debug.
 - handle enum / bool / date in the admin form.
 - make server start command runnable from any directory.
 - use `rowid` during edition and in url.
-- type utils to infer table type from field definition.
 - write a complete Getting started guide https://khalilstemmler.com/blogs/typescript/node-starter-project/
 - search in admin
 - set a password to the admin interface
+- set port / suffix / database name from the admin (editor of .env)
+- start the front server from the admin (with dev mode)
 - hide Bun error 500 page on production
 - add more Response types: redirection, image, etc...
 - add cookies to request, and setCookie to response
 - /admin should redirect to /admin/ automatically
 
+* dynamique controllers routing
+
 # Bugs
 
-- Empty.
-
-# Tips
-
-- remove async await from controllers (break exception trace)
+- encode crash if value is wrong (eg: null instead of null)
 
 # How to publish new version
 

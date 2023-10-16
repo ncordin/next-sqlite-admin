@@ -62,7 +62,7 @@ export const encode = (
 
     case 'string':
       if (useEscaper) {
-        addParameters((value as string).slice(0, field.maxLength));
+        addParameters((value as string).slice(0, field.maxLength)); // BUG ! (example null)
         return '?';
       } else {
         return quotify(`${value}`, '"');
