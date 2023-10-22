@@ -1,36 +1,20 @@
 type Headers = {
-  'accept-encoding': string;
-  'accept-language': string;
-  'content-length': string;
-  'content-type': string;
-  'user-agent': string;
-  accept: string;
-  cookie: string;
-  connection: string;
-  host: string;
-  referer: string;
-  [key: string]: string;
+  'accept-encoding'?: string;
+  'accept-language'?: string;
+  'content-length'?: string;
+  'content-type'?: string;
+  'user-agent'?: string;
+  accept?: string;
+  cookie?: string;
+  connection?: string;
+  host?: string;
+  referer?: string;
+  [key: string]: string | undefined;
 };
 
-type On = (event: string, handler: (data?: any) => void) => { on: On };
+type Method = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
-export type HTTPRequest = {
-  method: 'GET' | 'POST' | 'PUT' | 'DELETE';
-  url: string;
-  path: string;
-  search: string;
-  headers: Headers;
-  _parsedUrl: { query: { [key: string]: string } };
-  on: On;
-  // Added by custom middlewares:
-  body: { [key: string]: string | number | boolean | null };
-};
-
-export type HTTPResponse = {
-  statusCode: number;
-  setHeader: (name: string, value: string) => void;
-  end: (data?: unknown) => void;
-};
+type Body = { [key: string]: string | number | boolean | null };
 
 function read<T>(
   from: 'query' | 'body',
@@ -60,9 +44,9 @@ function read<T>(
 type ControllerRequest = {
   url: string;
   path: string;
-  body: HTTPRequest['body'];
-  query: HTTPRequest['_parsedUrl']['query'];
-  method: HTTPRequest['method'];
+  body: Body;
+  query: Record<string, string>;
+  method: Method;
   headers: Headers;
   read: typeof read;
 };

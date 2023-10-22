@@ -6,9 +6,5 @@ export type { Controller };
 export type { InferFromFields };
 // End of fix.
 
-export * as libs from './libs';
-export * as middlewares from './controller/middlewares';
-
 export { initDatabase, Table } from './orm';
-export { wrapController } from './controller';
-export { adminRouter } from './admin-router';
+export { handleRequest } from './controller';

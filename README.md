@@ -49,3 +49,26 @@ SQLite ORM with a web admin.
 - Check for empty PREFIX, can cause bad URL like http://localhost//admin/
 - The node command MUST be run from the server project directory
 - Check node_module/sqlite-95/admin-webapp/dist exists
+
+# Gros bordel a ranger
+
+Theme 95 c cool
+Admin qui supporte enum et bool
+Voir ca comme un pack ORM / Admin
+Briser l'analysis paralysis
+
+Doit fonctionner offline (local network, no cloud)
+Doit fonctionner sur un VPS à 3$ 512 Mo de RAM
+Il faut un ORM élégant est auto cast (bool, number, enum, date)
+SQL c'est old school, mais maîtrisé c'est OP
+Entry point en Express/Bun = OP (tout est possible)
+
+Drop support des Bigint
+Ecrire une doc ! Genre les dates UTC et les commandes serveurs
+L'admin doit gérer le contrôle des enum et bool via Constraint
+Trouver quoi faire du desktop : voir les logs des endpoints / visiteur / serveur web / var d'env
+
+Supabase : 30 min d'install et 50 img dockers installées
+Prisma / Hasura : install qui need 2GB de RAM
+Cloud avec lamba functions c'est à chier
+Pocket base ? UI cool, best potentiel. Pas de logique custom :/ (voir tuto Youtube fireship)
