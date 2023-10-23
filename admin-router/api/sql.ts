@@ -17,7 +17,7 @@ const executeSql = (
   }
 };
 
-export const apiSql: Controller = (request, response) => {
+const controller: Controller = (request, response) => {
   // Think about a tool to check data and apply types:
   const params = request.body.params as unknown as string[];
 
@@ -36,3 +36,5 @@ export const apiSql: Controller = (request, response) => {
     return { error: { title: 'SQL error!', message: error.message } };
   }
 };
+
+export default controller;

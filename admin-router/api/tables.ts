@@ -49,7 +49,7 @@ const getTables = (database: Database) => {
   }));
 };
 
-export const apiTables: Controller = (request) => {
+const controller: Controller = (request) => {
   try {
     const database = getDatabase(request.headers.database?.toString() || '');
     const tables = getTables(database);
@@ -60,3 +60,5 @@ export const apiTables: Controller = (request) => {
     return { error: { message: error.message } };
   }
 };
+
+export default controller;

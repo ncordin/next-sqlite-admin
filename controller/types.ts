@@ -12,7 +12,7 @@ type Headers = {
   [key: string]: string | undefined;
 };
 
-type Method = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+export type Method = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
 type Body = { [key: string]: string | number | boolean | null };
 

@@ -2,7 +2,7 @@ import fileSystem from 'fs';
 import { Controller } from '../..';
 import { getError } from '../../orm/utils/error';
 
-export const apiFiles: Controller = () => {
+const controller: Controller = () => {
   try {
     const path = process.cwd();
     const files = fileSystem
@@ -16,3 +16,5 @@ export const apiFiles: Controller = () => {
     return { error: { message: error.message } };
   }
 };
+
+export default controller;
