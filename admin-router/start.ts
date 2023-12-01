@@ -1,19 +1,24 @@
-import { adminRouter } from '.';
-import { requestJsonBody } from '../controller/middlewares';
-import { cors, polka } from '../libs';
+import { handleRequest } from '..';
 
-const PORT = 8080;
-const app = polka();
+const port = 8080;
+const prefix = '';
 
-app.use(cors());
-app.use(requestJsonBody());
+const SERVER_OPTIONS = {
+  admin: {
+    prefix,
+    password: '',
+  },
+};
 
-app.use('/', adminRouter);
-
-app.listen(PORT, () => {
-  console.log('');
-  console.log(`SQLite 95 ready! ✨`);
-  console.log('');
-  console.log(`http://localhost:${PORT}`);
-  console.log('');
+const server = Bun.serve({
+  port,
+  async fetch(request) {
+    return handleRequest(request, SERVER_OPTIONS);
+  },
 });
+
+console.log('');
+console.log(`SQLite 95 ready! ✨`);
+console.log('');
+console.log(`http://${server.hostname}:${port}${prefix}`);
+console.log('');

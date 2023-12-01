@@ -1,3 +1,19 @@
+export type Options = {
+  admin: {
+    prefix: string;
+    password: string;
+  };
+  api?: {
+    prefix: string;
+    path: string;
+    cors: string;
+  };
+  assets?: {
+    prefix: string;
+    path: string;
+  }[];
+};
+
 type Headers = {
   'accept-encoding'?: string;
   'accept-language'?: string;
