@@ -1,7 +1,7 @@
 {
   "name": "sqlite-95",
   "description": "SQLite ORM with a web admin",
-  "version": "4.2.1",
+  "version": "4.2.4",
   "homepage": "https://github.com/ncordin/sqlite-95",
   "repository": {
     "type": "git",
@@ -10,7 +10,7 @@
   "main": "index.ts",
   "files": [
     "admin-router/",
-    "admin-webapp/dist/",
+    "admin-webapp/public/",
     "controller/",
     "libs/",
     "orm/",

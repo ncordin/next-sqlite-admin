@@ -3,7 +3,7 @@
 /admin-webapp/node_modules
 
 # production
-/admin-webapp/dist
+/admin-webapp/public/index.js
 
 # misc
 .DS_Store

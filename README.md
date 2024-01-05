@@ -49,7 +49,7 @@ SQLite ORM with a web admin.
 
 - Check for empty PREFIX, can cause bad URL like http://localhost//admin/
 - The node command MUST be run from the server project directory
-- Check node_module/sqlite-95/admin-webapp/dist exists
+- Check node_module/sqlite-95/admin-webapp/public exists
 
 # Gros bordel a ranger
 

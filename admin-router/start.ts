@@ -1,7 +1,7 @@
 import { handleRequest } from '..';
 
 const port = 8080;
-const prefix = '';
+const prefix = '/';
 
 const SERVER_OPTIONS = {
   admin: {
