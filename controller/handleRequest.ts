@@ -35,7 +35,7 @@ export const handleRequest = async (request: Request, options: Options) => {
   if (requestPath.startsWith(options.admin.prefix)) {
     const shortPath = requestPath.slice(options.admin.prefix.length);
 
-    if (shortPath.startsWith('/api/')) {
+    if (shortPath.startsWith('api/')) {
       const routeFile = join(LIB_PATH, '/admin-router', `${shortPath}.ts`);
       return callController(routeFile, request);
     }
