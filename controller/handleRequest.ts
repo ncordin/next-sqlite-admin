@@ -12,6 +12,18 @@ const LIB_PATH = IS_ADMIN
   ? ROOT_PATH
   : join(ROOT_PATH, '/node_modules/sqlite-95');
 
+export const getUrlsFromOptions = (options: Options) => {
+  const makePrefix = (subPrefix: string | undefined) =>
+    joinPrefix(options.prefix || '', subPrefix || '');
+
+  const asset = (options.assets && options.assets[0]) || { prefix: '' };
+  const app = makePrefix(asset.prefix);
+  const admin = makePrefix(options.admin?.prefix);
+  const api = makePrefix(options.api?.prefix);
+
+  return { app, admin, api };
+};
+
 export const handleRequest = async (request: Request, options: Options) => {
   const makePrefix = (subPrefix: string | undefined) =>
     joinPrefix(options.prefix || '', subPrefix || '');
@@ -41,8 +53,24 @@ export const handleRequest = async (request: Request, options: Options) => {
     const shortPath = requestPath.slice(ADMIN_PREFIX.length);
 
     if (shortPath.startsWith('api/')) {
-      const routeFile = join(LIB_PATH, '/admin-router', `${shortPath}.ts`);
-      return callController(routeFile, request);
+      if (
+        options.admin.password &&
+        options.admin.password === request.headers.get('password')
+      ) {
+        const routeFile = join(LIB_PATH, '/admin-router', `${shortPath}.ts`);
+        return callController(routeFile, request);
+      } else {
+        return new Response(
+          JSON.stringify({
+            error: {
+              title: 'Invalid password',
+              message:
+                'Password is declared in server configuration and can not be empty.',
+            },
+          }),
+          { status: 403 }
+        );
+      }
     }
 
     const assetPath = useIndex(shortPath, 'index.html');

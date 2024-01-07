@@ -1,3 +1,3 @@
-import { handleRequest } from './handleRequest';
+import { getUrlsFromOptions, handleRequest } from './handleRequest';
 
-export { handleRequest };
+export { getUrlsFromOptions, handleRequest };

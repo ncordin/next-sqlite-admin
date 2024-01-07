@@ -2,11 +2,12 @@ import { handleRequest } from '..';
 
 const port = 8080;
 const prefix = '/';
+const password = '1234';
 
 const SERVER_OPTIONS = {
   admin: {
     prefix,
-    password: '',
+    password,
   },
 };
 
@@ -18,7 +19,12 @@ const server = Bun.serve({
 });
 
 console.log('');
-console.log(`SQLite 95 ready! ✨`);
+console.log(`SQLite 95 local admin ready! ✨`);
 console.log('');
 console.log(`http://${server.hostname}:${port}${prefix}`);
+
+console.log('');
+
+console.log(`🔑 Admin password: ${password}`);
+
 console.log('');

@@ -4,15 +4,25 @@ import { ErrorModalProvider } from './contexts/ErrorModal';
 import { HtmlLayout } from './components/HtmlLayout';
 import { DatabaseProvider } from './contexts/Database';
 import { Desktop } from './screens/Desktop';
+import { Login } from './screens/Login';
+import { PasswordProvider, usePassword } from './contexts/Password';
+
+function CurrentScreen() {
+  const { password } = usePassword();
+
+  return password ? <Desktop /> : <Login />;
+}
 
 export function App() {
   return (
     <ErrorModalProvider>
-      <DatabaseProvider>
-        <HtmlLayout>
-          <Desktop />
-        </HtmlLayout>
-      </DatabaseProvider>
+      <PasswordProvider>
+        <DatabaseProvider>
+          <HtmlLayout>
+            <CurrentScreen />
+          </HtmlLayout>
+        </DatabaseProvider>
+      </PasswordProvider>
     </ErrorModalProvider>
   );
 }

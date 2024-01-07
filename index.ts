@@ -7,4 +7,4 @@ export type { InferFromFields };
 // End of fix.
 
 export { initDatabase, Table } from './orm';
-export { handleRequest } from './controller';
+export { getUrlsFromOptions, handleRequest } from './controller';

@@ -1,14 +1,16 @@
 import { useDatabase } from '../contexts/Database';
 import { useErrorModal } from '../contexts/ErrorModal';
+import { usePassword } from '../contexts/Password';
 
 const BASE_URL = './';
 
-function fetchSqliteApi({ url, params, database = '' }) {
+function fetchSqliteApi({ url, params, password, database = '' }) {
   return fetch(`${BASE_URL}${url}`, {
     method: 'POST',
     cache: 'no-cache',
     headers: {
       'Content-Type': 'application/json',
+      Password: password,
       Database: database,
     },
     body: JSON.stringify(params),
@@ -18,12 +20,21 @@ function fetchSqliteApi({ url, params, database = '' }) {
 export function useApi() {
   const { open } = useErrorModal();
   const { database } = useDatabase();
+  const { password } = usePassword();
 
   const fetch = async (url, params) => {
-    const response = await fetchSqliteApi({ url, params, database });
+    const response = await fetchSqliteApi({
+      url,
+      params,
+      password,
+      database,
+    });
 
     if (response.error) {
-      open(response.error.title || 'Error!', response.error.message);
+      open(
+        response.error.title || 'Error!',
+        response.error.message ?? JSON.stringify(response.error)
+      );
       return Promise.reject();
     }
 

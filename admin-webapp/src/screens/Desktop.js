@@ -5,9 +5,11 @@ import { Shortcut } from '../components/Shortcut';
 import { useDatabase } from '../contexts/Database';
 import { TablesProvider } from '../contexts/Tables';
 import { useApi } from '../utils/useApi';
+import { usePassword } from '../contexts/Password';
 
 export function Desktop() {
   const { database, setDatabase } = useDatabase();
+  const { logout } = usePassword();
   const { fetch } = useApi();
   const [databases, setDatabases] = useState([]);
 
@@ -36,6 +38,8 @@ export function Desktop() {
               onClick={() => setDatabase(file)}
             />
           ))}
+
+          <Shortcut icon="desktop" name="Log out" onClick={logout} />
         </>
       )}
     </>
