@@ -1,4 +1,5 @@
 export type Options = {
+  prefix?: string;
   admin: {
     prefix: string;
     password: string;

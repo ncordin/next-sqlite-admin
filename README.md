@@ -30,7 +30,9 @@ SQLite ORM with a web admin.
 
 - bun run test
 - cd admin-webapp && bun install && bun run build
+- cd root of project
 - npm version patch|minor|major
+- npm publish --dry-run
 - npm publish
 
 # How to run on production

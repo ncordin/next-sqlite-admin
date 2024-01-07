@@ -17,3 +17,10 @@ export async function serveStaticFile(pathToFile: string, description: string) {
   console.log(`📄 ${description} ${pathToFile}`);
   return new Response(file);
 }
+
+export function joinPrefix(prefix: string, path: string) {
+  const parts = [...prefix.split('/'), ...path.split('/')];
+  const joined = parts.filter((part) => part).join('/');
+
+  return joined ? `/${joined}/` : '/';
+}
