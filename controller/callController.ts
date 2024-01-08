@@ -1,9 +1,13 @@
 import { CORS_HEADERS } from './cors';
 import { read } from './read';
-import { Controller, Method } from './types';
+import { Controller, Method, Middleware } from './types';
 import { make404 } from './utils';
 
-export async function callController(filePath: string, request: Request) {
+export async function callController(
+  filePath: string,
+  request: Request,
+  middleware: Middleware | undefined
+) {
   const file = await Bun.file(filePath);
 
   if ((await file.exists()) === false) {
@@ -66,6 +70,36 @@ export async function callController(filePath: string, request: Request) {
   };
 
   console.log(`🎯 ${request.method} ${requestPath}`);
+
+  /**
+   * Middleware TODO list:
+   * - [!] allow to read request and respond in place of the controller.
+   * - [!] accept one middleware.
+   * - [ ] accept a list of middlewares.
+   * - [ ] can be asynchrone
+   *
+   * Maybe not needed:
+   * - [ ] can read and modify response. <- wrapResponse function can do the job.
+   * - [ ] allow to edit request and pass data to the controller. <- wrapRequest function can do the job.
+   * - [ ] has access to controller object in order to adapt behaviour. <- overkill.
+   */
+  if (middleware) {
+    const middlewareResponse = middleware(
+      controllerRequest,
+      controllerResponse
+    );
+
+    if (middlewareResponse) {
+      const response = new Response(JSON.stringify(middlewareResponse), {
+        status: responseCode,
+        headers: CORS_HEADERS.headers,
+      });
+
+      console.log(`🟠 ${responseCode} - Intercepted by middleware`);
+
+      return response;
+    }
+  }
 
   return Promise.resolve(
     controller(controllerRequest, controllerResponse)

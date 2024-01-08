@@ -28,7 +28,7 @@ SQLite ORM with a web admin.
 
 # How to publish new version
 
-- bun run test
+- bun test
 - cd admin-webapp && bun install && bun run build
 - cd root of project
 - npm version patch|minor|major

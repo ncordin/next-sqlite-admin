@@ -45,7 +45,7 @@ export const handleRequest = async (request: Request, options: Options) => {
     const routePath = useIndex(shortPath, 'index');
     const routeFile = join(ENTRY_PATH, options.api.path, `${routePath}.ts`); // TODO: utils to build route with unit tests.
 
-    return callController(routeFile, request);
+    return callController(routeFile, request, options.api.middleware);
   }
 
   // Handle admin:
@@ -57,8 +57,9 @@ export const handleRequest = async (request: Request, options: Options) => {
         options.admin.password &&
         options.admin.password === request.headers.get('password')
       ) {
+        // TODO: the admin logic could be a middleware!
         const routeFile = join(LIB_PATH, '/admin-router', `${shortPath}.ts`);
-        return callController(routeFile, request);
+        return callController(routeFile, request, undefined);
       } else {
         return new Response(
           JSON.stringify({

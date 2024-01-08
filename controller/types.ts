@@ -8,6 +8,7 @@ export type Options = {
     prefix: string;
     path: string;
     cors: string;
+    middleware?: Middleware;
   };
   assets?: {
     prefix: string;
@@ -72,7 +73,20 @@ type ControllerResponse = {
   setStatusCode: (code: number) => void;
 };
 
+type JsonValue =
+  | string
+  | number
+  | boolean
+  | null
+  | JsonValue[]
+  | { [key: string]: JsonValue };
+
 export type Controller = (
   request: ControllerRequest,
   response: ControllerResponse
-) => unknown | Promise<unknown>;
+) => JsonValue | Promise<JsonValue>;
+
+export type Middleware = (
+  request: ControllerRequest,
+  response: ControllerResponse
+) => JsonValue | undefined;
