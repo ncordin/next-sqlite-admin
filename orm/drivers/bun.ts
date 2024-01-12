@@ -92,12 +92,14 @@ export const queryRun = ({
   }
 
   try {
-    const affectedRows = database
-      .query(sql)
-      .all(...parameters) as unknown as number;
+    database.query(sql).run(...parameters);
+
+    const result = database.query('SELECT CHANGES() as `changes`;').get() as {
+      changes: number;
+    };
 
     return {
-      affectedRows,
+      affectedRows: result.changes,
     };
   } catch (e) {
     const error = getError(e);
