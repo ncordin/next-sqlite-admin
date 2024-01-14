@@ -1,6 +1,6 @@
 import { CORS_HEADERS } from './cors';
 import { read } from './read';
-import { Controller, Method, Middleware } from './types';
+import { ContentType, Controller, Method, Middleware } from './types';
 import { make404 } from './utils';
 
 export async function callController(
@@ -62,10 +62,14 @@ export async function callController(
   };
 
   let responseCode = 200;
+  let responseContentType: ContentType = 'json';
 
   const controllerResponse = {
     setStatusCode: (code: number) => {
       responseCode = code;
+    },
+    setContentType: (type: ContentType) => {
+      responseContentType = type;
     },
   };
 
@@ -104,13 +108,44 @@ export async function callController(
   return Promise.resolve(
     controller(controllerRequest, controllerResponse)
   ).then((value) => {
-    const response = new Response(JSON.stringify(value), {
-      status: responseCode,
-      headers: CORS_HEADERS.headers,
-    });
-
     console.log(`🟢 ${responseCode}`);
 
-    return response;
+    switch (responseContentType) {
+      case 'json':
+        return new Response(JSON.stringify(value), {
+          status: responseCode,
+          headers: {
+            ...CORS_HEADERS.headers,
+            'Content-Type': 'application/json',
+          },
+        });
+
+      case 'html':
+        return new Response(
+          typeof value === 'string' ? value : JSON.stringify(value),
+          {
+            status: responseCode,
+            headers: {
+              ...CORS_HEADERS.headers,
+              'Content-Type': 'text/html; charset=utf-8',
+            },
+          }
+        );
+
+      case 'text':
+        return new Response(
+          typeof value === 'string' ? value : JSON.stringify(value),
+          {
+            status: responseCode,
+            headers: {
+              ...CORS_HEADERS.headers,
+              'Content-Type': 'text/plain',
+            },
+          }
+        );
+
+      default:
+        throw new Error('Impossible Content-Type');
+    }
   });
 }

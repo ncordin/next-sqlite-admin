@@ -26,7 +26,7 @@ const controller: Controller = (request, response) => {
       String(request.headers.database),
       String(request.body.query),
       params
-    );
+    ) as Array<{ [key: string]: string }>;
 
     response.setStatusCode(202);
     return result;

@@ -69,8 +69,11 @@ type ControllerRequest = {
   read: typeof read;
 };
 
+export type ContentType = 'json' | 'html' | 'text';
+
 type ControllerResponse = {
   setStatusCode: (code: number) => void;
+  setContentType: (type: ContentType) => void;
 };
 
 type JsonValue =
@@ -78,6 +81,7 @@ type JsonValue =
   | number
   | boolean
   | null
+  | Date
   | JsonValue[]
   | { [key: string]: JsonValue };
 

@@ -9,7 +9,6 @@ function main() {
   console.log('');
 
   const result = Players.insert({
-    id: 1,
     name: 'Coco',
     gold: Players.rawSql('10 + 10'),
     isCool: true,
