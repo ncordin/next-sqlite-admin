@@ -8,12 +8,6 @@ export async function callController(
   request: Request,
   middleware: Middleware | undefined
 ) {
-  const file = await Bun.file(filePath);
-
-  if ((await file.exists()) === false) {
-    return make404('controller', filePath);
-  }
-
   const controllerModule = await import(filePath);
 
   if (typeof controllerModule.default !== 'function') {

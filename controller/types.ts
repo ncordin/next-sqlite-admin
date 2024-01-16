@@ -1,19 +1,22 @@
-export type Options = {
+export type HandleRequestOptions = {
   prefix?: string;
-  admin: {
+  admin?: {
     prefix: string;
     password: string;
-  };
-  api?: {
-    prefix: string;
-    path: string;
-    cors: string;
-    middleware?: Middleware;
   };
   assets?: {
     prefix: string;
     path: string;
-  }[];
+  };
+  controllers?: {
+    path: string;
+    cors: string;
+    middleware?: Middleware;
+  };
+  catchAll?: {
+    type: 'static' | 'controller';
+    path: string;
+  };
 };
 
 type Headers = {
