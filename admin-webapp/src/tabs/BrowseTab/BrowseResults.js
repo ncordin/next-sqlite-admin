@@ -42,20 +42,24 @@ export function BrowseResults({
         <TableRow head>
           <TableHeadCell></TableHeadCell>
           <TableHeadCell></TableHeadCell>
-          {headers.map((header) => (
-            <TableHeadCell
-              key={header}
-              onClick={() => changeOrderBy(header)}
-              style={{ cursor: 'pointer' }}
-            >
-              <BoldIf condition={orderBy === header}>{header}</BoldIf>
-            </TableHeadCell>
-          ))}
+          {headers
+            .filter((header) => header !== 'rowid')
+            .map((header) => (
+              <TableHeadCell
+                key={header}
+                onClick={() => changeOrderBy(header)}
+                style={{ cursor: 'pointer' }}
+              >
+                <BoldIf condition={orderBy === header}>{header}</BoldIf>
+              </TableHeadCell>
+            ))}
         </TableRow>
       </TableHead>
       <TableBody>
         {rows.map((row, index) => {
-          const values = Object.values(row);
+          const values = Object.entries(row)
+            .filter(([key]) => key !== 'rowid')
+            .map(([, value]) => value);
 
           return (
             <TableRow key={index}>
@@ -70,7 +74,7 @@ export function BrowseResults({
               <TableDataCell style={{ width: 40 }}>
                 <Anchor
                   style={{ cursor: 'pointer' }}
-                  onClick={() => selectEditingRow(row)}
+                  onClick={() => selectEditingRow(row.rowid)}
                 >
                   edit
                 </Anchor>

@@ -33,40 +33,45 @@ export function Login() {
         onClose={() => null}
         style={{ width: 600, minHeight: 200 }}
       >
-        <Flex>
-          <img src="./assets/keys.ico" height="40" width="40" />
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            setPassword(localPassword);
+          }}
+        >
+          <Flex>
+            <img src="./assets/keys.ico" height="40" width="40" />
 
-          <table style={{ flex: 1, margin: '0 32px' }}>
-            <tbody>
-              <tr style={{ height: 42 }}>
-                <td>Username:</td>
-                <td>
-                  <TextField value="admin" onChange={() => null} disabled />
-                </td>
-              </tr>
-              <tr>
-                <td>Password:</td>
-                <td>
-                  <TextField
-                    type="password"
-                    value={localPassword}
-                    onChange={(event) => setLocalPassword(event.target.value)}
-                  />
-                </td>
-              </tr>
-            </tbody>
-          </table>
+            <table style={{ flex: 1, margin: '0 32px' }}>
+              <tbody>
+                <tr style={{ height: 42 }}>
+                  <td>Username:</td>
+                  <td>
+                    <TextField value="admin" onChange={() => null} disabled />
+                  </td>
+                </tr>
+                <tr>
+                  <td>Password:</td>
+                  <td>
+                    <TextField
+                      type="password"
+                      value={localPassword}
+                      onChange={(event) => setLocalPassword(event.target.value)}
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
 
-          <section>
-            <LargeButton onClick={() => setPassword(localPassword)}>
-              Ok
-            </LargeButton>
-            <Space vertical />
-            <LargeButton onClick={() => null} disabled>
-              Cancel
-            </LargeButton>
-          </section>
-        </Flex>
+            <section>
+              <LargeButton type="submit">Ok</LargeButton>
+              <Space vertical />
+              <LargeButton onClick={() => null} disabled>
+                Cancel
+              </LargeButton>
+            </section>
+          </Flex>
+        </form>
       </ClosableWindow>
     </Container>
   );

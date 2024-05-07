@@ -85,6 +85,7 @@ type JsonValue =
   | boolean
   | null
   | Date
+  | undefined
   | JsonValue[]
   | { [key: string]: JsonValue };
 

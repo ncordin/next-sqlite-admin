@@ -7,7 +7,8 @@ function escapeValue(value) {
     return 'NULL';
   }
 
-  return `'${value}'`; // TODO: escape
+  const escaped = `${value}`.split(`'`).join(`''`);
+  return `'${escaped}'`;
 }
 
 function makeAssignment(field, value) {
@@ -28,14 +29,9 @@ function makeEquality(field, value) {
 
 export function makeSet(row) {
   return Object.keys(row)
+    .filter((key) => key !== 'rowid')
     .map((key) => makeAssignment(key, row[key]))
     .join(', ');
-}
-
-export function makeWhere(row) {
-  return Object.keys(row)
-    .map((key) => makeEquality(key, row[key]))
-    .join(' AND ');
 }
 
 function makeField(field) {
@@ -53,7 +49,7 @@ export function makeFields(fields) {
 }
 
 export function makeDelete(table, row) {
-  return `DELETE FROM \`${table}\` WHERE ${makeWhere(row)};`;
+  return `DELETE FROM \`${table}\` WHERE rowid=${row.rowid};`;
 }
 
 export function makeCreateTable(table, fields) {

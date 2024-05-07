@@ -3,25 +3,41 @@ import React, { useEffect, useState } from 'react';
 import { useTables } from '../../contexts/Tables';
 import { RowForm } from '../../components/RowForm';
 import { InnerPanel } from '../../components/InnerPanel';
-import { makeSet, makeWhere } from '../../utils/query';
+import { makeSet } from '../../utils/query';
 import { Button, Fieldset } from 'react95';
+import { useApi } from '../../utils/useApi';
+import { useUrlParam } from '../../utils/useUrlParam';
 
-export function Edit({ row, execute, cancel }) {
+export function Edit() {
   const { currentTable } = useTables();
-  const [editingRow, setEditingRow] = useState(row);
+  const [rowid, setRowid] = useUrlParam('rowid');
+  const [editingRow, setEditingRow] = useState({});
   const [showQuery, setShowQuery] = useState(false);
-
-  const set = makeSet(editingRow);
-  const where = makeWhere(row);
-  const query = `UPDATE \`${currentTable.name}\` SET ${set} WHERE ${where}`;
+  const { executeQuery } = useApi();
 
   useEffect(() => {
-    setEditingRow(row);
-  }, [currentTable?.name]);
+    executeQuery(
+      `SELECT rowid, * FROM \`${currentTable.name}\` WHERE rowid=${rowid}`
+    ).then((data) => {
+      setEditingRow(data[0]);
+    });
+  }, [rowid]);
+
+  useEffect(() => {
+    return cancel;
+  }, []);
+
+  const set = makeSet(editingRow);
+  const query = `UPDATE \`${currentTable.name}\` SET ${set} WHERE rowid=${rowid}`;
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    execute(query);
+    await executeQuery(query);
+    setRowid('');
+  };
+
+  const cancel = () => {
+    setRowid('');
   };
 
   return (

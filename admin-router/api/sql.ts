@@ -13,7 +13,11 @@ const executeSql = (
   if (lowerSql.startsWith('select ') || lowerSql.startsWith('pragma ')) {
     return database.query(query).all(...params);
   } else {
-    return [database.query(query).run(...params)];
+    database.query(query).run(...params);
+    const result = database.query('SELECT CHANGES() as `changes`;').get() as {
+      changes: number;
+    };
+    return [{ affectedRows: result.changes }];
   }
 };
 

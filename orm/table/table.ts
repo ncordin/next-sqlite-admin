@@ -167,7 +167,7 @@ export const declareTable = <TableType>({
     } catch (e) {
       const error = getError(e);
 
-      if (error.message === 'constraint failed') {
+      if (error.message.startsWith('UNIQUE constraint failed')) {
         return { affectedRows: 0 };
       }
 

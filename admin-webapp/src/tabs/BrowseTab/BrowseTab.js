@@ -8,6 +8,7 @@ import { useTables } from '../../contexts/Tables';
 import { Edit } from './Edit';
 import { makeDelete } from '../../utils/query';
 import { useApi } from '../../utils/useApi';
+import { useUrlParam } from '../../utils/useUrlParam';
 
 const FlexRow = styled.div`
   display: flex;
@@ -22,6 +23,7 @@ const FlexColumn = styled.div`
 `;
 
 export function BrowseTab() {
+  const [rowid, setRowid] = useUrlParam('rowid');
   const { currentTable, refresh } = useTables();
   const { executeQuery } = useApi();
 
@@ -29,23 +31,23 @@ export function BrowseTab() {
   const [response, setResponse] = useState(null);
   const [orderBy, setOrderBy] = useState(null);
   const [orderByDirection, setOrderByDirection] = useState(true);
-  const [editingRow, setEditingRow] = useState(null);
   const [selected, setSelected] = useState([]);
 
   useEffect(() => {
-    currentTable && execute(`SELECT * FROM \`${currentTable.name}\`;`);
-    setEditingRow(null);
-    setOrderBy(null);
-    setOrderByDirection(null);
-    setSelected([]);
-  }, [currentTable]);
+    if (!rowid) {
+      currentTable && execute(`SELECT rowid, * FROM \`${currentTable.name}\`;`);
+      setOrderBy(null);
+      setOrderByDirection(null);
+      setSelected([]);
+    }
+  }, [currentTable, rowid]);
 
   useEffect(() => {
     if (currentTable && orderBy) {
       const orderCommand = `\`${orderBy}\` ${
         orderByDirection ? 'ASC' : 'DESC'
       }`;
-      const query = `SELECT * FROM \`${currentTable.name}\` ORDER BY ${orderCommand};`;
+      const query = `SELECT rowid, * FROM \`${currentTable.name}\` ORDER BY ${orderCommand};`;
 
       execute(query);
     }
@@ -63,13 +65,6 @@ export function BrowseTab() {
     setOrderBy(field);
   };
 
-  const saveRow = async (query) => {
-    await executeQuery(query);
-
-    setEditingRow(null);
-    execute(value);
-  };
-
   const deleteSelected = async () => {
     setSelected([]);
     const rows = selected.map((index) => response[index]);
@@ -83,14 +78,8 @@ export function BrowseTab() {
     refresh();
   };
 
-  if (editingRow) {
-    return (
-      <Edit
-        row={editingRow}
-        cancel={() => setEditingRow(null)}
-        execute={saveRow}
-      />
-    );
+  if (rowid) {
+    return <Edit />;
   }
 
   return (
@@ -118,7 +107,7 @@ export function BrowseTab() {
           data={response}
           orderBy={orderBy}
           changeOrderBy={changeOrderBy}
-          selectEditingRow={setEditingRow}
+          selectEditingRow={setRowid}
           selected={selected}
           setSelected={setSelected}
         />

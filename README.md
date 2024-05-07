@@ -4,6 +4,7 @@ SQLite ORM with a web admin.
 
 # TODOS
 
+- Table declaration: need UNIQUE and INDEX
 - table logs / errors ?
 - SQL: in(), group, having.
 - Table.lastQuery for debug.
