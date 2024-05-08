@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { Button, TextField } from 'react95';
@@ -25,6 +25,13 @@ const LargeButton = styled(Button)`
 export function Login() {
   const [localPassword, setLocalPassword] = useState('');
   const { setPassword } = usePassword();
+  const passwordRef = useRef(null);
+
+  useEffect(() => {
+    if (passwordRef.current) {
+      passwordRef.current.focus();
+    }
+  }, []);
 
   return (
     <Container>
@@ -57,6 +64,7 @@ export function Login() {
                       type="password"
                       value={localPassword}
                       onChange={(event) => setLocalPassword(event.target.value)}
+                      ref={passwordRef}
                     />
                   </td>
                 </tr>

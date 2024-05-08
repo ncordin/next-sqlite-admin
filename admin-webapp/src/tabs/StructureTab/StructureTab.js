@@ -153,14 +153,14 @@ export function StructureTab() {
         )}
       </Fieldset>
 
-      <Space size={2} />
+      <Space size={2} vertical />
 
       <Fieldset label="Add field">
         <NewFieldsForm fields={fields} setFields={setFields} />
         <Button onClick={addField}>Add field</Button>
       </Fieldset>
 
-      <Space size={2} />
+      <Space size={2} vertical />
 
       <ListIndex
         indexes={indexes}
@@ -168,7 +168,7 @@ export function StructureTab() {
         currentTable={currentTable}
       />
 
-      <Space size={2} />
+      <Space size={2} vertical />
 
       <CreateIndex refreshIndexes={refreshIndexes} />
     </div>
