@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Tab, TabBody, Tabs } from 'react95';
 import styled from 'styled-components';
 
@@ -13,6 +13,7 @@ import { ManagementTab } from '../tabs/ManagementTab/ManagementTab';
 import { SqlTab } from '../tabs/SqlTab';
 import { StructureTab } from '../tabs/StructureTab';
 import { useDatabase } from '../contexts/Database';
+import { useUrlParam } from '../utils/useUrlParam';
 
 const Container = styled.div`
   padding: 1rem;
@@ -31,16 +32,22 @@ const StyledTab = styled(Tab)`
   padding: 0 1.2rem;
 `;
 
-export function MainScreen({ onClose }) {
-  const [currentTab, setCurrentTab] = useState('browse');
-  const { database } = useDatabase();
-  const { currentTable } = useTables();
+export function MainScreen() {
+  const [currentTab, setCurrentTab] = useUrlParam('tab', 'browse');
+  const { database, setDatabase } = useDatabase();
+  const { currentTable, setCurrentTableName } = useTables();
 
   useEffect(() => {
     if (currentTab === 'create-table') {
       setCurrentTab('browse');
     }
   }, [currentTable?.name]);
+
+  const onClose = () => {
+    setCurrentTab(null);
+    setCurrentTableName(null);
+    setDatabase(null);
+  };
 
   const getTabBody = (value) => {
     switch (value) {

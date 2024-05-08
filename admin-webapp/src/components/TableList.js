@@ -4,7 +4,7 @@ import { useTables } from '../contexts/Tables';
 import { BoldIf } from './BoldIf';
 
 export function TableList({ createTable }) {
-  const { currentTable, setCurrentTable, tables, refresh } = useTables();
+  const { currentTable, setCurrentTableName, tables, refresh } = useTables();
 
   return (
     <>
@@ -22,7 +22,7 @@ export function TableList({ createTable }) {
               size="sm"
               style={{ cursor: 'pointer' }}
               onClick={() => {
-                setCurrentTable(table);
+                setCurrentTableName(table.name);
               }}
             >
               <BoldIf condition={table.name === currentTable?.name}>

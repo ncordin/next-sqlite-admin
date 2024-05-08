@@ -11,7 +11,7 @@ export function CreateTableTab({ onCreated }) {
   const [tableName, setTableName] = useState('');
   const [fields, setFields] = useState([defaultField]);
   const { executeQuery } = useApi();
-  const { refresh, tables, setCurrentTable } = useTables();
+  const { refresh, tables, setCurrentTableName } = useTables();
 
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -23,7 +23,7 @@ export function CreateTableTab({ onCreated }) {
     const newlyCreatedTable = tables.find((table) => table.name === tableName);
 
     if (newlyCreatedTable) {
-      setCurrentTable(newlyCreatedTable);
+      setCurrentTableName(newlyCreatedTable.name);
       onCreated();
     }
   }, [tables]);

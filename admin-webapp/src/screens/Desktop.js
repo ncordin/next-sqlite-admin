@@ -23,7 +23,7 @@ export function Desktop() {
     <>
       {database && (
         <TablesProvider>
-          <MainScreen onClose={() => setDatabase(null)} />
+          <MainScreen />
         </TablesProvider>
       )}
       {!database && (

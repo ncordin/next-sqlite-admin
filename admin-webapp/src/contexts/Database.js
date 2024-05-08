@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useUrlParam } from '../utils/useUrlParam';
 
 const ReactContext = React.createContext({
   database: null,
@@ -6,7 +7,7 @@ const ReactContext = React.createContext({
 });
 
 function DatabaseProvider({ children }) {
-  const [database, setDatabase] = useState(null);
+  const [database, setDatabase] = useUrlParam('database');
 
   return (
     <ReactContext.Provider
