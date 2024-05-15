@@ -1,3 +1,5 @@
+import { BunFile } from 'bun';
+
 export type HandleRequestOptions = {
   prefix?: string;
   admin?: {
@@ -72,7 +74,7 @@ type ControllerRequest = {
   read: typeof read;
 };
 
-export type ContentType = 'json' | 'html' | 'text';
+export type ContentType = 'json' | 'html' | 'text' | 'file';
 
 type ControllerResponse = {
   setStatusCode: (code: number) => void;
@@ -92,7 +94,7 @@ type JsonValue =
 export type Controller = (
   request: ControllerRequest,
   response: ControllerResponse
-) => JsonValue | Promise<JsonValue>;
+) => JsonValue | Promise<JsonValue | BunFile>;
 
 export type Middleware = (
   request: ControllerRequest,

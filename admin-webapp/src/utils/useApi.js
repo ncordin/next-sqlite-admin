@@ -14,7 +14,18 @@ function fetchSqliteApi({ url, params, password, database = '' }) {
       Database: database,
     },
     body: JSON.stringify(params),
-  }).then((response) => response.json());
+  }).then((response) => {
+    const type = response.headers.get('Content-Type');
+
+    if (type === 'application/json') {
+      return response.json();
+    }
+    if (type === 'application/octet-stream') {
+      return response.blob();
+    }
+
+    console.log(`Unknown content type: ${type}}`);
+  });
 }
 
 export function useApi() {
@@ -45,5 +56,9 @@ export function useApi() {
     return fetch('api/sql', { query, params });
   };
 
-  return { fetch, executeQuery };
+  const download = async (database) => {
+    return fetch('api/download', { database });
+  };
+
+  return { fetch, executeQuery, download };
 }

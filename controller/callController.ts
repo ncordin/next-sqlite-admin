@@ -1,3 +1,4 @@
+import { BunFile } from 'bun';
 import { CORS_HEADERS } from './cors';
 import { read } from './read';
 import { ContentType, Controller, Method, Middleware } from './types';
@@ -137,6 +138,13 @@ export async function callController(
             },
           }
         );
+
+      case 'file':
+        return new Response(value as BunFile, {
+          headers: {
+            ...CORS_HEADERS.headers,
+          },
+        });
 
       default:
         throw new Error('Impossible Content-Type');

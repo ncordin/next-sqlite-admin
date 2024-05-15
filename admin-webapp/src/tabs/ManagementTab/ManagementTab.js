@@ -4,10 +4,12 @@ import { Button, Fieldset, TextField } from 'react95';
 import { useTables } from '../../contexts/Tables';
 import { InnerPanel } from '../../components/InnerPanel';
 import { useApi } from '../../utils/useApi';
+import { useDatabase } from '../../contexts/Database';
 
 export function ManagementTab() {
   const { currentTable, refresh } = useTables();
-  const { executeQuery } = useApi();
+  const { database } = useDatabase();
+  const { executeQuery, download } = useApi();
   const [newTableName, setNewTableName] = useState(currentTable.name);
 
   useEffect(() => {
@@ -33,6 +35,18 @@ export function ManagementTab() {
     await refresh();
   };
 
+  const onDownload = async () => {
+    const blob = await download(database);
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = url;
+    a.download = database;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
+
   return (
     <>
       <form onSubmit={renameTable}>
@@ -49,6 +63,15 @@ export function ManagementTab() {
           </Button>
         </Fieldset>
       </form>
+
+      <Fieldset
+        label="Export database"
+        style={{ marginBottom: 32, padding: '2rem' }}
+      >
+        <Button onClick={onDownload} style={{ marginTop: '1rem' }}>
+          Download a copy
+        </Button>
+      </Fieldset>
 
       <Fieldset
         label="Danger zone"
