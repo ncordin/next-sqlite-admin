@@ -3,7 +3,13 @@ import { cwd } from 'node:process';
 import { callController } from './callController';
 import { HandleRequestOptions } from './types';
 import { CORS_HEADERS } from './cors';
-import { make404, serveStaticFile, joinPrefix, useIndex } from './utils';
+import {
+  make404,
+  serveStaticFile,
+  joinPrefix,
+  useIndex,
+  displayPath,
+} from './utils';
 
 const ENTRY_PATH = dirname(Bun.main);
 const ROOT_PATH = cwd();
@@ -118,7 +124,10 @@ export const handleRequest = async (
   if (options.catchAll && options.catchAll.type === 'static') {
     const assetFile = join(ENTRY_PATH, options.catchAll.path);
 
-    return serveStaticFile(assetFile, `catch-all static`);
+    return serveStaticFile(
+      assetFile,
+      `catch-all static ${displayPath(requestPath)}`
+    );
   }
 
   return make404('final', requestPath);
