@@ -68,7 +68,7 @@ export const handleRequest = async (
                 'Password is declared in server configuration and can not be empty.',
             },
           }),
-          { status: 403 }
+          { status: 403, headers: { 'Content-Type': 'application/json' } }
         );
       }
     }

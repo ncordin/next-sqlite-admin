@@ -91,7 +91,10 @@ export async function callController(
     if (middlewareResponse) {
       const response = new Response(JSON.stringify(middlewareResponse), {
         status: responseCode,
-        headers: CORS_HEADERS.headers,
+        headers: {
+          ...CORS_HEADERS.headers,
+          'Content-Type': 'application/json',
+        },
       });
 
       console.log(`🟠 ${responseCode} - Intercepted by middleware`);

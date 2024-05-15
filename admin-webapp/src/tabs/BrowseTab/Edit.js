@@ -40,6 +40,10 @@ export function Edit() {
     setRowid('');
   };
 
+  if (Object.keys(editingRow).length === 0) {
+    return null;
+  }
+
   return (
     <form onSubmit={onSubmit}>
       <Fieldset label={`Editing ${currentTable.name}`}>

@@ -24,7 +24,7 @@ function fetchSqliteApi({ url, params, password, database = '' }) {
       return response.blob();
     }
 
-    console.log(`Unknown content type: ${type}}`);
+    return response;
   });
 }
 

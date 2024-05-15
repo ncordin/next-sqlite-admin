@@ -12,6 +12,10 @@ const isNumericalType = (type) => {
   return NUMERICS.includes(split);
 };
 
+function isNumericalValue(value) {
+  return /^-?\d+$/.test(value);
+}
+
 const StyledTable = styled.table`
   margin: 1rem 0;
 
@@ -22,21 +26,22 @@ const StyledTable = styled.table`
 `;
 
 function renderInput({ field, value, setValue }) {
+  let onChange = (event) => setValue(event.target.value);
+
   if (isNumericalType(field.type)) {
-    return (
-      <NumberField
-        defaultValue={value || ''}
-        onChange={(value) => setValue(value)}
-        width={300}
-        disabled={value === null}
-      />
-    );
+    onChange = (event) => {
+      const value = event.target.value;
+
+      if (isNumericalValue(value)) {
+        return setValue(value);
+      }
+    };
   }
 
   return (
     <TextField
       value={value || ''}
-      onChange={(event) => setValue(event.target.value)}
+      onChange={onChange}
       style={{ width: 300 }}
       disabled={value === null}
     />
