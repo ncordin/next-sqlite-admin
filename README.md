@@ -74,3 +74,5 @@ Supabase : 30 min d'install et 50 img dockers installées
 Prisma / Hasura : install qui need 2GB de RAM
 Cloud avec lamba functions c'est à chier
 Pocket base ? UI cool, best potentiel. Pas de logique custom :/ (voir tuto Youtube fireship)
+
+SELECT name, SUM("pgsize") FROM "dbstat" GROUP BY name;

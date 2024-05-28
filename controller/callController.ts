@@ -1,8 +1,23 @@
 import { BunFile } from 'bun';
 import { CORS_HEADERS } from './cors';
 import { read } from './read';
-import { ContentType, Controller, Method, Middleware } from './types';
-import { make404 } from './utils';
+import {
+  ContentType,
+  Controller,
+  ControllerResponse,
+  Method,
+  Middleware,
+} from './types';
+
+function parseCookie(cookie: string) {
+  return cookie
+    .split(';')
+    .map((part) => part.trim())
+    .reduce((acc, current) => {
+      const [name, value] = current.split('=').map((v) => v.trim());
+      return { ...acc, [name]: value };
+    }, {});
+}
 
 export async function callController(
   filePath: string,
@@ -37,12 +52,18 @@ export async function callController(
     method: request.method as Method,
     headers: request.headers.toJSON(),
     read: (
-      from: 'query' | 'body',
+      from: 'query' | 'body' | 'cookie',
       name: string,
       type: 'string' | 'number' | 'boolean',
       defaultValue: unknown
     ) => {
-      const value = ((from === 'query' ? query : body) || {})[name];
+      const source =
+        from === 'query'
+          ? query
+          : from === 'body'
+          ? body
+          : parseCookie(request.headers.get('cookie') ?? '');
+      const value = (source || {})[name];
 
       if (type === 'boolean') {
         return read(value, 'boolean', defaultValue);
@@ -58,13 +79,23 @@ export async function callController(
 
   let responseCode = 200;
   let responseContentType: ContentType = 'json';
+  let customerHeaders: [string, string][] = [];
 
-  const controllerResponse = {
-    setStatusCode: (code: number) => {
+  const controllerResponse: ControllerResponse = {
+    setStatusCode: (code) => {
       responseCode = code;
     },
-    setContentType: (type: ContentType) => {
+    setContentType: (type) => {
       responseContentType = type;
+    },
+    setCustomHeader: (name, value) => {
+      customerHeaders.push([name, value]);
+    },
+    setCookie: (name, value, maxAge) => {
+      customerHeaders.push([
+        'Set-Cookie',
+        `${name}=${value}; Max-Age=${maxAge}; Path=/`,
+      ]);
     },
   };
 
@@ -91,10 +122,7 @@ export async function callController(
     if (middlewareResponse) {
       const response = new Response(JSON.stringify(middlewareResponse), {
         status: responseCode,
-        headers: {
-          ...CORS_HEADERS.headers,
-          'Content-Type': 'application/json',
-        },
+        headers: [...CORS_HEADERS, ['Content-Type', 'application/json']],
       });
 
       console.log(`🟠 ${responseCode} - Intercepted by middleware`);
@@ -112,10 +140,11 @@ export async function callController(
       case 'json':
         return new Response(JSON.stringify(value), {
           status: responseCode,
-          headers: {
-            ...CORS_HEADERS.headers,
-            'Content-Type': 'application/json',
-          },
+          headers: [
+            ...CORS_HEADERS,
+            ...customerHeaders,
+            ['Content-Type', 'application/json'],
+          ],
         });
 
       case 'html':
@@ -123,10 +152,11 @@ export async function callController(
           typeof value === 'string' ? value : JSON.stringify(value),
           {
             status: responseCode,
-            headers: {
-              ...CORS_HEADERS.headers,
-              'Content-Type': 'text/html; charset=utf-8',
-            },
+            headers: [
+              ...CORS_HEADERS,
+              ...customerHeaders,
+              ['Content-Type', 'text/html; charset=utf-8'],
+            ],
           }
         );
 
@@ -135,18 +165,17 @@ export async function callController(
           typeof value === 'string' ? value : JSON.stringify(value),
           {
             status: responseCode,
-            headers: {
-              ...CORS_HEADERS.headers,
-              'Content-Type': 'text/plain',
-            },
+            headers: [
+              ...CORS_HEADERS,
+              ...customerHeaders,
+              ['Content-Type', 'text/plain'],
+            ],
           }
         );
 
       case 'file':
         return new Response(value as BunFile, {
-          headers: {
-            ...CORS_HEADERS.headers,
-          },
+          headers: [...CORS_HEADERS, ...customerHeaders],
         });
 
       default:

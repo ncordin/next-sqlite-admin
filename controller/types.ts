@@ -40,25 +40,25 @@ export type Method = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 type Body = { [key: string]: string | number | boolean | null };
 
 function read<T>(
-  from: 'query' | 'body',
+  from: 'query' | 'body' | 'cookie',
   name: string,
   type: 'string',
   defaultValue: T
 ): string | T;
 function read<T>(
-  from: 'query' | 'body',
+  from: 'query' | 'body' | 'cookie',
   name: string,
   type: 'number',
   defaultValue: T
 ): number | T;
 function read<T>(
-  from: 'query' | 'body',
+  from: 'query' | 'body' | 'cookie',
   name: string,
   type: 'boolean',
   defaultValue: T
 ): boolean | T;
 function read<T>(
-  from: 'query' | 'body',
+  from: 'query' | 'body' | 'cookie',
   name: string,
   type: 'string' | 'number' | 'boolean',
   defaultValue: T
@@ -76,9 +76,11 @@ type ControllerRequest = {
 
 export type ContentType = 'json' | 'html' | 'text' | 'file';
 
-type ControllerResponse = {
+export type ControllerResponse = {
+  setCookie: (name: string, value: string, maxAge: number) => void;
   setStatusCode: (code: number) => void;
   setContentType: (type: ContentType) => void;
+  setCustomHeader: (name: string, value: string) => void;
 };
 
 type JsonValue =

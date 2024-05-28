@@ -44,7 +44,7 @@ export const handleRequest = async (
   // Est-ce qu'on veut traiter TOUTES les requêtes meme si elles matchent rien ?
   if (request.method === 'OPTIONS') {
     console.log(`🔍 OPTIONS ${requestPath}`);
-    return new Response('Departed', CORS_HEADERS);
+    return new Response('Departed', { headers: CORS_HEADERS });
   }
 
   // Handle admin:
