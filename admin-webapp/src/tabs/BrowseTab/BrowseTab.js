@@ -35,7 +35,8 @@ export function BrowseTab() {
 
   useEffect(() => {
     if (!rowid) {
-      currentTable && execute(`SELECT rowid, * FROM \`${currentTable.name}\`;`);
+      currentTable &&
+        execute(`SELECT rowid, * FROM \`${currentTable.name}\` LIMIT 100;`);
       setOrderBy(null);
       setOrderByDirection(null);
       setSelected([]);
@@ -47,7 +48,7 @@ export function BrowseTab() {
       const orderCommand = `\`${orderBy}\` ${
         orderByDirection ? 'ASC' : 'DESC'
       }`;
-      const query = `SELECT rowid, * FROM \`${currentTable.name}\` ORDER BY ${orderCommand};`;
+      const query = `SELECT rowid, * FROM \`${currentTable.name}\` ORDER BY ${orderCommand} LIMIT 100;`;
 
       execute(query);
     }
