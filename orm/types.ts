@@ -2,7 +2,15 @@ export type RawSQL = { _SQL: string };
 
 export type Value = number | string | boolean | Date | null | RawSQL;
 
-export type ComparisonSymbol = '<' | '<=' | '>' | '>=' | '=' | '!=' | 'LIKE';
+export type ComparisonSymbol =
+  | '='
+  | '!='
+  | '<'
+  | '<='
+  | '>'
+  | '>='
+  | 'LIKE'
+  | 'NOT LIKE';
 
 export type Set = {
   fieldName: string;
@@ -13,6 +21,7 @@ export type Where = {
   fieldName: string;
   comparison: ComparisonSymbol;
   value: Value;
+  values: Value[];
 };
 
 export type OrderBy = {

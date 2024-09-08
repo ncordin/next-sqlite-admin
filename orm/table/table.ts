@@ -39,6 +39,10 @@ export type TableInstance<TableType> = {
     operator: ComparisonSymbol,
     value: TableType[Field] | RawSQL
   ) => TableInstance<TableType>;
+  in: <Field extends keyof TableType>(
+    fieldName: Field,
+    values: TableType[Field][] | RawSQL
+  ) => TableInstance<TableType>;
   orderBy: <Field extends keyof TableType>(
     fieldName: Field,
     direction: 'ASC' | 'DESC'
@@ -85,6 +89,21 @@ export const declareTable = <TableType>({
       fieldName: String(fieldName),
       comparison,
       value: value as Value,
+      values: [],
+    };
+    this.wheres.push(newWhere);
+    return this;
+  },
+
+  /**
+   * In
+   */
+  in: function (fieldName, values) {
+    const newWhere: Where = {
+      fieldName: String(fieldName),
+      comparison: '=',
+      value: null,
+      values: values as Value[],
     };
     this.wheres.push(newWhere);
     return this;

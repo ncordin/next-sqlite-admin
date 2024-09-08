@@ -2,11 +2,28 @@ import { AnyField, Fields } from '../fields/declaration';
 import { encode, encodeName } from '../fields/encode';
 import { ComparisonSymbol, Limit, OrderBy, Set, Value, Where } from '../types';
 
-const OPERATORS: ComparisonSymbol[] = ['<', '<=', '>', '>=', '=', '!=', 'LIKE'];
+const OPERATORS: ComparisonSymbol[] = [
+  '=',
+  '!=',
+  '<',
+  '<=',
+  '>',
+  '>=',
+  'LIKE',
+  'NOT LIKE',
+];
 
-const escapeOperator = (operator: ComparisonSymbol, value: Value) => {
+const escapeOperator = (
+  operator: ComparisonSymbol,
+  value: Value,
+  values: Value[]
+) => {
   if (OPERATORS.includes(operator) === false) {
     throw new Error(`Invalid comparison operator ${operator}`);
+  }
+
+  if (operator === '=' && values.length) {
+    return 'IN';
   }
 
   if (value === null) {
@@ -22,10 +39,20 @@ export function makeWhere(name: string, fields: Fields, conditions: Where[]) {
   }
 
   return conditions
-    .map(({ fieldName, comparison, value }) => {
+    .map(({ fieldName, comparison, value, values }) => {
       const escapedField = encodeName(fieldName);
-      const escapedOperator = escapeOperator(comparison, value);
-      const escapedValue = encode(value, fields[fieldName]);
+      const escapedOperator = escapeOperator(comparison, value, values);
+      let escapedValue = '';
+
+      if (values.length) {
+        const inValues = values
+          .map((singleValue) => encode(singleValue, fields[fieldName]))
+          .join(', ');
+
+        escapedValue = `(${inValues})`;
+      } else {
+        escapedValue = encode(value, fields[fieldName]);
+      }
 
       return `${escapedField} ${escapedOperator} ${escapedValue}`;
     })

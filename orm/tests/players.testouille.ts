@@ -31,6 +31,7 @@ function main() {
 
   const players = Players.where('gold', '>', 2)
     .where('isCool', '=', true)
+    .in('state', ['data-A', 'data-B'])
     .orderBy('gold', 'ASC')
     .orderBy('createdAt', 'DESC')
     .limit(100, 0)
