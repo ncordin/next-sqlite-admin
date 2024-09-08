@@ -5,6 +5,7 @@ import { useTables } from '../../contexts/Tables';
 import { RowForm } from '../../components/RowForm';
 import { useApi } from '../../utils/useApi';
 import { InnerPanel } from '../../components/InnerPanel';
+import { escapeFieldName, escapeValue } from '../../utils/query';
 
 export function InsertTab({ onCreated }) {
   const { currentTable, refresh } = useTables();
@@ -13,11 +14,11 @@ export function InsertTab({ onCreated }) {
   const [showQuery, setShowQuery] = useState(false);
 
   const fields = Object.keys(editingRow)
-    .map((name) => `\`${name}\``)
+    .map((name) => escapeFieldName(name))
     .join(', ');
 
   const values = Object.values(editingRow)
-    .map((value) => `'${value}'`)
+    .map((value) => escapeValue(value))
     .join(', ');
 
   const query = `INSERT INTO \`${currentTable.name}\` (${fields}) VALUES (${values});`;

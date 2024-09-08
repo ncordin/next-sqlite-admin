@@ -1,8 +1,8 @@
-function escapeFieldName(name) {
+export function escapeFieldName(name) {
   return `\`${name}\``;
 }
 
-function escapeValue(value) {
+export function escapeValue(value) {
   if (value === null) {
     return 'NULL';
   }
