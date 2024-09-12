@@ -5,6 +5,7 @@ import {
   Insertable,
   Limit,
   OrderBy,
+  RawRow,
   RawSQL,
   Set,
   Value,
@@ -58,6 +59,7 @@ export type TableInstance<TableType> = {
   update: () => WriteResult;
   count: () => number;
   rawSql: (sql: string) => RawSQL;
+  rawQuery: (sql: string, mode: 'read') => RawRow[];
 };
 
 export const declareTable = <TableType>({
@@ -247,10 +249,22 @@ export const declareTable = <TableType>({
   },
 
   /**
-   * Sql
+   * Pass raw Sql values:
    */
   rawSql: function (sqlString: string) {
     return { _SQL: sqlString };
+  },
+
+  /**
+   * Execute raw Sql queries:
+   */
+  rawQuery: function (sql: string, mode: 'read' | 'write') {
+    if (mode === 'read') {
+      return queryGet({ sql, parameters: [], name, fields });
+    }
+
+    const writeResult = queryRun({ sql, parameters: [], name, fields });
+    return [{ affectedRows: writeResult.affectedRows.toString() }];
   },
 
   clearState: function () {
